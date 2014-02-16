@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F10E1A0918AFD3F6007C9E4B /* PasscodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F10E1A0818AFD3F6007C9E4B /* PasscodeManager.m */; };
+		F10E1A0F18AFE32E007C9E4B /* FXKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = F10E1A0E18AFE32E007C9E4B /* FXKeychain.m */; };
+		F1A0A69718B05F010065D9FD /* PasscodeCircularButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F1A0A69618B05F010065D9FD /* PasscodeCircularButton.m */; };
+		F1B8E9E918AEAD5800B7F120 /* PasscodeSettingsDurationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B8E9E818AEAD5800B7F120 /* PasscodeSettingsDurationViewController.m */; };
 		F1E50F9418AEA64C0011AF09 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1E50F9318AEA64C0011AF09 /* Foundation.framework */; };
 		F1E50F9618AEA64C0011AF09 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1E50F9518AEA64C0011AF09 /* CoreGraphics.framework */; };
 		F1E50F9818AEA64C0011AF09 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1E50F9718AEA64C0011AF09 /* UIKit.framework */; };
@@ -19,6 +23,9 @@
 		F1E50FAF18AEA64C0011AF09 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1E50F9718AEA64C0011AF09 /* UIKit.framework */; };
 		F1E50FB718AEA64C0011AF09 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F1E50FB518AEA64C0011AF09 /* InfoPlist.strings */; };
 		F1E50FB918AEA64C0011AF09 /* WPiOSPasscodeLockTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F1E50FB818AEA64C0011AF09 /* WPiOSPasscodeLockTests.m */; };
+		F1E50FC418AEA65B0011AF09 /* PasscodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1E50FC318AEA65B0011AF09 /* PasscodeViewController.m */; };
+		F1E50FC718AEA7A10011AF09 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1E50FC618AEA7A10011AF09 /* SettingsViewController.m */; };
+		F1E50FCA18AEA9770011AF09 /* PasscodeSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1E50FC918AEA9770011AF09 /* PasscodeSettingsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +39,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F10E1A0718AFD3F6007C9E4B /* PasscodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PasscodeManager.h; sourceTree = "<group>"; };
+		F10E1A0818AFD3F6007C9E4B /* PasscodeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PasscodeManager.m; sourceTree = "<group>"; };
+		F10E1A0D18AFE32E007C9E4B /* FXKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXKeychain.h; sourceTree = "<group>"; };
+		F10E1A0E18AFE32E007C9E4B /* FXKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXKeychain.m; sourceTree = "<group>"; };
+		F1A0A69518B05EFB0065D9FD /* PasscodeCircularButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PasscodeCircularButton.h; sourceTree = "<group>"; };
+		F1A0A69618B05F010065D9FD /* PasscodeCircularButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PasscodeCircularButton.m; sourceTree = "<group>"; };
+		F1B8E9E718AEAD5800B7F120 /* PasscodeSettingsDurationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PasscodeSettingsDurationViewController.h; sourceTree = "<group>"; };
+		F1B8E9E818AEAD5800B7F120 /* PasscodeSettingsDurationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PasscodeSettingsDurationViewController.m; sourceTree = "<group>"; };
 		F1E50F9018AEA64C0011AF09 /* WPiOSPasscodeLock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WPiOSPasscodeLock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1E50F9318AEA64C0011AF09 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F1E50F9518AEA64C0011AF09 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -48,6 +63,12 @@
 		F1E50FB418AEA64C0011AF09 /* WPiOSPasscodeLockTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WPiOSPasscodeLockTests-Info.plist"; sourceTree = "<group>"; };
 		F1E50FB618AEA64C0011AF09 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F1E50FB818AEA64C0011AF09 /* WPiOSPasscodeLockTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WPiOSPasscodeLockTests.m; sourceTree = "<group>"; };
+		F1E50FC218AEA65B0011AF09 /* PasscodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PasscodeViewController.h; path = ../PasscodeViewController.h; sourceTree = "<group>"; };
+		F1E50FC318AEA65B0011AF09 /* PasscodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PasscodeViewController.m; path = ../PasscodeViewController.m; sourceTree = "<group>"; };
+		F1E50FC518AEA7A10011AF09 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		F1E50FC618AEA7A10011AF09 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		F1E50FC818AEA9770011AF09 /* PasscodeSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PasscodeSettingsViewController.h; sourceTree = "<group>"; };
+		F1E50FC918AEA9770011AF09 /* PasscodeSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PasscodeSettingsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +95,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F10E1A0618AFCAC5007C9E4B /* WPiOSPasscodeLock */ = {
+			isa = PBXGroup;
+			children = (
+				F10E1A0D18AFE32E007C9E4B /* FXKeychain.h */,
+				F10E1A0E18AFE32E007C9E4B /* FXKeychain.m */,
+				F1E50FC218AEA65B0011AF09 /* PasscodeViewController.h */,
+				F1E50FC318AEA65B0011AF09 /* PasscodeViewController.m */,
+				F10E1A0718AFD3F6007C9E4B /* PasscodeManager.h */,
+				F10E1A0818AFD3F6007C9E4B /* PasscodeManager.m */,
+				F1A0A69518B05EFB0065D9FD /* PasscodeCircularButton.h */,
+				F1A0A69618B05F010065D9FD /* PasscodeCircularButton.m */,
+			);
+			name = WPiOSPasscodeLock;
+			sourceTree = "<group>";
+		};
 		F1E50F8718AEA64C0011AF09 = {
 			isa = PBXGroup;
 			children = (
@@ -107,8 +143,15 @@
 		F1E50F9918AEA64C0011AF09 /* WPiOSPasscodeLock */ = {
 			isa = PBXGroup;
 			children = (
+				F10E1A0618AFCAC5007C9E4B /* WPiOSPasscodeLock */,
 				F1E50FA218AEA64C0011AF09 /* AppDelegate.h */,
 				F1E50FA318AEA64C0011AF09 /* AppDelegate.m */,
+				F1E50FC518AEA7A10011AF09 /* SettingsViewController.h */,
+				F1E50FC618AEA7A10011AF09 /* SettingsViewController.m */,
+				F1E50FC818AEA9770011AF09 /* PasscodeSettingsViewController.h */,
+				F1E50FC918AEA9770011AF09 /* PasscodeSettingsViewController.m */,
+				F1B8E9E718AEAD5800B7F120 /* PasscodeSettingsDurationViewController.h */,
+				F1B8E9E818AEAD5800B7F120 /* PasscodeSettingsDurationViewController.m */,
 				F1E50FA518AEA64C0011AF09 /* Images.xcassets */,
 				F1E50F9A18AEA64C0011AF09 /* Supporting Files */,
 			);
@@ -239,8 +282,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1E50FCA18AEA9770011AF09 /* PasscodeSettingsViewController.m in Sources */,
+				F1B8E9E918AEAD5800B7F120 /* PasscodeSettingsDurationViewController.m in Sources */,
 				F1E50FA418AEA64C0011AF09 /* AppDelegate.m in Sources */,
+				F1E50FC418AEA65B0011AF09 /* PasscodeViewController.m in Sources */,
 				F1E50FA018AEA64C0011AF09 /* main.m in Sources */,
+				F1E50FC718AEA7A10011AF09 /* SettingsViewController.m in Sources */,
+				F10E1A0918AFD3F6007C9E4B /* PasscodeManager.m in Sources */,
+				F1A0A69718B05F010065D9FD /* PasscodeCircularButton.m in Sources */,
+				F10E1A0F18AFE32E007C9E4B /* FXKeychain.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -443,6 +493,7 @@
 				F1E50FBE18AEA64C0011AF09 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F1E50FBF18AEA64C0011AF09 /* Build configuration list for PBXNativeTarget "WPiOSPasscodeLockTests" */ = {
 			isa = XCConfigurationList;
@@ -451,6 +502,7 @@
 				F1E50FC118AEA64C0011AF09 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

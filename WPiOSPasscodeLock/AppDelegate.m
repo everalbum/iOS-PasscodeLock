@@ -7,15 +7,24 @@
 //
 
 #import "AppDelegate.h"
-
+#import "SettingsViewController.h" 
+#import "PasscodeManager.h"
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
+    
+    [[PasscodeManager sharedManager] activatePasscodeProtection];
+
+    SettingsViewController *svc = [[SettingsViewController alloc]initWithStyle:UITableViewStyleGrouped];
+    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:svc];
+    
+    self.window.rootViewController = nav;
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+
     return YES;
 }
 
