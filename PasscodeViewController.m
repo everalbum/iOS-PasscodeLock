@@ -9,18 +9,51 @@
 #import "PasscodeViewController.h"
 #import "PasscodeManager.h" 
 #import "PasscodeCircularButton.h"
+#import "PasscodeCircularView.h" 
 
+static NSString * const EnterPasscodeLabel = @"Enter Passcode";
+static NSString * const ReEnterPasscodeLabel = @"Re-enter your new Passcode";
+static NSString * const EnterCurrentPasscodeLabel = @"Enter your old Passcode";
 
-static NSString * const kEnterPasscodeLabel = @"Enter your passcode.";
-static NSString * const kReEnterPasscodeLabel = @"Re-enter your passcode.";
-static NSString * const kEnterCurrentPasscodeLabel = @"Enter your current passcode.";
+static CGFloat const PasscodeButtonSize = 65;
+static CGFloat const PasscodeButtonPaddingHorizontal = 20;
+static CGFloat const PasscodeButtonPaddingVertical = 10;
+
+static CGFloat const PasscodeEntryViewSize = 10;
+static NSInteger const PasscodeDigitCount = 4;
+
+typedef enum PasscodeWorkflowStep : NSUInteger {
+    WorkflowStepOne,
+    WorkflowStepSetupPasscodeEnteredOnce,
+    WorkflowStepSetupPasscodeEnteredTwice,
+    WorkflowStepSetupPasscodesDidNotMatch,
+    WorkflowStepChangePasscodeVerified,
+    WorkflowStepChangePasscodeNotVerified,
+} PasscodeWorkflowStep;
 
 @interface PasscodeViewController ()
 
-@property (strong, nonatomic) UITextField *textField;
-@property (strong, nonatomic) UILabel *label;
-@property (strong, nonatomic) PasscodeCircularButton *cancelButton;
+@property (strong, nonatomic) UILabel *lblInstruction;
+@property (strong, nonatomic) UIButton *btnCancelOrDelete;
+@property (strong, nonatomic) UIView *buttonContainerView;
+
+@property (strong, nonatomic) PasscodeCircularButton *btnDelete;
+@property (strong, nonatomic) PasscodeCircularButton *btnZero;
+@property (strong, nonatomic) PasscodeCircularButton *btnOne;
+@property (strong, nonatomic) PasscodeCircularButton *btnTwo;
+@property (strong, nonatomic) PasscodeCircularButton *btnThree;
+@property (strong, nonatomic) PasscodeCircularButton *btnFour;
+@property (strong, nonatomic) PasscodeCircularButton *btnFive;
+@property (strong, nonatomic) PasscodeCircularButton *btnSix;
+@property (strong, nonatomic) PasscodeCircularButton *btnSeven;
+@property (strong, nonatomic) PasscodeCircularButton *btnEight;
+@property (strong, nonatomic) PasscodeCircularButton *btnNine;
+
 @property (strong, nonatomic) NSString *passcodeFirstEntry;
+@property (strong, nonatomic) NSString *passcodeEntered;
+@property (strong, nonatomic) NSMutableArray *passcodeEntryViews;
+@property (assign) NSInteger numberOfDigitsEntered;
+
 @property (assign) PasscodeType passcodeType;
 @property (assign) PasscodeWorkflowStep currentWorkflowStep;
 
@@ -28,6 +61,20 @@ static NSString * const kEnterCurrentPasscodeLabel = @"Enter your current passco
 
 
 @implementation PasscodeViewController
+
+#pragma mark - 
+#pragma mark - Lifecycle Methods
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self generateView];
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+}
 
 -(id) initWithPasscodeType:(PasscodeType)type withDelegate:(id<PasscodeViewControllerDelegate>)delegate
 {
@@ -42,56 +89,416 @@ static NSString * const kEnterCurrentPasscodeLabel = @"Enter your current passco
     return self;
 }
 
-- (void)enableCancel
+#pragma mark -
+#pragma mark - Event Handlers
+
+-(void)cancelOrDeleteBtnPressed:(id)sender
 {
-    _cancelButton = [PasscodeCircularButton buttonWithType:UIButtonTypeRoundedRect];
-    _cancelButton.lineColor = [UIColor blackColor];
-    _cancelButton.frame = CGRectMake(110, 160, 50, 50);
-    [_cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
-    [_cancelButton addTarget:self action:@selector(cancelBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:_cancelButton];
-    [self.cancelButton drawCircular];
+    if(self.btnCancelOrDelete.tag == 1){
+        [_delegate passcodeSetupCancelled];
+    }
+    else if(self.btnCancelOrDelete.tag == 2)
+    {
+        NSInteger currentPasscodeLength = self.passcodeEntered.length;
+        PasscodeCircularView *pcv = self.passcodeEntryViews[currentPasscodeLength-1];
+        [pcv clear];
+        self.numberOfDigitsEntered--;
+        self.passcodeEntered = [self.passcodeEntered substringToIndex:currentPasscodeLength-1];
+        if(self.numberOfDigitsEntered == 0){
+            self.btnCancelOrDelete.hidden = YES;
+            [self enableCancelIfAllowed];
+        }
+    }
 }
 
-- (void)createLayout
+-(void) passcodeBtnPressed:(PasscodeCircularButton *)button
 {
+    if(self.numberOfDigitsEntered < PasscodeDigitCount)
+    {
+        NSInteger tag = button.tag;
+        NSString *tagStr = [[NSNumber numberWithInteger:tag] stringValue];
+        self.passcodeEntered = [NSString stringWithFormat:@"%@%@", self.passcodeEntered, tagStr];
+        PasscodeCircularView *pcv = self.passcodeEntryViews[self.numberOfDigitsEntered];
+        [pcv fill];
+        self.numberOfDigitsEntered++;
+        [self enableDelete];
+        if(self.numberOfDigitsEntered == PasscodeDigitCount)
+        {
+            [self evaluatePasscodeEntry];
+        }
+    }
+    
+}
 
+
+#pragma mark -
+#pragma mark - Layout Methods
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    UIUserInterfaceIdiom interfaceIdiom = [[UIDevice currentDevice] userInterfaceIdiom];
+    if (interfaceIdiom == UIUserInterfaceIdiomPad) return UIInterfaceOrientationMaskAll;
+    if (interfaceIdiom == UIUserInterfaceIdiomPhone) return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskPortraitUpsideDown;
+    
+    return UIInterfaceOrientationMaskAll;
+}
+-(void)viewWillLayoutSubviews
+{
+    [self buildLayout];
+}
+
+- (void)generateView
+{
+    [self createButtons];
+    [self createPasscodeEntryView];
+    [self buildLayout];
     [self.view setBackgroundColor:[UIColor whiteColor]];
-    _label = [[UILabel alloc]initWithFrame:CGRectMake(50,50,200,20)];
-    [self.view addSubview:_label];
-    
     [self updateLayoutBasedOnWorkflowStep];
+}
+-(void)createButtons
+{
+    CGRect frame = CGRectMake(0, 0, PasscodeButtonSize, PasscodeButtonSize);
+
+    UIColor *lineColor = [UIColor blackColor];
+    UIColor *titleColor = [UIColor blackColor];
+    UIColor *fillColor = [UIColor clearColor];
+    UIColor *selectedLineColor = [UIColor whiteColor];
+    UIColor *selectedTitleColor = [UIColor whiteColor];
+    UIColor *selectedFillColor = [UIColor redColor];
+
     
-    _textField = [[UITextField alloc]initWithFrame:CGRectMake(50, 100, 200, 50)];
-    [_textField setBackgroundColor:[UIColor lightGrayColor]];
-    [self.view addSubview:_textField];
+    _btnOne = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(@"1",nil)
+                                                      frame:frame
+                                                  lineColor:lineColor
+                                                 titleColor:titleColor
+                                                  fillColor:fillColor
+                                          selectedLineColor:selectedLineColor
+                                         selectedTitleColor:selectedTitleColor
+                                          selectedFillColor:selectedFillColor];
     
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    button.frame = CGRectMake(50, 160, 50, 50);
-    [button setTitle:@"OK" forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(btnPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:button];
+    [_btnOne addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    _btnTwo = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(@"2",nil)
+                                                      frame:frame
+                                                  lineColor:lineColor
+                                                 titleColor:titleColor
+                                                  fillColor:fillColor
+                                          selectedLineColor:selectedLineColor
+                                         selectedTitleColor:selectedTitleColor
+                                          selectedFillColor:selectedFillColor];
+    
+    [_btnTwo addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    _btnThree = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(@"3",nil)
+                                                        frame:frame
+                                                    lineColor:lineColor
+                                                   titleColor:titleColor
+                                                    fillColor:fillColor
+                                            selectedLineColor:selectedLineColor
+                                           selectedTitleColor:selectedTitleColor
+                                            selectedFillColor:selectedFillColor];
+    
+    [_btnThree addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
+
+    _btnFour = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(@"4", nil)
+                                                       frame:frame
+                                                   lineColor:lineColor
+                                                  titleColor:titleColor
+                                                   fillColor:fillColor
+                                           selectedLineColor:selectedLineColor
+                                          selectedTitleColor:selectedTitleColor
+                                           selectedFillColor:selectedFillColor];
+    
+    [_btnFour addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    _btnFive = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(@"5", nil)
+                                                       frame:frame
+                                                   lineColor:lineColor
+                                                  titleColor:titleColor
+                                                   fillColor:fillColor
+                                           selectedLineColor:selectedLineColor
+                                          selectedTitleColor:selectedTitleColor
+                                           selectedFillColor:selectedFillColor];
+    
+    [_btnFive addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
+
+    _btnSix = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(@"6",nil)
+                                                      frame:frame
+                                                  lineColor:lineColor
+                                                 titleColor:titleColor
+                                                  fillColor:fillColor
+                                          selectedLineColor:selectedLineColor
+                                         selectedTitleColor:selectedTitleColor
+                                          selectedFillColor:selectedFillColor];
+    
+    [_btnSix addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
+
+    _btnSeven = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(@"7",nil)
+                                                        frame:frame
+                                                    lineColor:lineColor
+                                                   titleColor:titleColor
+                                                    fillColor:fillColor
+                                            selectedLineColor:selectedLineColor
+                                           selectedTitleColor:selectedTitleColor
+                                            selectedFillColor:selectedFillColor];
+    
+    [_btnSeven addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    _btnEight = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(@"8",nil)
+                                                        frame:frame
+                                                    lineColor:lineColor
+                                                   titleColor:titleColor
+                                                    fillColor:fillColor
+                                            selectedLineColor:selectedLineColor
+                                           selectedTitleColor:selectedTitleColor
+                                            selectedFillColor:selectedFillColor];
+    
+    [_btnEight addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    _btnNine = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(@"9",nil)
+                                                       frame:frame
+                                                   lineColor:lineColor
+                                                  titleColor:titleColor
+                                                   fillColor:fillColor
+                                           selectedLineColor:selectedLineColor
+                                          selectedTitleColor:selectedTitleColor
+                                           selectedFillColor:selectedFillColor];
+    
+    [_btnNine addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    _btnZero = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(@"0",nil)
+                                                       frame:frame
+                                                   lineColor:lineColor
+                                                  titleColor:titleColor
+                                                   fillColor:fillColor
+                                           selectedLineColor:selectedLineColor
+                                          selectedTitleColor:selectedTitleColor
+                                           selectedFillColor:selectedFillColor];
+    
+    [_btnZero addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    _btnCancelOrDelete = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    _btnCancelOrDelete.frame = frame;
+    _btnCancelOrDelete.titleLabel.textColor = [UIColor blueColor];
+    _btnCancelOrDelete.hidden = YES;
+    [_btnCancelOrDelete setTitle:@"" forState:UIControlStateNormal];
+    [_btnCancelOrDelete addTarget:self action:@selector(cancelOrDeleteBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    _lblInstruction = [[UILabel alloc]initWithFrame:CGRectZero];
+
 }
 
--(void)viewWillAppear:(BOOL)animated
+- (void)buildLayout
 {
-    [super viewWillAppear:animated];
-    [self createLayout];
+    UIUserInterfaceIdiom interfaceIdiom = [[UIDevice currentDevice] userInterfaceIdiom];
+
+    _buttonContainerView = [[UIView alloc]initWithFrame:CGRectZero];
+    _buttonContainerView.translatesAutoresizingMaskIntoConstraints = NO;
+    [_buttonContainerView setBackgroundColor:[UIColor clearColor]];
+    [self.view addSubview:_buttonContainerView];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:_buttonContainerView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTop multiplier:1.0f constant:130.0f]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:_buttonContainerView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.0f]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:_buttonContainerView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:0.0f]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:_buttonContainerView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0f constant:0.0f]];
+
+    CGFloat buttonRowWidth = (PasscodeButtonSize * 3) + (PasscodeButtonPaddingHorizontal * 2);
+    CGFloat firstButtonX = ([self returnWidth]/2) - (buttonRowWidth/2) + 0.5;
+    CGFloat middleButtonX = firstButtonX + PasscodeButtonSize + PasscodeButtonPaddingHorizontal;
+    CGFloat lastButtonX = middleButtonX + PasscodeButtonSize + PasscodeButtonPaddingHorizontal;
+    CGFloat firstRowY = 0;
+    
+    if(interfaceIdiom == UIUserInterfaceIdiomPad){
+        firstRowY = 100;
+    }else{
+        firstRowY = 20;
+    }
+    
+    CGFloat middleRowY = firstRowY + PasscodeButtonSize + PasscodeButtonPaddingVertical;
+    CGFloat lastRowY = middleRowY + PasscodeButtonSize + PasscodeButtonPaddingVertical;
+    CGFloat zeroRowY = lastRowY + PasscodeButtonSize + PasscodeButtonPaddingVertical;
+
+    CGRect frameBtnOne = CGRectMake(firstButtonX, firstRowY, PasscodeButtonSize, PasscodeButtonSize);
+    CGRect frameBtnTwo = CGRectMake(middleButtonX, firstRowY, PasscodeButtonSize, PasscodeButtonSize);
+    CGRect frameBtnThree = CGRectMake(lastButtonX, firstRowY, PasscodeButtonSize, PasscodeButtonSize);
+    CGRect frameBtnFour = CGRectMake(firstButtonX, middleRowY, PasscodeButtonSize, PasscodeButtonSize);
+    CGRect frameBtnFive = CGRectMake(middleButtonX, middleRowY, PasscodeButtonSize, PasscodeButtonSize);
+    CGRect frameBtnSix = CGRectMake(lastButtonX, middleRowY, PasscodeButtonSize, PasscodeButtonSize);
+    CGRect frameBtnSeven = CGRectMake(firstButtonX, lastRowY, PasscodeButtonSize, PasscodeButtonSize);
+    CGRect frameBtnEight = CGRectMake(middleButtonX, lastRowY, PasscodeButtonSize, PasscodeButtonSize);
+    CGRect frameBtnNine = CGRectMake(lastButtonX, lastRowY, PasscodeButtonSize, PasscodeButtonSize);
+    CGRect frameBtnZero = CGRectMake(middleButtonX, zeroRowY, PasscodeButtonSize, PasscodeButtonSize);
+    CGRect frameBtnCancel = CGRectMake(lastButtonX, zeroRowY, PasscodeButtonSize, PasscodeButtonSize);
+    CGRect frameLblInstruction = CGRectMake(0, 0, 250, 20);
+
+    _btnOne.frame = frameBtnOne;
+    _btnTwo.frame = frameBtnTwo;
+    _btnThree.frame = frameBtnThree;
+    _btnFour.frame = frameBtnFour;
+    _btnFive.frame = frameBtnFive;
+    _btnSix.frame = frameBtnSix;
+    _btnSeven.frame = frameBtnSeven;
+    _btnEight.frame = frameBtnEight;
+    _btnNine.frame = frameBtnNine;
+    _btnZero.frame = frameBtnZero;
+    _btnCancelOrDelete.frame = frameBtnCancel;
+
+    _lblInstruction.textAlignment = NSTextAlignmentCenter;
+    _lblInstruction.frame = frameLblInstruction;
+    _lblInstruction.center = CGPointMake([self returnWidth]/2, 60);
+    _lblInstruction.font = [UIFont systemFontOfSize:15];
+    
+    [_buttonContainerView addSubview:_btnOne];
+    [_buttonContainerView addSubview:_btnTwo];
+    [_buttonContainerView addSubview:_btnThree];
+    [_buttonContainerView addSubview:_btnFour];
+    [_buttonContainerView addSubview:_btnFive];
+    [_buttonContainerView addSubview:_btnSix];
+    [_buttonContainerView addSubview:_btnSeven];
+    [_buttonContainerView addSubview:_btnEight];
+    [_buttonContainerView addSubview:_btnNine];
+    [_buttonContainerView addSubview:_btnZero];
+    [_buttonContainerView addSubview:_btnCancelOrDelete];
+
+    [self.view addSubview:_lblInstruction];
+    
+    CGFloat passcodeEntryViewsY = 90;
+    CGFloat passcodeEntryViewWidth = (PasscodeDigitCount * PasscodeEntryViewSize) + ((PasscodeDigitCount - 1) * PasscodeButtonPaddingHorizontal);
+    CGFloat xPoint = ([self returnWidth] - passcodeEntryViewWidth) / 2;
+    
+    for (PasscodeCircularView *circularView in self.passcodeEntryViews){
+        CGRect frame = CGRectMake(xPoint, passcodeEntryViewsY, PasscodeEntryViewSize, PasscodeEntryViewSize);
+        circularView.frame = frame;
+        xPoint = xPoint + PasscodeEntryViewSize + PasscodeButtonPaddingHorizontal;
+        [self.view addSubview:circularView];
+    }
 }
 
--(void)btnPressed:(UIButton *)button
+- (void)updateLayoutBasedOnWorkflowStep
 {
+    self.btnCancelOrDelete.hidden = YES;
+    
+    if(self.passcodeType == PasscodeTypeSetup)
+    {
+        if(self.currentWorkflowStep == WorkflowStepOne)
+        {
+            self.lblInstruction.text = NSLocalizedString(EnterPasscodeLabel, nil);
+        }
+        else if(self.currentWorkflowStep == WorkflowStepSetupPasscodeEnteredOnce)
+        {
+            self.lblInstruction.text = NSLocalizedString(ReEnterPasscodeLabel, nil);
+        }
+        else if(self.currentWorkflowStep == WorkflowStepSetupPasscodesDidNotMatch)
+        {
+            self.lblInstruction.text = NSLocalizedString(EnterPasscodeLabel, nil);
+            self.currentWorkflowStep = WorkflowStepOne;
+        }
+    }
+    else if(self.passcodeType == PasscodeTypeVerify || self.passcodeType == PasscodeTypeVerifyForSettingChange){
+        self.lblInstruction.text = NSLocalizedString(EnterPasscodeLabel, nil);;
+        if(self.passcodeType == PasscodeTypeVerifyForSettingChange){
+        }
+    }
+    else if(self.passcodeType == PasscodeTypeChangePasscode)
+    {
+        if(self.currentWorkflowStep == WorkflowStepOne){
+            self.lblInstruction.text = NSLocalizedString(EnterCurrentPasscodeLabel, nil);
+        }
+    }
+    [self enableCancelIfAllowed];
+    [self resetPasscodeEntryView];
+}
+
+#pragma mark - 
+#pragma mark - UIView Handlers
+
+-(void)enableDelete
+{
+    if(!self.btnCancelOrDelete.tag != 2){
+        self.btnCancelOrDelete.tag = 2;
+        [self.btnCancelOrDelete setTitle:NSLocalizedString(@"Delete",nil) forState:UIControlStateNormal];
+    }
+    if(self.btnCancelOrDelete.hidden){
+        self.btnCancelOrDelete.hidden = NO;
+    }
+}
+
+- (void)enableCancelIfAllowed
+{
+    if(self.passcodeType == PasscodeTypeChangePasscode || self.passcodeType == PasscodeTypeSetup || self.passcodeType == PasscodeTypeVerifyForSettingChange){
+        [_btnCancelOrDelete setTitle:NSLocalizedString(@"Cancel", nil) forState:UIControlStateNormal];
+        _btnCancelOrDelete.tag = 1;
+        _btnCancelOrDelete.hidden = NO;
+    }
+}
+- (void) createPasscodeEntryView
+{
+    self.passcodeEntryViews = [NSMutableArray new];
+    self.passcodeEntered = @"";
+    self.numberOfDigitsEntered = 0;
+    CGRect frame = CGRectMake(0, 0, PasscodeEntryViewSize, PasscodeEntryViewSize);
+    
+    for (int i=0; i < PasscodeDigitCount; i++){
+        PasscodeCircularView *pcv = [[PasscodeCircularView alloc]initWithFrame:frame
+                                                                     lineColor:[UIColor redColor]
+                                                                     fillColor:[UIColor redColor]];
+        [self.passcodeEntryViews addObject:pcv];
+    }
+}
+
+- (void) resetPasscodeEntryView
+{
+    for(PasscodeCircularView *pcv in self.passcodeEntryViews)
+    {
+        [pcv clear];
+    }
+    self.passcodeEntered = @"";
+    self.numberOfDigitsEntered = 0;
+}
+
+#pragma mark - 
+#pragma mark - Helper methods
+
+- (CGFloat)returnWidth
+{
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    if (UIInterfaceOrientationIsLandscape(orientation)){
+        return self.view.frame.size.height;
+    }
+    else{
+        return self.view.frame.size.width;
+    }
+}
+
+- (CGFloat)returnHeight
+{
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    if (UIInterfaceOrientationIsLandscape(orientation)){
+        return self.view.frame.size.width;
+    }
+    else{
+        return self.view.frame.size.height;
+    }
+}
+
+-(void)evaluatePasscodeEntry{
     if(self.passcodeType == PasscodeTypeSetup){
         if(self.currentWorkflowStep == WorkflowStepOne){
             self.currentWorkflowStep = WorkflowStepSetupPasscodeEnteredOnce;
-            self.passcodeFirstEntry = self.textField.text;
+            self.passcodeFirstEntry = self.passcodeEntered;
             [self updateLayoutBasedOnWorkflowStep];
         }
         else if(self.currentWorkflowStep == WorkflowStepSetupPasscodeEnteredOnce)
         {
-            if([self.passcodeFirstEntry isEqualToString:self.textField.text])
+            if([self.passcodeFirstEntry isEqualToString:self.passcodeEntered])
             {
-                [[PasscodeManager sharedManager] setPasscode:self.textField.text];
+                [[PasscodeManager sharedManager] setPasscode:self.passcodeEntered];
                 [_delegate didSetupPasscode];
             }
             else
@@ -102,7 +509,7 @@ static NSString * const kEnterCurrentPasscodeLabel = @"Enter your current passco
         }
     }
     else if(self.passcodeType == PasscodeTypeVerify || self.passcodeType == PasscodeTypeVerifyForSettingChange){
-        if([[PasscodeManager sharedManager] isPasscodeCorrect:self.textField.text]){
+        if([[PasscodeManager sharedManager] isPasscodeCorrect:self.passcodeEntered]){
             [_delegate didVerifyPasscode];
         }
         else{
@@ -112,7 +519,7 @@ static NSString * const kEnterCurrentPasscodeLabel = @"Enter your current passco
     }
     else if(self.passcodeType == PasscodeTypeChangePasscode)
     {
-        if([[PasscodeManager sharedManager] isPasscodeCorrect:self.textField.text]){
+        if([[PasscodeManager sharedManager] isPasscodeCorrect:self.passcodeEntered]){
             self.passcodeType = PasscodeTypeSetup;
             self.currentWorkflowStep = WorkflowStepOne;
             [self updateLayoutBasedOnWorkflowStep];
@@ -123,132 +530,12 @@ static NSString * const kEnterCurrentPasscodeLabel = @"Enter your current passco
         }
         
     }
-}
-- (void)updateLayoutBasedOnWorkflowStep
-{
-    if(self.passcodeType == PasscodeTypeSetup)
-    {
-        if(self.currentWorkflowStep == WorkflowStepOne)
-        {
-            self.label.text = NSLocalizedString(kEnterPasscodeLabel, nil);
-            self.textField.text = @"";
-        }
-        else if(self.currentWorkflowStep == WorkflowStepSetupPasscodeEnteredOnce)
-        {
-            self.label.text = NSLocalizedString(kReEnterPasscodeLabel, nil);
-            self.textField.text = @"";
-        }
-        else if(self.currentWorkflowStep == WorkflowStepSetupPasscodesDidNotMatch)
-        {
-            self.label.text = NSLocalizedString(kEnterPasscodeLabel, nil);
-            self.currentWorkflowStep = WorkflowStepOne;
-            self.textField.text = @"";
-        }
-    }
-    else if(self.passcodeType == PasscodeTypeVerify || self.passcodeType == PasscodeTypeVerifyForSettingChange){
-        self.label.text = NSLocalizedString(kEnterPasscodeLabel, nil);;
-        self.textField.text = @"";
-        if(self.passcodeType == PasscodeTypeVerifyForSettingChange){
-            [self enableCancel];
-        }
-    }
-    else if(self.passcodeType == PasscodeTypeChangePasscode)
-    {
-        if(self.currentWorkflowStep == WorkflowStepOne){
-            self.label.text = NSLocalizedString(kEnterCurrentPasscodeLabel, nil);
-            self.textField.text = @"";
-            [self enableCancel];
-        }
-    }
-}
--(void)cancelBtnPressed:(id)sender
-{
-    [_delegate passcodeSetupCancelled];
+
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-}
 
 -(void)setDelegate:(id)newDelegate{
     _delegate = newDelegate;
 }
-
-
-
-
-
-
-
-//-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-//{
-//    [self rotateAccordingToStatusBarOrientationAndSupportedOrientations];
-//}
-
-//#pragma mark - TODO
-//- (void)rotateAccordingToStatusBarOrientationAndSupportedOrientations {
-//	UIInterfaceOrientation orientation = [self desiredOrientation];
-//    CGFloat angle = UIInterfaceOrientationAngleOfOrientation(orientation);
-//    CGAffineTransform transform = CGAffineTransformMakeRotation(angle);
-//	
-//    [self setIfNotEqualTransform: transform
-//						   frame: self.view.window.bounds];
-//}
-//
-//
-//- (void)setIfNotEqualTransform:(CGAffineTransform)transform frame:(CGRect)frame {
-//    if(!CGAffineTransformEqualToTransform(self.view.transform, transform)) {
-//        self.view.transform = transform;
-//    }
-//    if(!CGRectEqualToRect(self.view.frame, frame)) {
-//        self.view.frame = frame;
-//    }
-//}
-//CGFloat UIInterfaceOrientationAngleOfOrientation(UIInterfaceOrientation orientation) {
-//    CGFloat angle;
-//	
-//    switch (orientation) {
-//        case UIInterfaceOrientationPortraitUpsideDown:
-//            angle = M_PI;
-//            break;
-//        case UIInterfaceOrientationLandscapeLeft:
-//            angle = -M_PI_2;
-//            break;
-//        case UIInterfaceOrientationLandscapeRight:
-//            angle = M_PI_2;
-//            break;
-//        default:
-//            angle = 0.0;
-//            break;
-//    }
-//	
-//    return angle;
-//}
-//
-//- (UIInterfaceOrientation)desiredOrientation {
-//    UIInterfaceOrientation statusBarOrientation = [[UIApplication sharedApplication] statusBarOrientation];
-//    UIInterfaceOrientationMask statusBarOrientationAsMask = UIInterfaceOrientationMaskFromOrientation(statusBarOrientation);
-//    if(self.supportedInterfaceOrientations & statusBarOrientationAsMask) {
-//        return statusBarOrientation;
-//    }
-//    else {
-//        if(self.supportedInterfaceOrientations & UIInterfaceOrientationMaskPortrait) {
-//            return UIInterfaceOrientationPortrait;
-//        }
-//        else if(self.supportedInterfaceOrientations & UIInterfaceOrientationMaskLandscapeLeft) {
-//            return UIInterfaceOrientationLandscapeLeft;
-//        }
-//        else if(self.supportedInterfaceOrientations & UIInterfaceOrientationMaskLandscapeRight) {
-//            return UIInterfaceOrientationLandscapeRight;
-//        }
-//        else {
-//            return UIInterfaceOrientationPortraitUpsideDown;
-//        }
-//    }
-//}
-//UIInterfaceOrientationMask UIInterfaceOrientationMaskFromOrientation(UIInterfaceOrientation orientation) {
-//    return 1 << orientation;
-//}
 
 @end

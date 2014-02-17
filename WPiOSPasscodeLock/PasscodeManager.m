@@ -22,6 +22,7 @@ static NSString * const kPasscodeInactivityEnded = @"PasscodeInactivityEnded";
 @property (nonatomic, strong) void (^verificationCompletedBlock)(BOOL success);
 @property (nonatomic, strong) PasscodeViewController *passcodeViewController;
 @property (nonatomic, strong) UIViewController *presentingViewController;
+
 @end
 
 @implementation PasscodeManager
@@ -35,13 +36,26 @@ static NSString * const kPasscodeInactivityEnded = @"PasscodeInactivityEnded";
     return sharedManager;
 }
 
+
+#pragma mark -
+#pragma mark - Subscriptions management
+
 -(void) activatePasscodeProtection
 {
-    [self subscribeToNotifications];
+    if([self isPasscodeProtectionOn]){
+        [self subscribeToNotifications];
+    }
+}
+
+-(void) deactivatePasscodeProtection
+{
+    [self disableSubscriptions];
 }
 
 -(void)subscribeToNotifications
 {
+    [self disableSubscriptions];
+    
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleNotification:)
                                                  name: UIApplicationDidEnterBackgroundNotification
@@ -51,6 +65,79 @@ static NSString * const kPasscodeInactivityEnded = @"PasscodeInactivityEnded";
                                                  name: UIApplicationDidBecomeActiveNotification
                                                object: nil];
 }
+
+-(void)disableSubscriptions
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+
+}
+
+-(void)handleNotification:(NSNotification *)notification
+{
+    if(notification.name == UIApplicationDidEnterBackgroundNotification)
+    {
+        NSLog(@"Application did enter background");
+        [self startTrackingInactivity];
+    }
+    else if(notification.name == UIApplicationDidBecomeActiveNotification)
+    {
+        NSLog(@"Application did become active");
+        [self stopTrackingInactivity];
+        
+        if([self shouldLock]){
+            [self verifyPasscodeWithPasscodeType:PasscodeTypeVerify withCompletion:nil];
+        }
+    }
+}
+
+
+#pragma mark -
+#pragma mark - PasscodeViewControllerDelegate methods
+
+-(void)passcodeSetupCancelled
+{
+    if(self.setupCompletedBlock){
+        self.setupCompletedBlock(NO);
+        self.setupCompletedBlock = nil;
+    }
+    
+    if(self.verificationCompletedBlock){
+        self.verificationCompletedBlock(NO);
+        self.verificationCompletedBlock = nil;
+    }
+    [self dismissLockScreen];
+}
+
+-(void)didVerifyPasscode
+{
+    if(self.verificationCompletedBlock){
+        self.verificationCompletedBlock(YES);
+        self.verificationCompletedBlock = nil;
+    }
+    [self dismissLockScreen];
+}
+
+-(void)passcodeVerificationFailed
+{
+    if(self.verificationCompletedBlock){
+        self.verificationCompletedBlock(NO);
+        self.verificationCompletedBlock = nil;
+    }
+}
+
+-(void)didSetupPasscode
+{
+    [self togglePasscodeProtection:YES];
+    if(self.setupCompletedBlock){
+        self.setupCompletedBlock(YES);
+        self.setupCompletedBlock = nil;
+    }
+    [self dismissLockScreen];
+}
+
+#pragma mark - 
+#pragma mark - Workflow launchers 
 
 - (void) disablePasscodeProtectionWithCompletion:(void (^) (BOOL success)) completion
 {
@@ -72,15 +159,27 @@ static NSString * const kPasscodeInactivityEnded = @"PasscodeInactivityEnded";
 -(void)presentLockScreenWithPasscodeType:(PasscodeType) passcodeType
 {
     self.passcodeViewController = [[PasscodeViewController alloc]initWithPasscodeType:passcodeType withDelegate:self];
-   // UIWindow *mainWindow = [UIApplication sharedApplication].windows[0];
- //   [mainWindow addSubview: self.passcodeViewController.view];
-   // [mainWindow.rootViewController addChildViewController: self.passcodeViewController];
-    
     self.presentingViewController = [self topViewController];
     [self.presentingViewController presentViewController:self.passcodeViewController animated:NO completion:nil];
-
 }
 
+-(void)setupNewPasscodeWithCompletion:(void (^)(BOOL success)) completion
+{
+    [self setPasscodeInactivityDurationInMinutes:@0];
+    self.setupCompletedBlock = completion;
+    [self presentLockScreenWithPasscodeType:PasscodeTypeSetup];
+    
+}
+
+- (void) changePasscodeWithCompletion:(void (^)(BOOL success)) completion
+{
+    [self setPasscodeInactivityDurationInMinutes:[self getPasscodeInactivityDurationInMinutes]];
+    self.setupCompletedBlock = completion;
+    [self presentLockScreenWithPasscodeType:PasscodeTypeChangePasscode];
+}
+
+#pragma mark -
+#pragma mark - Helper methods
 
 - (UIViewController *)topViewController{
     return [self topViewController:[UIApplication sharedApplication].keyWindow.rootViewController];
@@ -103,29 +202,6 @@ static NSString * const kPasscodeInactivityEnded = @"PasscodeInactivityEnded";
 }
 
 
-
-
-
-
-
-
--(void)handleNotification:(NSNotification *)notification
-{
-    if(notification.name == UIApplicationDidEnterBackgroundNotification)
-    {
-        NSLog(@"Application did enter background");
-        [self startTrackingInactivity];
-    }
-    else if(notification.name == UIApplicationDidBecomeActiveNotification)
-    {
-        NSLog(@"Application did become active");
-        [self stopTrackingInactivity];
-        
-        if([self shouldLock]){
-            [self verifyPasscodeWithPasscodeType:PasscodeTypeVerify withCompletion:nil];
-        }
-    }
-}
 
 -(BOOL) shouldLock
 {
@@ -163,62 +239,11 @@ static NSString * const kPasscodeInactivityEnded = @"PasscodeInactivityEnded";
     [FXKeychain defaultKeychain][kPasscodeInactivityEnded] = [NSDate date];
 }
 
--(void)setupNewPasscodeWithCompletion:(void (^)(BOOL success)) completion
-{
-    [self setPasscodeInactivityDurationInMinutes:@0];
-    self.setupCompletedBlock = completion;
-    [self presentLockScreenWithPasscodeType:PasscodeTypeSetup];
-
-}
-- (void) changePasscodeWithCompletion:(void (^)(BOOL success)) completion
-{
-    [self setPasscodeInactivityDurationInMinutes:[self getPasscodeInactivityDurationInMinutes]];
-    self.setupCompletedBlock = completion;
-    [self presentLockScreenWithPasscodeType:PasscodeTypeChangePasscode];
-}
-
--(void)didSetupPasscode
-{
-    [self togglePasscodeProtection:YES];
-    [self dismissLockScreen];
-    if(self.setupCompletedBlock){
-        self.setupCompletedBlock(YES);
-    }
-}
-
--(void)passcodeSetupCancelled
-{
-    if(self.setupCompletedBlock){
-        self.setupCompletedBlock(NO);
-    }
-    
-    if(self.verificationCompletedBlock){
-        self.verificationCompletedBlock(NO);
-    }
-    [self dismissLockScreen];
-}
-
 - (void)dismissLockScreen
 {
-   // [self.passcodeViewController.view removeFromSuperview];
-   // [self.passcodeViewController removeFromParentViewController];
     [self.passcodeViewController dismissViewControllerAnimated:NO completion:nil];
 }
 
--(void)didVerifyPasscode
-{
-    if(self.verificationCompletedBlock){
-        self.verificationCompletedBlock(YES);
-
-    }
-    [self dismissLockScreen];
-}
--(void)passcodeVerificationFailed
-{
-    if(self.verificationCompletedBlock){
-    self.verificationCompletedBlock(NO);
-    }
-}
 
 - (void) setPasscode:(NSString *)passcode
 {
@@ -243,10 +268,12 @@ static NSString * const kPasscodeInactivityEnded = @"PasscodeInactivityEnded";
     if(isOn)
     {
         [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:kPasscodeProtectionStatusKey];
+        [self activatePasscodeProtection];
     }
     else
     {
         [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:kPasscodeProtectionStatusKey];
+        [self deactivatePasscodeProtection];
         
     }
 }

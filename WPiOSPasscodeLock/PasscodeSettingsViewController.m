@@ -134,6 +134,7 @@
                 [self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
             }
             else{
+                self.passcodeEnabled = NO;
                 [switchView setOn:NO];
             }
         }];

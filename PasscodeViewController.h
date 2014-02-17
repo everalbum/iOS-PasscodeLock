@@ -26,14 +26,6 @@ typedef enum PasscodeType : NSUInteger {
     PasscodeTypeChangePasscode
 } PasscodeType;
 
-typedef enum PasscodeWorkflowStep : NSUInteger {
-    WorkflowStepOne,
-    WorkflowStepSetupPasscodeEnteredOnce,
-    WorkflowStepSetupPasscodeEnteredTwice,
-    WorkflowStepSetupPasscodesDidNotMatch,
-    WorkflowStepChangePasscodeVerified,
-    WorkflowStepChangePasscodeNotVerified, 
-} PasscodeWorkflowStep;
 
 @interface PasscodeViewController : UIViewController
 

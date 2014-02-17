@@ -10,8 +10,14 @@
 
 @interface PasscodeCircularButton : UIButton
 
-@property (nonatomic, strong) UIColor *lineColor;
 
-- (void) drawCircular;
+- (id) initWithNumber:(NSString *)number
+                frame:(CGRect)frame
+            lineColor:(UIColor *) lineColor
+           titleColor:(UIColor *) titleColor
+            fillColor:(UIColor *) fillColor
+    selectedLineColor:(UIColor *) selectedLineColor
+   selectedTitleColor:(UIColor *) selectedTitleColor
+    selectedFillColor:(UIColor *) selectedFillColor;
 
 @end
