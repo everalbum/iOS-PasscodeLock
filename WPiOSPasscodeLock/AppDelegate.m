@@ -32,7 +32,7 @@
 -(void) setPasscodeStyle{
     
     [PasscodeManager sharedManager].buttonTitleFont = [UIFont fontWithName:@"Avenir-Book" size:35];
-    [PasscodeManager sharedManager].instructionsLabelFont = [UIFont fontWithName:@"Avenir-Book" size:20];
+    [PasscodeManager sharedManager].instructionsLabelFont = [UIFont fontWithName:@"Avenir-Book" size:17];
     [PasscodeManager sharedManager].cancelOrDeleteButtonFont = [UIFont fontWithName:@"Avenir-Book" size:15];
     
     UIColor *iPhone5CBlue = [UIColor colorWithRed:0.275 green:0.671 blue:0.878 alpha:1.0];
