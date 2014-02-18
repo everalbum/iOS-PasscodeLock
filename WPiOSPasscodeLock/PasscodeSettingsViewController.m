@@ -30,10 +30,15 @@
     return self;
 }
 
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    [self resetDurations];
+}
+
+- (void)resetDurations
+{
     self.durations = @[NSLocalizedString(@"Immediately",nil),
                        NSLocalizedString(@"After 1 minute",nil),
                        NSLocalizedString(@"After 15 minutes",nil)];
@@ -154,10 +159,12 @@
             }
         }];
     }
+    [self reloadTableView];
 }
 
 -(void)reloadTableView
 {
+    [self resetDurations];
     [self.tableView reloadData];
 }
 

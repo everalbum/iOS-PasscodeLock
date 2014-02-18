@@ -42,8 +42,9 @@
 //    UIColor *iPhone5SSpaceGrey = [UIColor colorWithRed:0.6 green:0.596 blue:0.608 alpha:1.0];
 //    UIColor *iPhone5SGold = [UIColor colorWithRed:0.831 green:0.773 blue:0.702 alpha:1.0];
 //    UIColor *iPhone5SSilver = [UIColor colorWithRed:0.843 green:0.851 blue:0.847 alpha:1.0];
+//    UIColor *iPhone5CPink = [UIColor colorWithRed:0.996 green:0.463 blue:0.478 alpha:1.0];
+
     UIColor *iPhone5CWhite = [UIColor colorWithRed:0.961 green:0.957 blue:0.969 alpha:1.0];
-    UIColor *iPhone5CPink = [UIColor colorWithRed:0.996 green:0.463 blue:0.478 alpha:1.0];
     UIColor *wpBlue = [UIColor colorWithRed:0.129 green:0.459 blue:0.608 alpha:1.0];
     UIColor *wpOrange = [UIColor colorWithRed:0.835 green:0.306 blue:0.129 alpha:1.0];
     
