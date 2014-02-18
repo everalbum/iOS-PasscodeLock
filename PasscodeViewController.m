@@ -151,19 +151,19 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     [self createButtons];
     [self createPasscodeEntryView];
     [self buildLayout];
-    [self.view setBackgroundColor:[UIColor colorWithRed:160/255.0f green:236/255.0f blue:112/255.0f alpha:1.0f]];
+    [self.view setBackgroundColor:[PasscodeManager sharedManager].backgroundColor];
     [self updateLayoutBasedOnWorkflowStep];
 }
 -(void)createButtons
 {
     CGRect frame = CGRectMake(0, 0, PasscodeButtonSize, PasscodeButtonSize);
 
-    UIColor *lineColor = [UIColor blackColor];
-    UIColor *titleColor = [UIColor blackColor];
-    UIColor *fillColor = [UIColor clearColor];
-    UIColor *selectedLineColor = [UIColor whiteColor];
-    UIColor *selectedTitleColor = [UIColor whiteColor];
-    UIColor *selectedFillColor = [UIColor redColor];
+    UIColor *lineColor = [PasscodeManager sharedManager].buttonLineColor;
+    UIColor *titleColor = [PasscodeManager sharedManager].buttonTitleColor;
+    UIColor *fillColor = [PasscodeManager sharedManager].buttonFillColor;
+    UIColor *selectedLineColor = [PasscodeManager sharedManager].buttonHighlightedLineColor;
+    UIColor *selectedTitleColor = [PasscodeManager sharedManager].buttonHighlightedTitleColor;
+    UIColor *selectedFillColor = [PasscodeManager sharedManager].buttonHighlightedFillColor;
 
     
     _btnOne = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(@"1",nil)
@@ -281,12 +281,13 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     
     _btnCancelOrDelete = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     _btnCancelOrDelete.frame = frame;
-    _btnCancelOrDelete.titleLabel.textColor = [UIColor blueColor];
+    _btnCancelOrDelete.titleLabel.textColor = [PasscodeManager sharedManager].cancelOrDeleteButtonColor;
     _btnCancelOrDelete.hidden = YES;
     [_btnCancelOrDelete setTitle:@"" forState:UIControlStateNormal];
     [_btnCancelOrDelete addTarget:self action:@selector(cancelOrDeleteBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
     
     _lblInstruction = [[UILabel alloc]initWithFrame:CGRectZero];
+    _lblInstruction.textColor = [PasscodeManager sharedManager].instructionsLabelColor;
 
 }
 

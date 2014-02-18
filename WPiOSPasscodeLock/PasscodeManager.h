@@ -25,4 +25,15 @@
 - (void) setPasscodeInactivityDurationInMinutes:(NSNumber *) minutes;
 - (NSNumber *) getPasscodeInactivityDurationInMinutes;
 
+@property (strong, nonatomic) UIColor *backgroundColor;
+@property (strong, nonatomic) UIColor *buttonLineColor;
+@property (strong, nonatomic) UIColor *buttonTitleColor;
+@property (strong, nonatomic) UIColor *buttonFillColor;
+@property (strong, nonatomic) UIColor *buttonHighlightedLineColor;
+@property (strong, nonatomic) UIColor *buttonHighlightedTitleColor;
+@property (strong, nonatomic) UIColor *buttonHighlightedFillColor;
+@property (strong, nonatomic) UIColor *instructionsLabelColor;
+@property (strong, nonatomic) UIColor *cancelOrDeleteButtonColor;
+
+
 @end

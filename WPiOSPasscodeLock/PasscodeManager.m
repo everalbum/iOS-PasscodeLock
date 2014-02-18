@@ -310,4 +310,88 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
     return NO;
 }
 
+#pragma mark - 
+#pragma mark - Styling Getters
+
+-(UIColor *)backgroundColor
+{
+    if(_backgroundColor){
+        return _backgroundColor;
+    }
+    else{
+        return [UIColor whiteColor];
+    }
+}
+-(UIColor *)buttonLineColor
+{
+    if(_buttonLineColor){
+        return _buttonLineColor;
+    }
+    else{
+        return [UIColor blackColor];
+    }
+}
+-(UIColor *)buttonTitleColor
+{
+    if(_buttonTitleColor){
+        return _buttonTitleColor;
+    }
+    else{
+        return [UIColor blackColor];
+    }
+}
+-(UIColor *)buttonFillColor
+{
+    if(_buttonFillColor){
+        return _buttonFillColor;
+    }
+    else{
+        return [UIColor clearColor];
+    }
+}
+-(UIColor *)buttonHighlightedLineColor
+{
+    if(_buttonHighlightedLineColor){
+        return _buttonHighlightedLineColor;
+    }
+    else{
+        return [UIColor whiteColor];
+    }
+}
+-(UIColor *)buttonHighlightedTitleColor
+{
+    if(_buttonHighlightedTitleColor){
+        return _buttonHighlightedTitleColor;
+    }
+    else{
+        return [UIColor whiteColor];
+    }
+}
+-(UIColor *)buttonHighlightedFillColor
+{
+    if(_buttonHighlightedFillColor){
+        return _buttonHighlightedFillColor;
+    }
+    else{
+        return [UIColor redColor];
+    }
+}
+-(UIColor *)instructionsLabelColor
+{
+    if(_instructionsLabelColor){
+        return _instructionsLabelColor;
+    }
+    else{
+        return [UIColor blackColor];
+    }
+}
+-(UIColor *)cancelOrDeleteButtonColor
+{
+    if(_cancelOrDeleteButtonColor){
+        return _cancelOrDeleteButtonColor;
+    }
+    else{
+        return [UIColor blackColor];
+    }
+}
 @end
