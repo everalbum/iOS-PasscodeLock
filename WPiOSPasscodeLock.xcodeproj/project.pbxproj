@@ -101,8 +101,7 @@
 		F10E1A0618AFCAC5007C9E4B /* WPiOSPasscodeLock */ = {
 			isa = PBXGroup;
 			children = (
-				F10E1A0D18AFE32E007C9E4B /* FXKeychain.h */,
-				F10E1A0E18AFE32E007C9E4B /* FXKeychain.m */,
+				F1D7FE6A18B4280E0024EF13 /* Util */,
 				F13CC32818B2A8E4001BDD0D /* Controller */,
 				F13CC32718B2A8CD001BDD0D /* View */,
 				F10E1A0718AFD3F6007C9E4B /* PasscodeManager.h */,
@@ -129,6 +128,15 @@
 				F1E50FC318AEA65B0011AF09 /* PasscodeViewController.m */,
 			);
 			name = Controller;
+			sourceTree = "<group>";
+		};
+		F1D7FE6A18B4280E0024EF13 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				F10E1A0D18AFE32E007C9E4B /* FXKeychain.h */,
+				F10E1A0E18AFE32E007C9E4B /* FXKeychain.m */,
+			);
+			name = Util;
 			sourceTree = "<group>";
 		};
 		F1E50F8718AEA64C0011AF09 = {
