@@ -11,9 +11,11 @@
 #import "PasscodeCircularButton.h"
 #import "PasscodeCircularView.h" 
 
-static NSString * const EnterPasscodeLabel = @"Enter Passcode";
-static NSString * const ReEnterPasscodeLabel = @"Re-enter your new Passcode";
-static NSString * const EnterCurrentPasscodeLabel = @"Enter your old Passcode";
+static NSString * const EnterPasscodeText = @"Enter Passcode";
+static NSString * const ReEnterPasscodeText = @"Re-enter your new Passcode";
+static NSString * const EnterCurrentPasscodeText = @"Enter your old Passcode";
+static NSString * const IncorrectPasscodeText = @"Incorrect Passcode";
+static NSString * const PasscodesDidNotMatchText = @"Passcodes Did Not Match";
 
 static CGFloat const PasscodeButtonSize = 75;
 static CGFloat const PasscodeButtonPaddingHorizontal = 20;
@@ -404,27 +406,27 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     {
         if(self.currentWorkflowStep == WorkflowStepOne)
         {
-            self.lblInstruction.text = NSLocalizedString(EnterPasscodeLabel, nil);
+            self.lblInstruction.text = NSLocalizedString(EnterPasscodeText, nil);
         }
         else if(self.currentWorkflowStep == WorkflowStepSetupPasscodeEnteredOnce)
         {
-            self.lblInstruction.text = NSLocalizedString(ReEnterPasscodeLabel, nil);
+            self.lblInstruction.text = NSLocalizedString(ReEnterPasscodeText, nil);
         }
         else if(self.currentWorkflowStep == WorkflowStepSetupPasscodesDidNotMatch)
         {
-            self.lblInstruction.text = NSLocalizedString(EnterPasscodeLabel, nil);
+            self.lblInstruction.text = NSLocalizedString(EnterPasscodeText, nil);
             self.currentWorkflowStep = WorkflowStepOne;
         }
     }
     else if(self.passcodeType == PasscodeTypeVerify || self.passcodeType == PasscodeTypeVerifyForSettingChange){
-        self.lblInstruction.text = NSLocalizedString(EnterPasscodeLabel, nil);;
+        self.lblInstruction.text = NSLocalizedString(EnterPasscodeText, nil);;
         if(self.passcodeType == PasscodeTypeVerifyForSettingChange){
         }
     }
     else if(self.passcodeType == PasscodeTypeChangePasscode)
     {
         if(self.currentWorkflowStep == WorkflowStepOne){
-            self.lblInstruction.text = NSLocalizedString(EnterCurrentPasscodeLabel, nil);
+            self.lblInstruction.text = NSLocalizedString(EnterCurrentPasscodeText, nil);
         }
     }
     [self enableCancelIfAllowed];
@@ -530,7 +532,7 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
             else
             {
                 self.currentWorkflowStep = WorkflowStepSetupPasscodesDidNotMatch;
-                [self showErrorMessage:NSLocalizedString(@"Passcodes did not match.", nil)];
+                [self showErrorMessage:NSLocalizedString(PasscodesDidNotMatchText, nil)];
                 [self updateLayoutBasedOnWorkflowStep];
             }
         }
@@ -540,7 +542,7 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
             [_delegate didVerifyPasscode];
         }
         else{
-            [self showErrorMessage:NSLocalizedString(@"Incorrect passcode", nil)];
+            [self showErrorMessage:NSLocalizedString(IncorrectPasscodeText, nil)];
 
             self.currentWorkflowStep = WorkflowStepOne;
             [self updateLayoutBasedOnWorkflowStep];
@@ -554,6 +556,7 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
             [self updateLayoutBasedOnWorkflowStep];
         }
         else{
+            [self showErrorMessage:NSLocalizedString(IncorrectPasscodeText, nil)];
             self.currentWorkflowStep = WorkflowStepOne;
             [self updateLayoutBasedOnWorkflowStep];
         }
