@@ -22,7 +22,6 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 @property (nonatomic, strong) void (^verificationCompletedBlock)(BOOL success);
 @property (nonatomic, strong) PasscodeViewController *passcodeViewController;
 @property (nonatomic, strong) UIViewController *presentingViewController;
-
 @end
 
 @implementation PasscodeManager
@@ -62,21 +61,30 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
                                                object: nil];
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleNotification:)
+                                                 name: UIApplicationWillResignActiveNotification
+                                               object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleNotification:)
                                                  name: UIApplicationDidBecomeActiveNotification
                                                object: nil];
 }
 
 -(void)disableSubscriptions
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIApplicationDidEnterBackgroundNotification object:nil];
 
 }
 
 -(void)handleNotification:(NSNotification *)notification
 {
-    if(notification.name == UIApplicationDidEnterBackgroundNotification)
+    if(notification.name == UIApplicationDidEnterBackgroundNotification || notification.name == UIApplicationWillResignActiveNotification)
     {
+        [self dismissLockScreen];
         [self startTrackingInactivity];
     }
     else if(notification.name == UIApplicationDidBecomeActiveNotification)
