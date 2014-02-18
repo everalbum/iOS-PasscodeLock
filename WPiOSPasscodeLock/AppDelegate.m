@@ -59,21 +59,6 @@
     [PasscodeManager sharedManager].passcodeViewLineColor = blackColor;
     
     [PasscodeManager sharedManager].buttonFillColor = [UIColor clearColor];
-    
-//    [PasscodeManager sharedManager].backgroundColor = iPhone5CBlue;
-//    [PasscodeManager sharedManager].buttonHighlightedLineColor = iPhone5CBlue;
-//    [PasscodeManager sharedManager].buttonHighlightedTitleColor = iPhone5CBlue;
-//    
-//    [PasscodeManager sharedManager].buttonLineColor = iPhone5CGreen;
-//    [PasscodeManager sharedManager].buttonTitleColor = iPhone5CGreen;
-//    [PasscodeManager sharedManager].buttonHighlightedFillColor = iPhone5CGreen;
-//    [PasscodeManager sharedManager].instructionsLabelColor = iPhone5CGreen;
-//    [PasscodeManager sharedManager].cancelOrDeleteButtonColor = iPhone5CGreen;
-//    [PasscodeManager sharedManager].passcodeViewFillColor = iPhone5CGreen;
-//    [PasscodeManager sharedManager].passcodeViewLineColor = iPhone5CGreen;
-//    
-//    [PasscodeManager sharedManager].buttonFillColor = [UIColor clearColor];
-
 
 }
 

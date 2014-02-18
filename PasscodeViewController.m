@@ -35,6 +35,7 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
 
 @property (strong, nonatomic) UILabel *lblInstruction;
 @property (strong, nonatomic) UIButton *btnCancelOrDelete;
+@property (strong, nonatomic) UILabel *lblError;
 
 @property (strong, nonatomic) PasscodeCircularButton *btnDelete;
 @property (strong, nonatomic) PasscodeCircularButton *btnZero;
@@ -309,7 +310,11 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     _lblInstruction = [[UILabel alloc]initWithFrame:CGRectZero];
     _lblInstruction.textColor = [PasscodeManager sharedManager].instructionsLabelColor;
     _lblInstruction.font = [PasscodeManager sharedManager].instructionsLabelFont;
-
+    
+    _lblError = [[UILabel alloc]initWithFrame:CGRectZero];
+    _lblError.textColor = [PasscodeManager sharedManager].errorLabelColor;
+    _lblError.backgroundColor = [PasscodeManager sharedManager].errorLabelBackgroundColor;
+    _lblError.font = [PasscodeManager sharedManager].errorLabelFont;
 }
 
 - (void)buildLayout
@@ -338,6 +343,7 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     CGRect frameBtnZero = CGRectMake(middleButtonX, zeroRowY, PasscodeButtonSize, PasscodeButtonSize);
     CGRect frameBtnCancel = CGRectMake(lastButtonX, zeroRowY, PasscodeButtonSize, PasscodeButtonSize);
     CGRect frameLblInstruction = CGRectMake(0, 0, 250, 20);
+    CGRect frameLblError = CGRectMake(0, 0, 200, 20);
 
     _btnOne.frame = frameBtnOne;
     _btnTwo.frame = frameBtnTwo;
@@ -355,6 +361,12 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     _lblInstruction.frame = frameLblInstruction;
     _lblInstruction.center = CGPointMake([self returnWidth]/2, firstRowY - (PasscodeButtonPaddingVertical * 10));
 
+    _lblError.textAlignment = NSTextAlignmentCenter;
+    _lblError.frame = frameLblError;
+    _lblError.center = CGPointMake([self returnWidth]/2, firstRowY - (PasscodeButtonPaddingVertical * 3));
+    _lblError.layer.cornerRadius = 10;
+    _lblError.hidden = YES;
+
     [self.view addSubview:_btnOne];
     [self.view addSubview:_btnTwo];
     [self.view addSubview:_btnThree];
@@ -368,6 +380,8 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     [self.view addSubview:_btnCancelOrDelete];
 
     [self.view addSubview:_lblInstruction];
+    [self.view addSubview:_lblError];
+
     
     CGFloat passcodeEntryViewsY = firstRowY - PasscodeButtonPaddingVertical * 7;
     CGFloat passcodeEntryViewWidth = (PasscodeDigitCount * PasscodeEntryViewSize) + ((PasscodeDigitCount - 1) * PasscodeButtonPaddingHorizontal);
@@ -430,6 +444,11 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     }
 }
 
+-(void)showErrorMessage:(NSString *)errorMessage
+{
+    self.lblError.hidden = NO;
+    self.lblError.text = errorMessage;
+}
 - (void)enableCancelIfAllowed
 {
     if(self.passcodeType == PasscodeTypeChangePasscode || self.passcodeType == PasscodeTypeSetup || self.passcodeType == PasscodeTypeVerifyForSettingChange){
@@ -491,6 +510,9 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
 }
 
 -(void)evaluatePasscodeEntry{
+    
+    self.lblError.hidden = YES;
+    
     if(self.passcodeType == PasscodeTypeSetup){
         if(self.currentWorkflowStep == WorkflowStepOne){
             self.currentWorkflowStep = WorkflowStepSetupPasscodeEnteredOnce;
@@ -507,6 +529,7 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
             else
             {
                 self.currentWorkflowStep = WorkflowStepSetupPasscodesDidNotMatch;
+                [self showErrorMessage:NSLocalizedString(@"Passcodes did not match.", nil)];
                 [self updateLayoutBasedOnWorkflowStep];
             }
         }
@@ -516,6 +539,8 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
             [_delegate didVerifyPasscode];
         }
         else{
+            [self showErrorMessage:NSLocalizedString(@"Incorrect passcode", nil)];
+
             self.currentWorkflowStep = WorkflowStepOne;
             [self updateLayoutBasedOnWorkflowStep];
         }
