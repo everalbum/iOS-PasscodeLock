@@ -46,17 +46,17 @@
     
     UIColor *blackColor = [UIColor blackColor];
     
-    [PasscodeManager sharedManager].backgroundColor = iPhone5SSpaceGrey;
-    [PasscodeManager sharedManager].buttonHighlightedLineColor = iPhone5SSpaceGrey;
-    [PasscodeManager sharedManager].buttonHighlightedTitleColor = iPhone5SSpaceGrey;
+    [PasscodeManager sharedManager].backgroundColor = iPhone5CPink;
+    [PasscodeManager sharedManager].buttonHighlightedLineColor = iPhone5CPink;
+    [PasscodeManager sharedManager].buttonHighlightedTitleColor = iPhone5CPink;
     
-    [PasscodeManager sharedManager].buttonLineColor = blackColor;
-    [PasscodeManager sharedManager].buttonTitleColor = blackColor;
-    [PasscodeManager sharedManager].buttonHighlightedFillColor = blackColor;
-    [PasscodeManager sharedManager].instructionsLabelColor = blackColor;
-    [PasscodeManager sharedManager].cancelOrDeleteButtonColor = blackColor;
-    [PasscodeManager sharedManager].passcodeViewFillColor = blackColor;
-    [PasscodeManager sharedManager].passcodeViewLineColor = blackColor;
+    [PasscodeManager sharedManager].buttonLineColor = iPhone5CYellow;
+    [PasscodeManager sharedManager].buttonTitleColor = iPhone5CYellow;
+    [PasscodeManager sharedManager].buttonHighlightedFillColor = iPhone5CYellow;
+    [PasscodeManager sharedManager].instructionsLabelColor = iPhone5CYellow;
+    [PasscodeManager sharedManager].cancelOrDeleteButtonColor = iPhone5CYellow;
+    [PasscodeManager sharedManager].passcodeViewFillColor = iPhone5CYellow;
+    [PasscodeManager sharedManager].passcodeViewLineColor = iPhone5CYellow;
     
     [PasscodeManager sharedManager].buttonFillColor = [UIColor clearColor];
 

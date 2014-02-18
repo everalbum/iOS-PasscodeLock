@@ -77,12 +77,10 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 {
     if(notification.name == UIApplicationDidEnterBackgroundNotification)
     {
-        NSLog(@"Application did enter background");
         [self startTrackingInactivity];
     }
     else if(notification.name == UIApplicationDidBecomeActiveNotification)
     {
-        NSLog(@"Application did become active");
         [self stopTrackingInactivity];
         
         if([self shouldLock]){

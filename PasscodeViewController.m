@@ -107,6 +107,7 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
         if(self.numberOfDigitsEntered == 0){
             self.btnCancelOrDelete.hidden = YES;
             [self enableCancelIfAllowed];
+            self.lblError.hidden = YES; 
         }
     }
 }
