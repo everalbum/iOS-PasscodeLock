@@ -18,6 +18,6 @@
             fillColor:(UIColor *) fillColor
     selectedLineColor:(UIColor *) selectedLineColor
    selectedTitleColor:(UIColor *) selectedTitleColor
-    selectedFillColor:(UIColor *) selectedFillColor;
-
+    selectedFillColor:(UIColor *) selectedFillColor
+                 font:(UIFont *) font; 
 @end

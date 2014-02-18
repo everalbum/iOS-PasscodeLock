@@ -164,7 +164,7 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     UIColor *selectedLineColor = [PasscodeManager sharedManager].buttonHighlightedLineColor;
     UIColor *selectedTitleColor = [PasscodeManager sharedManager].buttonHighlightedTitleColor;
     UIColor *selectedFillColor = [PasscodeManager sharedManager].buttonHighlightedFillColor;
-
+    UIFont *titleFont = [PasscodeManager sharedManager].buttonTitleFont;
     
     _btnOne = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(@"1",nil)
                                                       frame:frame
@@ -173,7 +173,8 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
                                                   fillColor:fillColor
                                           selectedLineColor:selectedLineColor
                                          selectedTitleColor:selectedTitleColor
-                                          selectedFillColor:selectedFillColor];
+                                          selectedFillColor:selectedFillColor
+                                                       font:titleFont];
     
     [_btnOne addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -185,7 +186,9 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
                                                   fillColor:fillColor
                                           selectedLineColor:selectedLineColor
                                          selectedTitleColor:selectedTitleColor
-                                          selectedFillColor:selectedFillColor];
+                                          selectedFillColor:selectedFillColor
+                                                       font:titleFont];
+
     
     [_btnTwo addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -197,7 +200,9 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
                                                     fillColor:fillColor
                                             selectedLineColor:selectedLineColor
                                            selectedTitleColor:selectedTitleColor
-                                            selectedFillColor:selectedFillColor];
+                                            selectedFillColor:selectedFillColor
+                                                         font:titleFont];
+
     
     [_btnThree addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
 
@@ -208,7 +213,9 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
                                                    fillColor:fillColor
                                            selectedLineColor:selectedLineColor
                                           selectedTitleColor:selectedTitleColor
-                                           selectedFillColor:selectedFillColor];
+                                           selectedFillColor:selectedFillColor
+                                                        font:titleFont];
+
     
     [_btnFour addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -219,7 +226,9 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
                                                    fillColor:fillColor
                                            selectedLineColor:selectedLineColor
                                           selectedTitleColor:selectedTitleColor
-                                           selectedFillColor:selectedFillColor];
+                                           selectedFillColor:selectedFillColor
+                                                        font:titleFont];
+
     
     [_btnFive addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
 
@@ -230,7 +239,9 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
                                                   fillColor:fillColor
                                           selectedLineColor:selectedLineColor
                                          selectedTitleColor:selectedTitleColor
-                                          selectedFillColor:selectedFillColor];
+                                          selectedFillColor:selectedFillColor
+                                                       font:titleFont];
+
     
     [_btnSix addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
 
@@ -241,7 +252,9 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
                                                     fillColor:fillColor
                                             selectedLineColor:selectedLineColor
                                            selectedTitleColor:selectedTitleColor
-                                            selectedFillColor:selectedFillColor];
+                                            selectedFillColor:selectedFillColor
+                                                         font:titleFont];
+
     
     [_btnSeven addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -252,7 +265,9 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
                                                     fillColor:fillColor
                                             selectedLineColor:selectedLineColor
                                            selectedTitleColor:selectedTitleColor
-                                            selectedFillColor:selectedFillColor];
+                                            selectedFillColor:selectedFillColor
+                                                         font:titleFont];
+
     
     [_btnEight addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -263,7 +278,9 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
                                                    fillColor:fillColor
                                            selectedLineColor:selectedLineColor
                                           selectedTitleColor:selectedTitleColor
-                                           selectedFillColor:selectedFillColor];
+                                           selectedFillColor:selectedFillColor
+                                                        font:titleFont];
+
     
     [_btnNine addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -274,7 +291,9 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
                                                    fillColor:fillColor
                                            selectedLineColor:selectedLineColor
                                           selectedTitleColor:selectedTitleColor
-                                           selectedFillColor:selectedFillColor];
+                                           selectedFillColor:selectedFillColor
+                                                        font:titleFont];
+
     
     [_btnZero addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -285,9 +304,11 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
         _btnCancelOrDelete.hidden = YES;
     [_btnCancelOrDelete setTitle:@"" forState:UIControlStateNormal];
     [_btnCancelOrDelete addTarget:self action:@selector(cancelOrDeleteBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
+    _btnCancelOrDelete.titleLabel.font = [PasscodeManager sharedManager].cancelOrDeleteButtonFont;
     
     _lblInstruction = [[UILabel alloc]initWithFrame:CGRectZero];
     _lblInstruction.textColor = [PasscodeManager sharedManager].instructionsLabelColor;
+    _lblInstruction.font = [PasscodeManager sharedManager].instructionsLabelFont;
 
 }
 
@@ -333,7 +354,6 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     _lblInstruction.textAlignment = NSTextAlignmentCenter;
     _lblInstruction.frame = frameLblInstruction;
     _lblInstruction.center = CGPointMake([self returnWidth]/2, firstRowY - (PasscodeButtonPaddingVertical * 10));
-    _lblInstruction.font = [UIFont systemFontOfSize:15];
 
     [self.view addSubview:_btnOne];
     [self.view addSubview:_btnTwo];
@@ -423,12 +443,14 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     self.passcodeEntryViews = [NSMutableArray new];
     self.passcodeEntered = @"";
     self.numberOfDigitsEntered = 0;
+    UIColor *lineColor = [PasscodeManager sharedManager].passcodeViewLineColor;
+    UIColor *fillColor = [PasscodeManager sharedManager].passcodeViewFillColor;
     CGRect frame = CGRectMake(0, 0, PasscodeEntryViewSize, PasscodeEntryViewSize);
     
     for (int i=0; i < PasscodeDigitCount; i++){
         PasscodeCircularView *pcv = [[PasscodeCircularView alloc]initWithFrame:frame
-                                                                     lineColor:[UIColor redColor]
-                                                                     fillColor:[UIColor redColor]];
+                                                                     lineColor:lineColor
+                                                                     fillColor:fillColor];
         [self.passcodeEntryViews addObject:pcv];
     }
 }

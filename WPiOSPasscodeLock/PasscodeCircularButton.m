@@ -18,6 +18,7 @@
 @property (nonatomic, strong) UIColor *selectedLineColor;
 @property (nonatomic, strong) UIColor *selectedFillColor;
 @property (nonatomic, strong) UIColor *selectedTitleColor;
+@property (nonatomic, strong) UIFont *font;
 @end
 
 @implementation PasscodeCircularButton
@@ -31,6 +32,7 @@
     selectedLineColor:(UIColor *) selectedLineColor
    selectedTitleColor:(UIColor *) selectedTitleColor
     selectedFillColor:(UIColor *) selectedFillColor
+                 font:(UIFont *) font
 {
     self = [super init];
     
@@ -45,6 +47,7 @@
         self.selectedTitleColor = selectedTitleColor;
         self.selectedFillColor = selectedFillColor;
         self.frame = frame;
+        self.font = font;
         [self setTitle:number forState:UIControlStateNormal];
         [self drawCircular];
     }
@@ -63,11 +66,12 @@
     
     [self.circle setStrokeColor:[self.lineColor CGColor]];
     
-    [self.circle setLineWidth:0.3f];
+    [self.circle setLineWidth:0.5f];
     [self.circle setFillColor:self.fillColor.CGColor];
     
     [[self layer] addSublayer:self.circle];
-    self.titleLabel.font = [UIFont systemFontOfSize:30];
+    self.titleLabel.font = self.font;
+   
 }
 
 - (void)setHighlighted:(BOOL)highlighted

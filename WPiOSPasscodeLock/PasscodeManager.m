@@ -382,7 +382,7 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
         return _instructionsLabelColor;
     }
     else{
-        return [UIColor redColor];
+        return [UIColor blackColor];
     }
 }
 -(UIColor *)cancelOrDeleteButtonColor
@@ -391,7 +391,48 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
         return _cancelOrDeleteButtonColor;
     }
     else{
-        return [UIColor redColor];
+        return [UIColor blackColor];
+    }
+}
+-(UIColor *)passcodeViewFillColor
+{
+    if(_passcodeViewFillColor){
+        return _passcodeViewFillColor;
+    }
+    else{
+        return [UIColor blackColor];
+    }
+}
+-(UIColor *)passcodeViewLineColor
+{
+    if(_passcodeViewLineColor){
+        return _passcodeViewLineColor;
+    }
+    else{
+        return [UIColor blackColor];
+    }
+}
+-(UIFont *)buttonTitleFont{
+    if(_buttonTitleFont){
+        return _buttonTitleFont;
+    }else{
+        return [UIFont systemFontOfSize:35];
+    }
+}
+
+-(UIFont *)instructionsLabelFont{
+    if(_instructionsLabelFont){
+        return _instructionsLabelFont;
+    }else{
+        return [UIFont systemFontOfSize:15];
+    }
+}
+
+-(UIFont *)cancelOrDeleteButtonFont{
+    if(_cancelOrDeleteButtonFont){
+        return _cancelOrDeleteButtonFont;
+    }else{
+        return [UIFont systemFontOfSize:15];
     }
 }
 @end

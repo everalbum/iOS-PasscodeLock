@@ -17,7 +17,8 @@
     // Override point for customization after application launch.
     
     [[PasscodeManager sharedManager] activatePasscodeProtection];
-
+    [self setPasscodeStyle];
+    
     SettingsViewController *svc = [[SettingsViewController alloc]initWithStyle:UITableViewStyleGrouped];
     UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:svc];
     
@@ -26,6 +27,54 @@
     [self.window makeKeyAndVisible];
 
     return YES;
+}
+
+-(void) setPasscodeStyle{
+    
+    [PasscodeManager sharedManager].buttonTitleFont = [UIFont fontWithName:@"Avenir-Book" size:35];
+    [PasscodeManager sharedManager].instructionsLabelFont = [UIFont fontWithName:@"Avenir-Book" size:20];
+    [PasscodeManager sharedManager].cancelOrDeleteButtonFont = [UIFont fontWithName:@"Avenir-Book" size:15];
+    
+    UIColor *iPhone5CBlue = [UIColor colorWithRed:0.275 green:0.671 blue:0.878 alpha:1.0];
+    UIColor *iPhone5CGreen = [UIColor colorWithRed:0.631 green:0.91 blue:0.467 alpha:1.0];
+    UIColor *iPhone5CWhite = [UIColor colorWithRed:0.961 green:0.957 blue:0.969 alpha:1.0];
+    UIColor *iPhone5CPink = [UIColor colorWithRed:0.996 green:0.463 blue:0.478 alpha:1.0];
+    UIColor *iPhone5CYellow = [UIColor colorWithRed:0.98 green:0.945 blue:0.537 alpha:1.0];
+    UIColor *iPhone5SSpaceGrey = [UIColor colorWithRed:0.6 green:0.596 blue:0.608 alpha:1.0];
+    UIColor *iPhone5SGold = [UIColor colorWithRed:0.831 green:0.773 blue:0.702 alpha:1.0];
+    UIColor *iPhone5SSilver = [UIColor colorWithRed:0.843 green:0.851 blue:0.847 alpha:1.0];
+    
+    UIColor *blackColor = [UIColor blackColor];
+    
+    [PasscodeManager sharedManager].backgroundColor = iPhone5SSpaceGrey;
+    [PasscodeManager sharedManager].buttonHighlightedLineColor = iPhone5SSpaceGrey;
+    [PasscodeManager sharedManager].buttonHighlightedTitleColor = iPhone5SSpaceGrey;
+    
+    [PasscodeManager sharedManager].buttonLineColor = blackColor;
+    [PasscodeManager sharedManager].buttonTitleColor = blackColor;
+    [PasscodeManager sharedManager].buttonHighlightedFillColor = blackColor;
+    [PasscodeManager sharedManager].instructionsLabelColor = blackColor;
+    [PasscodeManager sharedManager].cancelOrDeleteButtonColor = blackColor;
+    [PasscodeManager sharedManager].passcodeViewFillColor = blackColor;
+    [PasscodeManager sharedManager].passcodeViewLineColor = blackColor;
+    
+    [PasscodeManager sharedManager].buttonFillColor = [UIColor clearColor];
+    
+//    [PasscodeManager sharedManager].backgroundColor = iPhone5CBlue;
+//    [PasscodeManager sharedManager].buttonHighlightedLineColor = iPhone5CBlue;
+//    [PasscodeManager sharedManager].buttonHighlightedTitleColor = iPhone5CBlue;
+//    
+//    [PasscodeManager sharedManager].buttonLineColor = iPhone5CGreen;
+//    [PasscodeManager sharedManager].buttonTitleColor = iPhone5CGreen;
+//    [PasscodeManager sharedManager].buttonHighlightedFillColor = iPhone5CGreen;
+//    [PasscodeManager sharedManager].instructionsLabelColor = iPhone5CGreen;
+//    [PasscodeManager sharedManager].cancelOrDeleteButtonColor = iPhone5CGreen;
+//    [PasscodeManager sharedManager].passcodeViewFillColor = iPhone5CGreen;
+//    [PasscodeManager sharedManager].passcodeViewLineColor = iPhone5CGreen;
+//    
+//    [PasscodeManager sharedManager].buttonFillColor = [UIColor clearColor];
+
+
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

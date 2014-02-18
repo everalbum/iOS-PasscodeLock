@@ -44,7 +44,7 @@
     UIBezierPath *path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame))];
     [self.circle setPath:[path CGPath]];
     [self.circle setStrokeColor:self.lineColor.CGColor];
-    [self.circle setLineWidth:0.3f];
+    [self.circle setLineWidth:0.5f];
     [self.circle setFillColor:[UIColor clearColor].CGColor];
     [[self layer] addSublayer:self.circle];
 }
