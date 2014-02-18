@@ -151,7 +151,7 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     [self createButtons];
     [self createPasscodeEntryView];
     [self buildLayout];
-    [self.view setBackgroundColor:[UIColor whiteColor]];
+    [self.view setBackgroundColor:[UIColor colorWithRed:160/255.0f green:236/255.0f blue:112/255.0f alpha:1.0f]];
     [self updateLayoutBasedOnWorkflowStep];
 }
 -(void)createButtons
