@@ -10,11 +10,11 @@
 #import "FXKeychain.h"
 #import <math.h> 
 
-static NSString * const kPasscodeProtectionStatusKey = @"PasscodeProtectionEnabled";
-static NSString * const kPasscodeKey = @"PasscodeKey";
-static NSString * const kPasscodeInactivityDuration = @"PasscodeInactivityDuration";
-static NSString * const kPasscodeInactivityStarted = @"PasscodeInactivityStarted";
-static NSString * const kPasscodeInactivityEnded = @"PasscodeInactivityEnded";
+static NSString * const PasscodeProtectionStatusKey = @"PasscodeProtectionEnabled";
+static NSString * const PasscodeKey = @"PasscodeKey";
+static NSString * const PasscodeInactivityDuration = @"PasscodeInactivityDuration";
+static NSString * const PasscodeInactivityStarted = @"PasscodeInactivityStarted";
+static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 
 @interface PasscodeManager ()
 
@@ -223,20 +223,20 @@ static NSString * const kPasscodeInactivityEnded = @"PasscodeInactivityEnded";
 }
 -(NSDate *)getInactivityStartTime
 {
-    return [FXKeychain defaultKeychain][kPasscodeInactivityStarted];
+    return [FXKeychain defaultKeychain][PasscodeInactivityStarted];
 }
 -(NSDate *)getInactivityEndTime
 {
-    return [FXKeychain defaultKeychain][kPasscodeInactivityEnded];
+    return [FXKeychain defaultKeychain][PasscodeInactivityEnded];
 }
 
 -(void)startTrackingInactivity
 {
-    [FXKeychain defaultKeychain][kPasscodeInactivityStarted] = [NSDate date];
+    [FXKeychain defaultKeychain][PasscodeInactivityStarted] = [NSDate date];
 }
 -(void)stopTrackingInactivity
 {
-    [FXKeychain defaultKeychain][kPasscodeInactivityEnded] = [NSDate date];
+    [FXKeychain defaultKeychain][PasscodeInactivityEnded] = [NSDate date];
 }
 
 - (void)dismissLockScreen
@@ -247,12 +247,12 @@ static NSString * const kPasscodeInactivityEnded = @"PasscodeInactivityEnded";
 
 - (void) setPasscode:(NSString *)passcode
 {
-    [FXKeychain defaultKeychain][kPasscodeKey] = passcode;
+    [FXKeychain defaultKeychain][PasscodeKey] = passcode;
 }
 
 - (BOOL) isPasscodeCorrect:(NSString *)passcode
 {
-    bool result = [[FXKeychain defaultKeychain][kPasscodeKey] isEqualToString:passcode];
+    bool result = [[FXKeychain defaultKeychain][PasscodeKey] isEqualToString:passcode];
     if(result)
     {
         return YES;
@@ -267,12 +267,12 @@ static NSString * const kPasscodeInactivityEnded = @"PasscodeInactivityEnded";
 {
     if(isOn)
     {
-        [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:kPasscodeProtectionStatusKey];
+        [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:PasscodeProtectionStatusKey];
         [self activatePasscodeProtection];
     }
     else
     {
-        [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:kPasscodeProtectionStatusKey];
+        [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:PasscodeProtectionStatusKey];
         [self deactivatePasscodeProtection];
         
     }
@@ -280,17 +280,17 @@ static NSString * const kPasscodeInactivityEnded = @"PasscodeInactivityEnded";
 
 - (void) setPasscodeInactivityDurationInMinutes:(NSNumber *) minutes
 {
-    [FXKeychain defaultKeychain][kPasscodeInactivityDuration] = minutes;
+    [FXKeychain defaultKeychain][PasscodeInactivityDuration] = minutes;
 }
 
 - (NSNumber *) getPasscodeInactivityDurationInMinutes
 {
-    return   [NSNumber numberWithInteger:[[FXKeychain defaultKeychain][kPasscodeInactivityDuration] integerValue]];
+    return   [NSNumber numberWithInteger:[[FXKeychain defaultKeychain][PasscodeInactivityDuration] integerValue]];
 }
 
 - (BOOL) isPasscodeProtectionOn
 {
-    NSString *status = [[NSUserDefaults standardUserDefaults]stringForKey:kPasscodeProtectionStatusKey];
+    NSString *status = [[NSUserDefaults standardUserDefaults]stringForKey:PasscodeProtectionStatusKey];
     
     if(status)
     {

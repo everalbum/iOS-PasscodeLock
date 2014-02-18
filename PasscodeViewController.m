@@ -15,11 +15,11 @@ static NSString * const EnterPasscodeLabel = @"Enter Passcode";
 static NSString * const ReEnterPasscodeLabel = @"Re-enter your new Passcode";
 static NSString * const EnterCurrentPasscodeLabel = @"Enter your old Passcode";
 
-static CGFloat const PasscodeButtonSize = 65;
+static CGFloat const PasscodeButtonSize = 75;
 static CGFloat const PasscodeButtonPaddingHorizontal = 20;
 static CGFloat const PasscodeButtonPaddingVertical = 10;
 
-static CGFloat const PasscodeEntryViewSize = 10;
+static CGFloat const PasscodeEntryViewSize = 15;
 static NSInteger const PasscodeDigitCount = 4;
 
 typedef enum PasscodeWorkflowStep : NSUInteger {
@@ -35,7 +35,6 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
 
 @property (strong, nonatomic) UILabel *lblInstruction;
 @property (strong, nonatomic) UIButton *btnCancelOrDelete;
-@property (strong, nonatomic) UIView *buttonContainerView;
 
 @property (strong, nonatomic) PasscodeCircularButton *btnDelete;
 @property (strong, nonatomic) PasscodeCircularButton *btnZero;
@@ -293,32 +292,13 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
 
 - (void)buildLayout
 {
-    UIUserInterfaceIdiom interfaceIdiom = [[UIDevice currentDevice] userInterfaceIdiom];
-
-    _buttonContainerView = [[UIView alloc]initWithFrame:CGRectZero];
-    _buttonContainerView.translatesAutoresizingMaskIntoConstraints = NO;
-    [_buttonContainerView setBackgroundColor:[UIColor clearColor]];
-    [self.view addSubview:_buttonContainerView];
-    
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:_buttonContainerView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTop multiplier:1.0f constant:130.0f]];
-    
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:_buttonContainerView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.0f]];
-    
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:_buttonContainerView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:0.0f]];
-    
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:_buttonContainerView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0f constant:0.0f]];
-
     CGFloat buttonRowWidth = (PasscodeButtonSize * 3) + (PasscodeButtonPaddingHorizontal * 2);
     CGFloat firstButtonX = ([self returnWidth]/2) - (buttonRowWidth/2) + 0.5;
     CGFloat middleButtonX = firstButtonX + PasscodeButtonSize + PasscodeButtonPaddingHorizontal;
     CGFloat lastButtonX = middleButtonX + PasscodeButtonSize + PasscodeButtonPaddingHorizontal;
-    CGFloat firstRowY = 0;
     
-    if(interfaceIdiom == UIUserInterfaceIdiomPad){
-        firstRowY = 100;
-    }else{
-        firstRowY = 20;
-    }
+    CGFloat firstRowY = ([self returnHeight]/2) - PasscodeButtonSize - PasscodeButtonPaddingVertical * 3;
+
     
     CGFloat middleRowY = firstRowY + PasscodeButtonSize + PasscodeButtonPaddingVertical;
     CGFloat lastRowY = middleRowY + PasscodeButtonSize + PasscodeButtonPaddingVertical;
@@ -351,24 +331,24 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
 
     _lblInstruction.textAlignment = NSTextAlignmentCenter;
     _lblInstruction.frame = frameLblInstruction;
-    _lblInstruction.center = CGPointMake([self returnWidth]/2, 60);
+    _lblInstruction.center = CGPointMake([self returnWidth]/2, firstRowY - (PasscodeButtonPaddingVertical * 10));
     _lblInstruction.font = [UIFont systemFontOfSize:15];
     
-    [_buttonContainerView addSubview:_btnOne];
-    [_buttonContainerView addSubview:_btnTwo];
-    [_buttonContainerView addSubview:_btnThree];
-    [_buttonContainerView addSubview:_btnFour];
-    [_buttonContainerView addSubview:_btnFive];
-    [_buttonContainerView addSubview:_btnSix];
-    [_buttonContainerView addSubview:_btnSeven];
-    [_buttonContainerView addSubview:_btnEight];
-    [_buttonContainerView addSubview:_btnNine];
-    [_buttonContainerView addSubview:_btnZero];
-    [_buttonContainerView addSubview:_btnCancelOrDelete];
+    [self.view addSubview:_btnOne];
+    [self.view addSubview:_btnTwo];
+    [self.view addSubview:_btnThree];
+    [self.view addSubview:_btnFour];
+    [self.view addSubview:_btnFive];
+    [self.view addSubview:_btnSix];
+    [self.view addSubview:_btnSeven];
+    [self.view addSubview:_btnEight];
+    [self.view addSubview:_btnNine];
+    [self.view addSubview:_btnZero];
+    [self.view addSubview:_btnCancelOrDelete];
 
     [self.view addSubview:_lblInstruction];
     
-    CGFloat passcodeEntryViewsY = 90;
+    CGFloat passcodeEntryViewsY = firstRowY - PasscodeButtonPaddingVertical * 7;
     CGFloat passcodeEntryViewWidth = (PasscodeDigitCount * PasscodeEntryViewSize) + ((PasscodeDigitCount - 1) * PasscodeButtonPaddingHorizontal);
     CGFloat xPoint = ([self returnWidth] - passcodeEntryViewWidth) / 2;
     
