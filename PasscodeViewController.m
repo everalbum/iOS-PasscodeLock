@@ -281,8 +281,8 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     
     _btnCancelOrDelete = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     _btnCancelOrDelete.frame = frame;
-    _btnCancelOrDelete.titleLabel.textColor = [PasscodeManager sharedManager].cancelOrDeleteButtonColor;
-    _btnCancelOrDelete.hidden = YES;
+    [_btnCancelOrDelete setTitleColor:[PasscodeManager sharedManager].cancelOrDeleteButtonColor forState:UIControlStateNormal];
+        _btnCancelOrDelete.hidden = YES;
     [_btnCancelOrDelete setTitle:@"" forState:UIControlStateNormal];
     [_btnCancelOrDelete addTarget:self action:@selector(cancelOrDeleteBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -334,7 +334,7 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     _lblInstruction.frame = frameLblInstruction;
     _lblInstruction.center = CGPointMake([self returnWidth]/2, firstRowY - (PasscodeButtonPaddingVertical * 10));
     _lblInstruction.font = [UIFont systemFontOfSize:15];
-    
+
     [self.view addSubview:_btnOne];
     [self.view addSubview:_btnTwo];
     [self.view addSubview:_btnThree];

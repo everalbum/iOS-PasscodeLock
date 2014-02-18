@@ -382,7 +382,7 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
         return _instructionsLabelColor;
     }
     else{
-        return [UIColor blackColor];
+        return [UIColor redColor];
     }
 }
 -(UIColor *)cancelOrDeleteButtonColor
@@ -391,7 +391,7 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
         return _cancelOrDeleteButtonColor;
     }
     else{
-        return [UIColor blackColor];
+        return [UIColor redColor];
     }
 }
 @end
