@@ -34,7 +34,10 @@
 {
     [super viewDidLoad];
     
-    self.durations = @[@"Immediately", @"After 1 minute", @"After 15 minutes"];
+    self.durations = @[NSLocalizedString(@"Immediately",nil),
+                       NSLocalizedString(@"After 1 minute",nil),
+                       NSLocalizedString(@"After 15 minutes",nil)];
+    
     self.durationMinutes = @[@0, @1, @15];
     
     if([[PasscodeManager sharedManager] isPasscodeProtectionOn])
@@ -89,17 +92,17 @@
         [switchview addTarget:self action:@selector(updateSwitch:) forControlEvents:UIControlEventTouchUpInside];
         [switchview setOn:self.passcodeEnabled];
         cell.accessoryView = switchview;
-        cell.textLabel.text = @"Passcode Lock";
+        cell.textLabel.text = NSLocalizedString(@"Passcode Lock",nil);
     }
     else if(indexPath.section == 1 && indexPath.row == 0)//Duration
     {
-        cell.textLabel.text = @"Activate";
+        cell.textLabel.text = NSLocalizedString(@"Activate",nil);
         cell.detailTextLabel.text = self.passcodeDuration;
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     else if(indexPath.section == 1 && indexPath.row == 1) //Change passcode
     {
-        cell.textLabel.text = @"Change Passcode";
+        cell.textLabel.text = NSLocalizedString(@"Change Passcode",nil);
     }
     
     return cell;

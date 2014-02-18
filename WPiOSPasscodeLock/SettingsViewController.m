@@ -31,7 +31,7 @@ NSString *CellIdentifier = @"Cell";
 {
     [super viewDidLoad];
 
-    self.title = @"Settings";
+    self.title = NSLocalizedString(@"Settings",nil);
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:CellIdentifier];
 
 }
@@ -60,7 +60,7 @@ NSString *CellIdentifier = @"Cell";
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
-    cell.textLabel.text = @"Passcode lock";
+    cell.textLabel.text = NSLocalizedString(@"Passcode Lock",nil);
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
     
