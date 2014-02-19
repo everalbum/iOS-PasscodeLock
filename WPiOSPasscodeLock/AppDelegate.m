@@ -44,7 +44,7 @@
     style.selectedTitleColor = iPhone5CWhite;
     style.titleFont = [UIFont fontWithName:@"Avenir-Book" size:35];
     
-    [buttonStyleProvider addStyleForButton:PasscodeButtonEight stye:style];
+    [buttonStyleProvider addStyleForButton:PasscodeButtonAll stye:style];
     
     [PasscodeManager sharedManager].buttonStyleProvider = buttonStyleProvider;
     [PasscodeManager sharedManager].instructionsLabelFont = [UIFont fontWithName:@"Avenir-Book" size:17];
