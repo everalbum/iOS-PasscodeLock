@@ -15,7 +15,7 @@ static NSString * const EnterPasscodeText = @"Enter Passcode";
 static NSString * const ReEnterPasscodeText = @"Re-enter your new Passcode";
 static NSString * const EnterCurrentPasscodeText = @"Enter your old Passcode";
 static NSString * const IncorrectPasscodeText = @"Incorrect Passcode";
-static NSString * const PasscodesDidNotMatchText = @"Passcodes Did Not Match";
+static NSString * const PasscodesDidNotMatchText = @"Passcodes did not Match";
 
 static CGFloat const PasscodeButtonSize = 75;
 static CGFloat const PasscodeButtonPaddingHorizontal = 20;
