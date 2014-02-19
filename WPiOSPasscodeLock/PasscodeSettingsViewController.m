@@ -135,14 +135,17 @@
 
 -(void)updateSwitch:(UISwitch *)switchView
 {
+    __weak PasscodeSettingsViewController *selfRef = self;
+
     if(switchView.isOn){
+        
         [[PasscodeManager sharedManager] setupNewPasscodeWithCompletion:^(BOOL success) {
             if(success){
-                self.passcodeEnabled = YES;
-                [self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+                selfRef.passcodeEnabled = YES;
+                [selfRef.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
             }
             else{
-                self.passcodeEnabled = NO;
+                selfRef.passcodeEnabled = NO;
                 [switchView setOn:NO];
             }
         }];
