@@ -38,22 +38,10 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
 @property (strong, nonatomic) UILabel *lblInstruction;
 @property (strong, nonatomic) UIButton *btnCancelOrDelete;
 @property (strong, nonatomic) UILabel *lblError;
-
-@property (strong, nonatomic) PasscodeCircularButton *btnDelete;
-@property (strong, nonatomic) PasscodeCircularButton *btnZero;
-@property (strong, nonatomic) PasscodeCircularButton *btnOne;
-@property (strong, nonatomic) PasscodeCircularButton *btnTwo;
-@property (strong, nonatomic) PasscodeCircularButton *btnThree;
-@property (strong, nonatomic) PasscodeCircularButton *btnFour;
-@property (strong, nonatomic) PasscodeCircularButton *btnFive;
-@property (strong, nonatomic) PasscodeCircularButton *btnSix;
-@property (strong, nonatomic) PasscodeCircularButton *btnSeven;
-@property (strong, nonatomic) PasscodeCircularButton *btnEight;
-@property (strong, nonatomic) PasscodeCircularButton *btnNine;
-
 @property (strong, nonatomic) NSString *passcodeFirstEntry;
 @property (strong, nonatomic) NSString *passcodeEntered;
 @property (strong, nonatomic) NSMutableArray *passcodeEntryViews;
+@property (strong, nonatomic) NSMutableArray *passcodeButtons;
 @property (assign) NSInteger numberOfDigitsEntered;
 
 @property (assign) PasscodeType passcodeType;
@@ -160,6 +148,8 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
 }
 -(void)createButtons
 {
+    
+    _passcodeButtons = [NSMutableArray new];
     CGRect frame = CGRectMake(0, 0, PasscodeButtonSize, PasscodeButtonSize);
 
     UIColor *lineColor = [PasscodeManager sharedManager].buttonLineColor;
@@ -169,143 +159,30 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     UIColor *selectedTitleColor = [PasscodeManager sharedManager].buttonHighlightedTitleColor;
     UIColor *selectedFillColor = [PasscodeManager sharedManager].buttonHighlightedFillColor;
     UIFont *titleFont = [PasscodeManager sharedManager].buttonTitleFont;
-    
-    _btnOne = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(@"1",nil)
-                                                      frame:frame
-                                                  lineColor:lineColor
-                                                 titleColor:titleColor
-                                                  fillColor:fillColor
-                                          selectedLineColor:selectedLineColor
-                                         selectedTitleColor:selectedTitleColor
-                                          selectedFillColor:selectedFillColor
-                                                       font:titleFont];
-    
-    [_btnOne addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
-    
-    
-    _btnTwo = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(@"2",nil)
-                                                      frame:frame
-                                                  lineColor:lineColor
-                                                 titleColor:titleColor
-                                                  fillColor:fillColor
-                                          selectedLineColor:selectedLineColor
-                                         selectedTitleColor:selectedTitleColor
-                                          selectedFillColor:selectedFillColor
-                                                       font:titleFont];
 
-    
-    [_btnTwo addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
-    
-    
-    _btnThree = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(@"3",nil)
-                                                        frame:frame
-                                                    lineColor:lineColor
-                                                   titleColor:titleColor
-                                                    fillColor:fillColor
-                                            selectedLineColor:selectedLineColor
-                                           selectedTitleColor:selectedTitleColor
-                                            selectedFillColor:selectedFillColor
-                                                         font:titleFont];
+    for(int i = 0; i < 10; i++)
+    {
+        NSString *passcodeNumberStr = [NSString stringWithFormat:@"%d",i];
+        PasscodeCircularButton *passcodeButton = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(passcodeNumberStr,nil)
+                                                                                         frame:frame
+                                                                                     lineColor:lineColor
+                                                                                    titleColor:titleColor
+                                                                                     fillColor:fillColor
+                                                                             selectedLineColor:selectedLineColor
+                                                                            selectedTitleColor:selectedTitleColor
+                                                                             selectedFillColor:selectedFillColor
+                                                                                          font:titleFont];
+        
+        [passcodeButton addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [_passcodeButtons addObject:passcodeButton];
 
-    
-    [_btnThree addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
-
-    _btnFour = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(@"4", nil)
-                                                       frame:frame
-                                                   lineColor:lineColor
-                                                  titleColor:titleColor
-                                                   fillColor:fillColor
-                                           selectedLineColor:selectedLineColor
-                                          selectedTitleColor:selectedTitleColor
-                                           selectedFillColor:selectedFillColor
-                                                        font:titleFont];
-
-    
-    [_btnFour addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
-    
-    _btnFive = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(@"5", nil)
-                                                       frame:frame
-                                                   lineColor:lineColor
-                                                  titleColor:titleColor
-                                                   fillColor:fillColor
-                                           selectedLineColor:selectedLineColor
-                                          selectedTitleColor:selectedTitleColor
-                                           selectedFillColor:selectedFillColor
-                                                        font:titleFont];
-
-    
-    [_btnFive addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
-
-    _btnSix = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(@"6",nil)
-                                                      frame:frame
-                                                  lineColor:lineColor
-                                                 titleColor:titleColor
-                                                  fillColor:fillColor
-                                          selectedLineColor:selectedLineColor
-                                         selectedTitleColor:selectedTitleColor
-                                          selectedFillColor:selectedFillColor
-                                                       font:titleFont];
-
-    
-    [_btnSix addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
-
-    _btnSeven = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(@"7",nil)
-                                                        frame:frame
-                                                    lineColor:lineColor
-                                                   titleColor:titleColor
-                                                    fillColor:fillColor
-                                            selectedLineColor:selectedLineColor
-                                           selectedTitleColor:selectedTitleColor
-                                            selectedFillColor:selectedFillColor
-                                                         font:titleFont];
-
-    
-    [_btnSeven addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
-    
-    _btnEight = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(@"8",nil)
-                                                        frame:frame
-                                                    lineColor:lineColor
-                                                   titleColor:titleColor
-                                                    fillColor:fillColor
-                                            selectedLineColor:selectedLineColor
-                                           selectedTitleColor:selectedTitleColor
-                                            selectedFillColor:selectedFillColor
-                                                         font:titleFont];
-
-    
-    [_btnEight addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
-    
-    _btnNine = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(@"9",nil)
-                                                       frame:frame
-                                                   lineColor:lineColor
-                                                  titleColor:titleColor
-                                                   fillColor:fillColor
-                                           selectedLineColor:selectedLineColor
-                                          selectedTitleColor:selectedTitleColor
-                                           selectedFillColor:selectedFillColor
-                                                        font:titleFont];
-
-    
-    [_btnNine addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
-    
-    _btnZero = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(@"0",nil)
-                                                       frame:frame
-                                                   lineColor:lineColor
-                                                  titleColor:titleColor
-                                                   fillColor:fillColor
-                                           selectedLineColor:selectedLineColor
-                                          selectedTitleColor:selectedTitleColor
-                                           selectedFillColor:selectedFillColor
-                                                        font:titleFont];
-
-    
-    [_btnZero addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
+    }
     
     
     _btnCancelOrDelete = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     _btnCancelOrDelete.frame = frame;
     [_btnCancelOrDelete setTitleColor:[PasscodeManager sharedManager].cancelOrDeleteButtonColor forState:UIControlStateNormal];
-        _btnCancelOrDelete.hidden = YES;
+    _btnCancelOrDelete.hidden = YES;
     [_btnCancelOrDelete setTitle:@"" forState:UIControlStateNormal];
     [_btnCancelOrDelete addTarget:self action:@selector(cancelOrDeleteBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
     _btnCancelOrDelete.titleLabel.font = [PasscodeManager sharedManager].cancelOrDeleteButtonFont;
@@ -323,41 +200,40 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
 - (void)buildLayout
 {
     CGFloat buttonRowWidth = (PasscodeButtonSize * 3) + (PasscodeButtonPaddingHorizontal * 2);
+  
     CGFloat firstButtonX = ([self returnWidth]/2) - (buttonRowWidth/2) + 0.5;
     CGFloat middleButtonX = firstButtonX + PasscodeButtonSize + PasscodeButtonPaddingHorizontal;
     CGFloat lastButtonX = middleButtonX + PasscodeButtonSize + PasscodeButtonPaddingHorizontal;
     
     CGFloat firstRowY = ([self returnHeight]/2) - PasscodeButtonSize - PasscodeButtonPaddingVertical * 3;
-
-    
     CGFloat middleRowY = firstRowY + PasscodeButtonSize + PasscodeButtonPaddingVertical;
     CGFloat lastRowY = middleRowY + PasscodeButtonSize + PasscodeButtonPaddingVertical;
     CGFloat zeroRowY = lastRowY + PasscodeButtonSize + PasscodeButtonPaddingVertical;
 
-    CGRect frameBtnOne = CGRectMake(firstButtonX, firstRowY, PasscodeButtonSize, PasscodeButtonSize);
-    CGRect frameBtnTwo = CGRectMake(middleButtonX, firstRowY, PasscodeButtonSize, PasscodeButtonSize);
-    CGRect frameBtnThree = CGRectMake(lastButtonX, firstRowY, PasscodeButtonSize, PasscodeButtonSize);
-    CGRect frameBtnFour = CGRectMake(firstButtonX, middleRowY, PasscodeButtonSize, PasscodeButtonSize);
-    CGRect frameBtnFive = CGRectMake(middleButtonX, middleRowY, PasscodeButtonSize, PasscodeButtonSize);
-    CGRect frameBtnSix = CGRectMake(lastButtonX, middleRowY, PasscodeButtonSize, PasscodeButtonSize);
-    CGRect frameBtnSeven = CGRectMake(firstButtonX, lastRowY, PasscodeButtonSize, PasscodeButtonSize);
-    CGRect frameBtnEight = CGRectMake(middleButtonX, lastRowY, PasscodeButtonSize, PasscodeButtonSize);
-    CGRect frameBtnNine = CGRectMake(lastButtonX, lastRowY, PasscodeButtonSize, PasscodeButtonSize);
-    CGRect frameBtnZero = CGRectMake(middleButtonX, zeroRowY, PasscodeButtonSize, PasscodeButtonSize);
+    NSValue *frameBtnOne = [NSValue valueWithCGRect:CGRectMake(firstButtonX, firstRowY, PasscodeButtonSize, PasscodeButtonSize)];
+    NSValue *frameBtnTwo = [NSValue valueWithCGRect:CGRectMake(middleButtonX, firstRowY, PasscodeButtonSize, PasscodeButtonSize)];
+    NSValue *frameBtnThree = [NSValue valueWithCGRect:CGRectMake(lastButtonX, firstRowY, PasscodeButtonSize, PasscodeButtonSize)];
+    NSValue *frameBtnFour = [NSValue valueWithCGRect:CGRectMake(firstButtonX, middleRowY, PasscodeButtonSize, PasscodeButtonSize)];
+    NSValue *frameBtnFive = [NSValue valueWithCGRect:CGRectMake(middleButtonX, middleRowY, PasscodeButtonSize, PasscodeButtonSize)];
+    NSValue *frameBtnSix = [NSValue valueWithCGRect:CGRectMake(lastButtonX, middleRowY, PasscodeButtonSize, PasscodeButtonSize)];
+    NSValue *frameBtnSeven = [NSValue valueWithCGRect:CGRectMake(firstButtonX, lastRowY, PasscodeButtonSize, PasscodeButtonSize)];
+    NSValue *frameBtnEight = [NSValue valueWithCGRect:CGRectMake(middleButtonX, lastRowY, PasscodeButtonSize, PasscodeButtonSize)];
+    NSValue *frameBtnNine = [NSValue valueWithCGRect:CGRectMake(lastButtonX, lastRowY, PasscodeButtonSize, PasscodeButtonSize)];
+    NSValue *frameBtnZero = [NSValue valueWithCGRect:CGRectMake(middleButtonX, zeroRowY, PasscodeButtonSize, PasscodeButtonSize)];
+   
     CGRect frameBtnCancel = CGRectMake(lastButtonX, zeroRowY, PasscodeButtonSize, PasscodeButtonSize);
     CGRect frameLblInstruction = CGRectMake(0, 0, 250, 20);
     CGRect frameLblError = CGRectMake(0, 0, 200, 20);
+    
+    NSArray *buttonFrames = @[frameBtnZero, frameBtnOne, frameBtnTwo, frameBtnThree, frameBtnFour, frameBtnFive, frameBtnSix, frameBtnSeven, frameBtnEight, frameBtnNine];
+                                                                                                                    
+    for(int i = 0; i < 10; i++)
+    {
+        PasscodeCircularButton *passcodeButton = _passcodeButtons[i];
+        passcodeButton.frame = [buttonFrames[i] CGRectValue];
+        [self.view addSubview:passcodeButton];
+    }
 
-    _btnOne.frame = frameBtnOne;
-    _btnTwo.frame = frameBtnTwo;
-    _btnThree.frame = frameBtnThree;
-    _btnFour.frame = frameBtnFour;
-    _btnFive.frame = frameBtnFive;
-    _btnSix.frame = frameBtnSix;
-    _btnSeven.frame = frameBtnSeven;
-    _btnEight.frame = frameBtnEight;
-    _btnNine.frame = frameBtnNine;
-    _btnZero.frame = frameBtnZero;
     _btnCancelOrDelete.frame = frameBtnCancel;
 
     _lblInstruction.textAlignment = NSTextAlignmentCenter;
@@ -370,16 +246,6 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     _lblError.layer.cornerRadius = 10;
     _lblError.hidden = YES;
 
-    [self.view addSubview:_btnOne];
-    [self.view addSubview:_btnTwo];
-    [self.view addSubview:_btnThree];
-    [self.view addSubview:_btnFour];
-    [self.view addSubview:_btnFive];
-    [self.view addSubview:_btnSix];
-    [self.view addSubview:_btnSeven];
-    [self.view addSubview:_btnEight];
-    [self.view addSubview:_btnNine];
-    [self.view addSubview:_btnZero];
     [self.view addSubview:_btnCancelOrDelete];
 
     [self.view addSubview:_lblInstruction];
