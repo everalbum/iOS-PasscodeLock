@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "PasscodeViewController.h" 
+#import "PasscodeButtonStyleProvider.h"
 
 @interface PasscodeManager : NSObject <PasscodeViewControllerDelegate> 
 
@@ -26,12 +27,6 @@
 - (NSNumber *) getPasscodeInactivityDurationInMinutes;
 
 @property (strong, nonatomic) UIColor *backgroundColor;
-@property (strong, nonatomic) UIColor *buttonLineColor;
-@property (strong, nonatomic) UIColor *buttonTitleColor;
-@property (strong, nonatomic) UIColor *buttonFillColor;
-@property (strong, nonatomic) UIColor *buttonHighlightedLineColor;
-@property (strong, nonatomic) UIColor *buttonHighlightedTitleColor;
-@property (strong, nonatomic) UIColor *buttonHighlightedFillColor;
 @property (strong, nonatomic) UIColor *instructionsLabelColor;
 @property (strong, nonatomic) UIColor *cancelOrDeleteButtonColor;
 @property (strong, nonatomic) UIColor *passcodeViewLineColor;
@@ -39,10 +34,9 @@
 @property (strong, nonatomic) UIColor *errorLabelColor;
 @property (strong, nonatomic) UIColor *errorLabelBackgroundColor;
 @property (strong, nonatomic) UIFont *errorLabelFont;
-@property (strong, nonatomic) UIFont *buttonTitleFont;
 @property (strong, nonatomic) UIFont *instructionsLabelFont;
 @property (strong, nonatomic) UIFont *cancelOrDeleteButtonFont;
-
+@property (strong, nonatomic) PasscodeButtonStyleProvider *buttonStyleProvider; 
 
 
 @end

@@ -7,17 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PasscodeButtonStyleProvider.h"
 
 @interface PasscodeCircularButton : UIButton
 
 
 - (id) initWithNumber:(NSString *)number
                 frame:(CGRect)frame
-            lineColor:(UIColor *) lineColor
-           titleColor:(UIColor *) titleColor
-            fillColor:(UIColor *) fillColor
-    selectedLineColor:(UIColor *) selectedLineColor
-   selectedTitleColor:(UIColor *) selectedTitleColor
-    selectedFillColor:(UIColor *) selectedFillColor
-                 font:(UIFont *) font; 
+                style:(PasscodeStyle *)style;
 @end

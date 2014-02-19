@@ -26,13 +26,7 @@
 
 - (id) initWithNumber:(NSString *)number
                 frame:(CGRect)frame
-            lineColor:(UIColor *) lineColor
-           titleColor:(UIColor *) titleColor
-            fillColor:(UIColor *) fillColor
-    selectedLineColor:(UIColor *) selectedLineColor
-   selectedTitleColor:(UIColor *) selectedTitleColor
-    selectedFillColor:(UIColor *) selectedFillColor
-                 font:(UIFont *) font
+                style:(PasscodeStyle *)style
 {
     self = [super init];
     
@@ -40,14 +34,14 @@
     {
         self = [PasscodeCircularButton buttonWithType:UIButtonTypeCustom];
         self.tag = [number integerValue];
-        self.lineColor = lineColor;
-        self.titleColor = titleColor;
-        self.fillColor = fillColor;
-        self.selectedLineColor = selectedLineColor;
-        self.selectedTitleColor = selectedTitleColor;
-        self.selectedFillColor = selectedFillColor;
+        self.lineColor = style.lineColor;
+        self.titleColor = style.titleColor;
+        self.fillColor = style.fillColor;
+        self.selectedLineColor = style.selectedLineColor;
+        self.selectedTitleColor = style.selectedTitleColor;
+        self.selectedFillColor = style.selectedFillColor;
         self.frame = frame;
-        self.font = font;
+        self.font = style.titleFont;
         [self setTitle:number forState:UIControlStateNormal];
         [self drawCircular];
     }
@@ -61,17 +55,12 @@
     [self.circle setBounds:CGRectMake(0.0f, 0.0f, [self bounds].size.width, [self bounds].size.height)];
     [self.circle setPosition:CGPointMake(CGRectGetMidX([self bounds]),CGRectGetMidY([self bounds]))];
     UIBezierPath *path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame))];
-    
     [self.circle setPath:[path CGPath]];
-    
     [self.circle setStrokeColor:[self.lineColor CGColor]];
-    
     [self.circle setLineWidth:0.5f];
     [self.circle setFillColor:self.fillColor.CGColor];
-    
     [[self layer] addSublayer:self.circle];
     self.titleLabel.font = self.font;
-   
 }
 
 - (void)setHighlighted:(BOOL)highlighted

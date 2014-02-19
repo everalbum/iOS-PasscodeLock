@@ -328,60 +328,7 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
         return [UIColor whiteColor];
     }
 }
--(UIColor *)buttonLineColor
-{
-    if(_buttonLineColor){
-        return _buttonLineColor;
-    }
-    else{
-        return [UIColor blackColor];
-    }
-}
--(UIColor *)buttonTitleColor
-{
-    if(_buttonTitleColor){
-        return _buttonTitleColor;
-    }
-    else{
-        return [UIColor blackColor];
-    }
-}
--(UIColor *)buttonFillColor
-{
-    if(_buttonFillColor){
-        return _buttonFillColor;
-    }
-    else{
-        return [UIColor clearColor];
-    }
-}
--(UIColor *)buttonHighlightedLineColor
-{
-    if(_buttonHighlightedLineColor){
-        return _buttonHighlightedLineColor;
-    }
-    else{
-        return [UIColor whiteColor];
-    }
-}
--(UIColor *)buttonHighlightedTitleColor
-{
-    if(_buttonHighlightedTitleColor){
-        return _buttonHighlightedTitleColor;
-    }
-    else{
-        return [UIColor whiteColor];
-    }
-}
--(UIColor *)buttonHighlightedFillColor
-{
-    if(_buttonHighlightedFillColor){
-        return _buttonHighlightedFillColor;
-    }
-    else{
-        return [UIColor redColor];
-    }
-}
+
 -(UIColor *)instructionsLabelColor
 {
     if(_instructionsLabelColor){
@@ -436,13 +383,6 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
         return [UIColor redColor];
     }
 }
--(UIFont *)buttonTitleFont{
-    if(_buttonTitleFont){
-        return _buttonTitleFont;
-    }else{
-        return [UIFont systemFontOfSize:35];
-    }
-}
 
 -(UIFont *)instructionsLabelFont{
     if(_instructionsLabelFont){
@@ -464,6 +404,14 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
         return _errorLabelFont;
     }else{
         return [UIFont systemFontOfSize:15];
+    }
+}
+-(PasscodeButtonStyleProvider *)buttonStyleProvider{
+    if(_buttonStyleProvider){
+        return _buttonStyleProvider;
+    }
+    else{
+        return [[PasscodeButtonStyleProvider alloc]init];
     }
 }
 @end

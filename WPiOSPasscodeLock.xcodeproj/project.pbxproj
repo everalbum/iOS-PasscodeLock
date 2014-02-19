@@ -10,6 +10,7 @@
 		F10E1A0918AFD3F6007C9E4B /* PasscodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F10E1A0818AFD3F6007C9E4B /* PasscodeManager.m */; };
 		F10E1A0F18AFE32E007C9E4B /* FXKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = F10E1A0E18AFE32E007C9E4B /* FXKeychain.m */; };
 		F13CC32318B27539001BDD0D /* PasscodeCircularView.m in Sources */ = {isa = PBXBuildFile; fileRef = F13CC32218B27539001BDD0D /* PasscodeCircularView.m */; };
+		F13E8AFF18B5388B00D93B21 /* PasscodeButtonStyleProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = F13E8AFE18B5388B00D93B21 /* PasscodeButtonStyleProvider.m */; };
 		F1A0A69718B05F010065D9FD /* PasscodeCircularButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F1A0A69618B05F010065D9FD /* PasscodeCircularButton.m */; };
 		F1B8E9E918AEAD5800B7F120 /* PasscodeSettingsDurationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B8E9E818AEAD5800B7F120 /* PasscodeSettingsDurationViewController.m */; };
 		F1E50F9418AEA64C0011AF09 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1E50F9318AEA64C0011AF09 /* Foundation.framework */; };
@@ -46,6 +47,8 @@
 		F10E1A0E18AFE32E007C9E4B /* FXKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXKeychain.m; sourceTree = "<group>"; };
 		F13CC32118B27538001BDD0D /* PasscodeCircularView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PasscodeCircularView.h; sourceTree = "<group>"; };
 		F13CC32218B27539001BDD0D /* PasscodeCircularView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PasscodeCircularView.m; sourceTree = "<group>"; };
+		F13E8AFD18B5388B00D93B21 /* PasscodeButtonStyleProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PasscodeButtonStyleProvider.h; sourceTree = "<group>"; };
+		F13E8AFE18B5388B00D93B21 /* PasscodeButtonStyleProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PasscodeButtonStyleProvider.m; sourceTree = "<group>"; };
 		F1A0A69518B05EFB0065D9FD /* PasscodeCircularButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PasscodeCircularButton.h; sourceTree = "<group>"; };
 		F1A0A69618B05F010065D9FD /* PasscodeCircularButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PasscodeCircularButton.m; sourceTree = "<group>"; };
 		F1B8E9E718AEAD5800B7F120 /* PasscodeSettingsDurationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PasscodeSettingsDurationViewController.h; sourceTree = "<group>"; };
@@ -115,6 +118,8 @@
 			children = (
 				F1A0A69518B05EFB0065D9FD /* PasscodeCircularButton.h */,
 				F1A0A69618B05F010065D9FD /* PasscodeCircularButton.m */,
+				F13E8AFD18B5388B00D93B21 /* PasscodeButtonStyleProvider.h */,
+				F13E8AFE18B5388B00D93B21 /* PasscodeButtonStyleProvider.m */,
 				F13CC32118B27538001BDD0D /* PasscodeCircularView.h */,
 				F13CC32218B27539001BDD0D /* PasscodeCircularView.m */,
 			);
@@ -313,6 +318,7 @@
 			files = (
 				F1E50FCA18AEA9770011AF09 /* PasscodeSettingsViewController.m in Sources */,
 				F1B8E9E918AEAD5800B7F120 /* PasscodeSettingsDurationViewController.m in Sources */,
+				F13E8AFF18B5388B00D93B21 /* PasscodeButtonStyleProvider.m in Sources */,
 				F1E50FA418AEA64C0011AF09 /* AppDelegate.m in Sources */,
 				F1E50FC418AEA65B0011AF09 /* PasscodeViewController.m in Sources */,
 				F1E50FA018AEA64C0011AF09 /* main.m in Sources */,

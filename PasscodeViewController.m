@@ -118,9 +118,7 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
             [self evaluatePasscodeEntry];
         }
     }
-    
 }
-
 
 #pragma mark -
 #pragma mark - Layout Methods
@@ -151,18 +149,23 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     _passcodeButtons = [NSMutableArray new];
     CGRect initialFrame = CGRectMake(0, 0, PasscodeButtonSize, PasscodeButtonSize);
     
+    PasscodeButtonStyleProvider *styleProvider = [PasscodeManager sharedManager].buttonStyleProvider;
+    BOOL styleForAllButtonsExists = [styleProvider styleExistsForButton:PasscodeButtonAll];
+    
     for(int i = 0; i < 10; i++)
     {
+        PasscodeStyle *buttonStyle;
+        
+        if(!styleForAllButtonsExists){
+            buttonStyle = [styleProvider styleForButton:i];
+        } else{
+            buttonStyle = [styleProvider styleForButton:PasscodeButtonAll];
+        }
+        
         NSString *passcodeNumberStr = [NSString stringWithFormat:@"%d",i];
         PasscodeCircularButton *passcodeButton = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(passcodeNumberStr,nil)
                                                                                          frame:initialFrame
-                                                                                     lineColor:[PasscodeManager sharedManager].buttonLineColor
-                                                                                    titleColor:[PasscodeManager sharedManager].buttonTitleColor
-                                                                                     fillColor:[PasscodeManager sharedManager].buttonFillColor
-                                                                             selectedLineColor:[PasscodeManager sharedManager].buttonHighlightedLineColor
-                                                                            selectedTitleColor:[PasscodeManager sharedManager].buttonHighlightedTitleColor
-                                                                             selectedFillColor:[PasscodeManager sharedManager].buttonHighlightedFillColor
-                                                                                          font:[PasscodeManager sharedManager].buttonTitleFont];
+                                                                                         style:buttonStyle];
         
         [passcodeButton addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
         [_passcodeButtons addObject:passcodeButton];
@@ -421,7 +424,6 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     }
 
 }
-
 
 -(void)setDelegate:(id)newDelegate{
     _delegate = newDelegate;
