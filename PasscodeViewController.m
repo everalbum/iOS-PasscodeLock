@@ -148,30 +148,21 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
 }
 -(void)createButtons
 {
-    
     _passcodeButtons = [NSMutableArray new];
-    CGRect frame = CGRectMake(0, 0, PasscodeButtonSize, PasscodeButtonSize);
-
-    UIColor *lineColor = [PasscodeManager sharedManager].buttonLineColor;
-    UIColor *titleColor = [PasscodeManager sharedManager].buttonTitleColor;
-    UIColor *fillColor = [PasscodeManager sharedManager].buttonFillColor;
-    UIColor *selectedLineColor = [PasscodeManager sharedManager].buttonHighlightedLineColor;
-    UIColor *selectedTitleColor = [PasscodeManager sharedManager].buttonHighlightedTitleColor;
-    UIColor *selectedFillColor = [PasscodeManager sharedManager].buttonHighlightedFillColor;
-    UIFont *titleFont = [PasscodeManager sharedManager].buttonTitleFont;
-
+    CGRect initialFrame = CGRectMake(0, 0, PasscodeButtonSize, PasscodeButtonSize);
+    
     for(int i = 0; i < 10; i++)
     {
         NSString *passcodeNumberStr = [NSString stringWithFormat:@"%d",i];
         PasscodeCircularButton *passcodeButton = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(passcodeNumberStr,nil)
-                                                                                         frame:frame
-                                                                                     lineColor:lineColor
-                                                                                    titleColor:titleColor
-                                                                                     fillColor:fillColor
-                                                                             selectedLineColor:selectedLineColor
-                                                                            selectedTitleColor:selectedTitleColor
-                                                                             selectedFillColor:selectedFillColor
-                                                                                          font:titleFont];
+                                                                                         frame:initialFrame
+                                                                                     lineColor:[PasscodeManager sharedManager].buttonLineColor
+                                                                                    titleColor:[PasscodeManager sharedManager].buttonTitleColor
+                                                                                     fillColor:[PasscodeManager sharedManager].buttonFillColor
+                                                                             selectedLineColor:[PasscodeManager sharedManager].buttonHighlightedLineColor
+                                                                            selectedTitleColor:[PasscodeManager sharedManager].buttonHighlightedTitleColor
+                                                                             selectedFillColor:[PasscodeManager sharedManager].buttonHighlightedFillColor
+                                                                                          font:[PasscodeManager sharedManager].buttonTitleFont];
         
         [passcodeButton addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
         [_passcodeButtons addObject:passcodeButton];
@@ -180,7 +171,7 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     
     
     _btnCancelOrDelete = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    _btnCancelOrDelete.frame = frame;
+    _btnCancelOrDelete.frame = initialFrame;
     [_btnCancelOrDelete setTitleColor:[PasscodeManager sharedManager].cancelOrDeleteButtonColor forState:UIControlStateNormal];
     _btnCancelOrDelete.hidden = YES;
     [_btnCancelOrDelete setTitle:@"" forState:UIControlStateNormal];
