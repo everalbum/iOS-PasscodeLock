@@ -247,7 +247,7 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 
 - (void)dismissLockScreen
 {
-    [self.passcodeViewController dismissViewControllerAnimated:NO completion:nil];
+    [self.passcodeViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 
