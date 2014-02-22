@@ -44,6 +44,7 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
 @property (strong, nonatomic) NSString *passcodeEntered;
 @property (strong, nonatomic) NSMutableArray *passcodeEntryViews;
 @property (strong, nonatomic) UIView *passcodeEntryViewsContainerView;
+@property (strong, nonatomic) UIImageView *backgroundImageView;
 @property (strong, nonatomic) NSMutableArray *passcodeButtons;
 @property (assign) NSInteger numberOfDigitsEntered;
 
@@ -144,8 +145,11 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     [self createButtons];
     [self createPasscodeEntryView];
     [self buildLayout];
-    [self.view setBackgroundColor:[PasscodeManager sharedManager].backgroundColor];
     [self updateLayoutBasedOnWorkflowStep];
+    
+    [self.view setBackgroundColor:[PasscodeManager sharedManager].backgroundColor];
+    [self applyBackgroundImage];
+    
 }
 -(void)createButtons
 {
@@ -221,6 +225,7 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     CGRect frameBtnCancel = CGRectMake(lastButtonX, zeroRowY, PasscodeButtonSize, PasscodeButtonSize);
     CGRect frameLblInstruction = CGRectMake(0, 0, 250, 20);
     CGRect frameLblError = CGRectMake(0, 0, 200, 20);
+    CGRect frameBackgroundImageView = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, [self returnWidth], [self returnHeight]);
     
     NSArray *buttonFrames = @[frameBtnZero, frameBtnOne, frameBtnTwo, frameBtnThree, frameBtnFour, frameBtnFive, frameBtnSix, frameBtnSeven, frameBtnEight, frameBtnNine];
                                                                                                                     
@@ -231,6 +236,8 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
         [self.view addSubview:passcodeButton];
     }
 
+    self.backgroundImageView.frame = frameBackgroundImageView;
+    
     self.btnCancelOrDelete.frame = frameBtnCancel;
 
     self.lblInstruction.textAlignment = NSTextAlignmentCenter;
@@ -374,8 +381,23 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
 	animation.values = instructions;
 	[view.layer addAnimation:animation forKey:@"position"];
 }
-
-#pragma mark - 
+-(void)applyBlur
+{
+    UIToolbar *blurToolbar = [[UIToolbar alloc] initWithFrame:self.view.bounds];
+    blurToolbar.barStyle = UIBarStyleBlackTranslucent;
+    blurToolbar.translucent = YES;
+    blurToolbar.alpha = 0.95;
+    [self.view addSubview:blurToolbar];
+}
+-(void)applyBackgroundImage
+{
+    if([PasscodeManager sharedManager].backgroundImage){
+        self.backgroundImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        [self.backgroundImageView setImage:[PasscodeManager sharedManager].backgroundImage];
+        [self.view addSubview:self.backgroundImageView];
+    }
+}
+#pragma mark -
 #pragma mark - Helper methods
 
 - (CGFloat)returnWidth

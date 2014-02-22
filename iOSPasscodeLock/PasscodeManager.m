@@ -414,4 +414,8 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
         return [[PasscodeButtonStyleProvider alloc]init];
     }
 }
+-(UIImage *)backgroundImage{
+    return _backgroundImage;
+}
+
 @end

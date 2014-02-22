@@ -27,6 +27,7 @@
 - (NSNumber *) getPasscodeInactivityDurationInMinutes;
 
 @property (strong, nonatomic) UIColor *backgroundColor;
+@property (strong, nonatomic) UIImage *backgroundImage;
 @property (strong, nonatomic) UIColor *instructionsLabelColor;
 @property (strong, nonatomic) UIColor *cancelOrDeleteButtonColor;
 @property (strong, nonatomic) UIColor *passcodeViewLineColor;
@@ -36,7 +37,6 @@
 @property (strong, nonatomic) UIFont *errorLabelFont;
 @property (strong, nonatomic) UIFont *instructionsLabelFont;
 @property (strong, nonatomic) UIFont *cancelOrDeleteButtonFont;
-@property (strong, nonatomic) PasscodeButtonStyleProvider *buttonStyleProvider; 
-
+@property (strong, nonatomic) PasscodeButtonStyleProvider *buttonStyleProvider;
 
 @end
