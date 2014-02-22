@@ -36,7 +36,6 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
     return sharedManager;
 }
 
-
 #pragma mark -
 #pragma mark - Subscriptions management
 
