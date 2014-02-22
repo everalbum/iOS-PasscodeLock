@@ -22,6 +22,7 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 @property (nonatomic, strong) void (^verificationCompletedBlock)(BOOL success);
 @property (nonatomic, strong) PasscodeViewController *passcodeViewController;
 @property (nonatomic, strong) UIViewController *presentingViewController;
+@property (nonatomic, strong) UIView *coverView;
 @end
 
 @implementation PasscodeManager
@@ -63,6 +64,11 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
                                              selector: @selector(handleNotification:)
                                                  name: UIApplicationDidBecomeActiveNotification
                                                object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleNotification:)
+                                                 name: UIApplicationDidEnterBackgroundNotification
+                                               object: nil];
+
 }
 
 -(void)disableSubscriptions
@@ -70,18 +76,23 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIApplicationDidEnterBackgroundNotification object:nil];
 
 }
 
 -(void)handleNotification:(NSNotification *)notification
 {
-    if(notification.name == UIApplicationWillResignActiveNotification)
-    {
+    if(notification.name == UIApplicationWillResignActiveNotification){
         [self startTrackingInactivity];
     }
-    else if(notification.name == UIApplicationDidBecomeActiveNotification)
+    if(notification.name == UIApplicationDidEnterBackgroundNotification){
+        [self presentCoverView];
+    }
+    if(notification.name == UIApplicationDidBecomeActiveNotification)
     {
+        [self dismissCoverView];
         [self stopTrackingInactivity];
         if([self shouldLock]){
             [self verifyPasscodeWithPasscodeType:PasscodeTypeVerify withCompletion:nil];
@@ -239,6 +250,20 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 - (void)dismissLockScreen
 {
     [self.passcodeViewController dismissViewControllerAnimated:NO completion:nil];
+}
+
+- (void) presentCoverView
+{
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    self.coverView = [[UIView alloc]initWithFrame:window.bounds];
+    [self.coverView setBackgroundColor:[UIColor blackColor]];
+    self.coverView.hidden = NO;
+    [UIApplication.sharedApplication.keyWindow addSubview:self.coverView];
+}
+
+- (void) dismissCoverView{
+    self.coverView.hidden = YES;
+    [self.coverView removeFromSuperview];
 }
 
 - (void) setPasscode:(NSString *)passcode
