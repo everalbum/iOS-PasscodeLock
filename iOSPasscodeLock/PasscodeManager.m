@@ -57,10 +57,6 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
     
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleNotification:)
-                                                 name: UIApplicationDidEnterBackgroundNotification
-                                               object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleNotification:)
                                                  name: UIApplicationWillResignActiveNotification
                                                object: nil];
     [[NSNotificationCenter defaultCenter] addObserver: self
@@ -72,8 +68,6 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 -(void)disableSubscriptions
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIApplicationDidBecomeActiveNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIApplicationDidEnterBackgroundNotification object:nil];
@@ -82,7 +76,7 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 
 -(void)handleNotification:(NSNotification *)notification
 {
-    if(notification.name == UIApplicationDidEnterBackgroundNotification || notification.name == UIApplicationWillResignActiveNotification)
+    if(notification.name == UIApplicationWillResignActiveNotification)
     {
         [self dismissLockScreen];
         [self startTrackingInactivity];
@@ -90,7 +84,6 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
     else if(notification.name == UIApplicationDidBecomeActiveNotification)
     {
         [self stopTrackingInactivity];
-        
         if([self shouldLock]){
             [self verifyPasscodeWithPasscodeType:PasscodeTypeVerify withCompletion:nil];
         }
@@ -207,8 +200,6 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
     return [self topViewController:presentedViewController];
 }
 
-
-
 -(BOOL) shouldLock
 {
     NSNumber *inactivityLimit = [self getPasscodeInactivityDurationInMinutes];
@@ -247,9 +238,8 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 
 - (void)dismissLockScreen
 {
-    [self.passcodeViewController dismissViewControllerAnimated:YES completion:nil];
+    [self.passcodeViewController dismissViewControllerAnimated:NO completion:nil];
 }
-
 
 - (void) setPasscode:(NSString *)passcode
 {
@@ -319,6 +309,11 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 #pragma mark - 
 #pragma mark - Styling Getters
 
+-(UIView *)coverViewWithBounds:(CGRect)bounds{
+    _coverView = [[UIView alloc]initWithFrame:bounds];
+    [_coverView setBackgroundColor:[UIColor blackColor]];
+    return _coverView;
+}
 -(UIColor *)backgroundColor
 {
     if(_backgroundColor){
