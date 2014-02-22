@@ -309,11 +309,6 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 #pragma mark - 
 #pragma mark - Styling Getters
 
--(UIView *)coverViewWithBounds:(CGRect)bounds{
-    _coverView = [[UIView alloc]initWithFrame:bounds];
-    [_coverView setBackgroundColor:[UIColor blackColor]];
-    return _coverView;
-}
 -(UIColor *)backgroundColor
 {
     if(_backgroundColor){
