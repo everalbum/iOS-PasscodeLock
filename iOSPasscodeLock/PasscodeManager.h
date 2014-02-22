@@ -34,6 +34,8 @@
 @property (strong, nonatomic) UIColor *passcodeViewFillColor;
 @property (strong, nonatomic) UIColor *errorLabelColor;
 @property (strong, nonatomic) UIColor *errorLabelBackgroundColor;
+@property (strong, nonatomic) UIColor *appLockedCoverScreenBackgroundColor;
+@property (strong, nonatomic) UIImage *appLockedCoverScreenBackgroundImage;
 @property (strong, nonatomic) UIFont *errorLabelFont;
 @property (strong, nonatomic) UIFont *instructionsLabelFont;
 @property (strong, nonatomic) UIFont *cancelOrDeleteButtonFont;

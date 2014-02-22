@@ -256,7 +256,15 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 {
     UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
     self.coverView = [[UIView alloc]initWithFrame:window.bounds];
-    [self.coverView setBackgroundColor:[UIColor blackColor]];
+    [self.coverView setBackgroundColor:self.appLockedCoverScreenBackgroundColor];
+    
+    if(self.appLockedCoverScreenBackgroundImage){
+        UIImageView *imageView = [[UIImageView alloc]initWithImage:self.appLockedCoverScreenBackgroundImage];
+        [imageView sizeToFit];
+        imageView.center = window.center;
+        [self.coverView addSubview:imageView];
+    }
+    
     self.coverView.hidden = NO;
     [UIApplication.sharedApplication.keyWindow addSubview:self.coverView];
 }
@@ -399,6 +407,15 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
     }
 }
 
+-(UIColor *)appLockedCoverScreenBackgroundColor{
+    if(_appLockedCoverScreenBackgroundColor){
+        return _appLockedCoverScreenBackgroundColor;
+    }
+    else{
+        return [UIColor blackColor];
+    }
+}
+
 -(UIFont *)instructionsLabelFont{
     if(_instructionsLabelFont){
         return _instructionsLabelFont;
@@ -431,6 +448,9 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 }
 -(UIImage *)backgroundImage{
     return _backgroundImage;
+}
+-(UIImage *)appLockedCoverScreenBackgroundImage{
+    return _appLockedCoverScreenBackgroundImage;
 }
 
 @end
