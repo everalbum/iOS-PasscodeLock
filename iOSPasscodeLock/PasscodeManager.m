@@ -78,7 +78,6 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 {
     if(notification.name == UIApplicationWillResignActiveNotification)
     {
-        [self dismissLockScreen];
         [self startTrackingInactivity];
     }
     else if(notification.name == UIApplicationDidBecomeActiveNotification)
@@ -157,6 +156,7 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 
 -(void)presentLockScreenWithPasscodeType:(PasscodeType) passcodeType
 {
+    [self dismissLockScreen];
     self.passcodeViewController = [[PasscodeViewController alloc]initWithPasscodeType:passcodeType withDelegate:self];
     self.presentingViewController = [self topViewController];
     [self.presentingViewController presentViewController:self.passcodeViewController animated:NO completion:nil];
