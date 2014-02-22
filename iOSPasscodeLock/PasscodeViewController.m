@@ -200,6 +200,7 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
 
 - (void)buildLayout
 {
+
     CGFloat buttonRowWidth = (PasscodeButtonSize * 3) + (PasscodeButtonPaddingHorizontal * 2);
   
     CGFloat firstButtonX = ([self returnWidth]/2) - (buttonRowWidth/2) + 0.5;
@@ -228,7 +229,8 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     CGRect frameBackgroundImageView = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, [self returnWidth], [self returnHeight]);
     
     NSArray *buttonFrames = @[frameBtnZero, frameBtnOne, frameBtnTwo, frameBtnThree, frameBtnFour, frameBtnFive, frameBtnSix, frameBtnSeven, frameBtnEight, frameBtnNine];
-                                                                                                                    
+    
+    
     for(int i = 0; i < 10; i++)
     {
         PasscodeCircularButton *passcodeButton = self.passcodeButtons[i];
@@ -253,15 +255,15 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     [self.view addSubview:self.btnCancelOrDelete];
     [self.view addSubview:self.lblInstruction];
     [self.view addSubview:self.lblError];
-
+    
     
     CGFloat passcodeEntryViewsY = firstRowY - PasscodeButtonPaddingVertical * 7;
     CGFloat passcodeEntryViewWidth = (PasscodeDigitCount * PasscodeEntryViewSize) + ((PasscodeDigitCount - 1) * PasscodeButtonPaddingHorizontal);
     CGFloat xPoint = ([self returnWidth] - passcodeEntryViewWidth) / 2;
     CGFloat xPointInsideContainer = 0;
+    CGRect framePasscodeEntryViewsContainerView = CGRectMake(xPoint, passcodeEntryViewsY, passcodeEntryViewWidth, PasscodeEntryViewSize);
     
-    self.passcodeEntryViewsContainerView = [[UIView alloc]initWithFrame:CGRectMake(xPoint, passcodeEntryViewsY, passcodeEntryViewWidth, PasscodeEntryViewSize)];
-    
+    self.passcodeEntryViewsContainerView = [[UIView alloc]initWithFrame:framePasscodeEntryViewsContainerView];
     for (PasscodeCircularView *circularView in self.passcodeEntryViews){
         CGRect frame = CGRectMake(xPointInsideContainer, 0, PasscodeEntryViewSize, PasscodeEntryViewSize);
         circularView.frame = frame;
@@ -269,7 +271,9 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
         [self.passcodeEntryViewsContainerView addSubview:circularView];
     }
     [self.view addSubview:self.passcodeEntryViewsContainerView];
-}
+
+    
+ }
 
 - (void)updateLayoutBasedOnWorkflowStep
 {
