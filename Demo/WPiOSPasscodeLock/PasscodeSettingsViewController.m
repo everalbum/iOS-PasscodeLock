@@ -98,6 +98,7 @@
         [switchview setOn:self.passcodeEnabled];
         cell.accessoryView = switchview;
         cell.textLabel.text = NSLocalizedString(@"Passcode Lock",nil);
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     else if(indexPath.section == 1 && indexPath.row == 0)//Duration
     {
