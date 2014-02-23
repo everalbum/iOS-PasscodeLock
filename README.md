@@ -9,10 +9,11 @@ Works with system notifications to detect app state to present the passcode wind
 ## Features
 
  * Uses blocks! 
+ * Uses iOS Keychain to store passcode information.
  * Supports activation based on inactivity (in minutes).
  * Lots of styling options. [Screenshot 1][2] [Screenshot 2][3]
- * Customizable "cover view" to hide the app contents when the app is backgrounded. [Screenshot][1]. 
- * iPad support [Screenshot][4]
+ * [Customizable "cover view" to hide the app contents when the app is backgrounded.][1]. 
+ * [iPad support][4]
 
 ##Installation
 
@@ -59,6 +60,11 @@ Example:
       }
 }];
 ```
+
+##Notes 
+
+* Even though the iOS Keychain is utilized for storing the Passcode, the `PasscodeProtectionEnabled` property is stored in `NSUserDefaults`. This is to prevent being locked out of the app forever due to the Keychain entries not being removed upon app uninstallation
+
 
 [1]:https://github.com/bakyelli/iOS-PasscodeLock/blob/master/readme_files/coverview.png?raw=true
 [2]:https://github.com/bakyelli/iOS-PasscodeLock/blob/master/readme_files/wp_iphones1.png?raw=true
