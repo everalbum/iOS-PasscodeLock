@@ -108,6 +108,7 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
 
 -(void) passcodeBtnPressed:(PasscodeCircularButton *)button
 {
+    
     if(self.numberOfDigitsEntered < PasscodeDigitCount)
     {
         NSInteger tag = button.tag;
@@ -116,7 +117,11 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
         PasscodeCircularView *pcv = self.passcodeEntryViews[self.numberOfDigitsEntered];
         [pcv fill];
         self.numberOfDigitsEntered++;
-        [self enableDelete];
+        
+        if(self.numberOfDigitsEntered == 1){
+            self.lblError.hidden = YES; 
+            [self enableDelete];
+        }
         if(self.numberOfDigitsEntered == PasscodeDigitCount)
         {
             [self evaluatePasscodeEntry];
