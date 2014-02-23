@@ -52,7 +52,7 @@
     [PasscodeManager sharedManager].errorLabelFont = [UIFont fontWithName:@"Avenir-Book" size:15];
     [PasscodeManager sharedManager].backgroundColor = wpBlue;
     [PasscodeManager sharedManager].backgroundImage = [UIImage imageNamed:@"background.jpeg"];
-    [PasscodeManager sharedManager].appLockedCoverScreenBackgroundImage = [UIImage imageNamed:@"wpLogo.png"];
+    [PasscodeManager sharedManager].appLockedCoverScreenBackgroundImage = [UIImage imageNamed:@"padlock.png"];
     [PasscodeManager sharedManager].appLockedCoverScreenBackgroundColor = wpBlue;
     [PasscodeManager sharedManager].instructionsLabelColor = iPhone5CWhite;
     [PasscodeManager sharedManager].cancelOrDeleteButtonColor = iPhone5CWhite;
