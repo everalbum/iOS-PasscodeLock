@@ -9,15 +9,7 @@
 #import "PasscodeViewController.h"
 #import "PasscodeManager.h" 
 #import "PasscodeCircularButton.h"
-#import "PasscodeCircularView.h" 
-
-static NSString * const EnterPasscodeText = @"Enter Passcode";
-static NSString * const ReEnterPasscodeText = @"Re-enter your new Passcode";
-static NSString * const EnterCurrentPasscodeText = @"Enter your old Passcode";
-static NSString * const IncorrectPasscodeText = @"Incorrect Passcode";
-static NSString * const PasscodesDidNotMatchText = @"Passcodes did not Match";
-static NSString * const DeleteButtonText = @"Delete";
-static NSString * const CancelButtonText = @"Cancel";
+#import "PasscodeCircularView.h"
 
 static CGFloat const PasscodeButtonSize = 75;
 static CGFloat const PasscodeButtonPaddingHorizontal = 20;
@@ -34,6 +26,11 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     WorkflowStepChangePasscodeVerified,
     WorkflowStepChangePasscodeNotVerified,
 } PasscodeWorkflowStep;
+
+typedef enum PasscodeErrorType : NSUInteger {
+    PasscodeErrorTypeIncorrectPasscode,
+    PasscodeErrorTypePascodesDidNotMatch
+} PasscodeErrorType;
 
 @interface PasscodeViewController ()
 
@@ -175,7 +172,7 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
         }
         
         NSString *passcodeNumberStr = [NSString stringWithFormat:@"%d",i];
-        PasscodeCircularButton *passcodeButton = [[PasscodeCircularButton alloc]initWithNumber:NSLocalizedString(passcodeNumberStr,nil)
+        PasscodeCircularButton *passcodeButton = [[PasscodeCircularButton alloc]initWithNumber:passcodeNumberStr
                                                                                          frame:initialFrame
                                                                                          style:buttonStyle];
         
@@ -288,27 +285,27 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
     {
         if(self.currentWorkflowStep == WorkflowStepOne)
         {
-            self.lblInstruction.text = NSLocalizedString(EnterPasscodeText, nil);
+            self.lblInstruction.text = NSLocalizedString(@"Enter Pascode", nil);
         }
         else if(self.currentWorkflowStep == WorkflowStepSetupPasscodeEnteredOnce)
         {
-            self.lblInstruction.text = NSLocalizedString(ReEnterPasscodeText, nil);
+            self.lblInstruction.text = NSLocalizedString(@"Re-enter your new Passcode", nil);
         }
         else if(self.currentWorkflowStep == WorkflowStepSetupPasscodesDidNotMatch)
         {
-            self.lblInstruction.text = NSLocalizedString(EnterPasscodeText, nil);
+            self.lblInstruction.text = NSLocalizedString(@"Enter Pascode", nil);
             self.currentWorkflowStep = WorkflowStepOne;
         }
     }
     else if(self.passcodeType == PasscodeTypeVerify || self.passcodeType == PasscodeTypeVerifyForSettingChange){
-        self.lblInstruction.text = NSLocalizedString(EnterPasscodeText, nil);;
+        self.lblInstruction.text = NSLocalizedString(@"Enter Pascode", nil);;
         if(self.passcodeType == PasscodeTypeVerifyForSettingChange){
         }
     }
     else if(self.passcodeType == PasscodeTypeChangePasscode)
     {
         if(self.currentWorkflowStep == WorkflowStepOne){
-            self.lblInstruction.text = NSLocalizedString(EnterCurrentPasscodeText, nil);
+            self.lblInstruction.text = NSLocalizedString(@"Enter your old Passcode", nil);
         }
     }
     [self enableCancelIfAllowed];
@@ -322,7 +319,7 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
 {
     if(!self.btnCancelOrDelete.tag != 2){
         self.btnCancelOrDelete.tag = 2;
-        [self.btnCancelOrDelete setTitle:NSLocalizedString(DeleteButtonText,nil) forState:UIControlStateNormal];
+        [self.btnCancelOrDelete setTitle:NSLocalizedString(@"Delete",nil) forState:UIControlStateNormal];
     }
     if(self.btnCancelOrDelete.hidden){
         self.btnCancelOrDelete.hidden = NO;
@@ -337,7 +334,7 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
 - (void)enableCancelIfAllowed
 {
     if(self.passcodeType == PasscodeTypeChangePasscode || self.passcodeType == PasscodeTypeSetup || self.passcodeType == PasscodeTypeVerifyForSettingChange){
-        [self.btnCancelOrDelete setTitle:NSLocalizedString(CancelButtonText, nil) forState:UIControlStateNormal];
+        [self.btnCancelOrDelete setTitle:NSLocalizedString(@"Cancel", nil) forState:UIControlStateNormal];
         self.btnCancelOrDelete.tag = 1;
         self.btnCancelOrDelete.hidden = NO;
     }
@@ -444,7 +441,7 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
             else
             {
                 self.currentWorkflowStep = WorkflowStepSetupPasscodesDidNotMatch;
-                [self performErrorWithErrorText:PasscodesDidNotMatchText];
+                [self performErrorWithErrorType:PasscodeErrorTypePascodesDidNotMatch];
                 [self updateLayoutBasedOnWorkflowStep];
             }
         }
@@ -454,7 +451,7 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
             [self.delegate didVerifyPasscode];
         }
         else{
-            [self performErrorWithErrorText:IncorrectPasscodeText];
+            [self performErrorWithErrorType:PasscodeErrorTypeIncorrectPasscode];
             self.currentWorkflowStep = WorkflowStepOne;
             [self updateLayoutBasedOnWorkflowStep];
         }
@@ -467,7 +464,7 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
             [self updateLayoutBasedOnWorkflowStep];
         }
         else{
-            [self performErrorWithErrorText:IncorrectPasscodeText];
+            [self performErrorWithErrorType:PasscodeErrorTypeIncorrectPasscode];
             self.currentWorkflowStep = WorkflowStepOne;
             [self updateLayoutBasedOnWorkflowStep];
         }
@@ -476,8 +473,14 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
 
 }
 
--(void)performErrorWithErrorText:(NSString *)text{
-    [self showErrorMessage:NSLocalizedString(text, nil)];
+-(void)performErrorWithErrorType:(PasscodeErrorType) errorType{
+    if(errorType == PasscodeErrorTypeIncorrectPasscode){
+        [self showErrorMessage:NSLocalizedString(@"Incorrect Passcode", nil)];
+    }
+    else if(errorType == PasscodeErrorTypePascodesDidNotMatch){
+        [self showErrorMessage:NSLocalizedString(@"Passcodes did not Match", nil)];
+
+    }
     [self performShake:self.passcodeEntryViewsContainerView];
 }
 
