@@ -30,12 +30,14 @@
 {
     NSString *passcode = @"1111";
     [[PasscodeManager sharedManager] setPasscode:passcode];
+    
     XCTAssertTrue([[PasscodeManager sharedManager] isPasscodeCorrect:passcode], @"Passcode was not set correctly.");
 }
 
 -(void) testPasscodeActivation
 {
     [[PasscodeManager sharedManager] togglePasscodeProtection:NO];
+    
     XCTAssertFalse([[PasscodeManager sharedManager] isPasscodeProtectionOn], @"Passcode protection activation does not function.");
 }
 
@@ -43,6 +45,7 @@
 {
     NSNumber *inactivityDuration = @1;
     [[PasscodeManager sharedManager] setPasscodeInactivityDurationInMinutes:inactivityDuration];
+    
     XCTAssertTrue([[PasscodeManager sharedManager] getPasscodeInactivityDurationInMinutes] == inactivityDuration, @"Inactivity duration was not set correctly.");
 }
 
