@@ -22,6 +22,7 @@
 - (void) togglePasscodeProtection:(BOOL)isOn;
 - (BOOL) isPasscodeProtectionOn;
 - (BOOL) isPasscodeCorrect:(NSString *)passcode;
+- (BOOL) shouldLock;
 - (void) disablePasscodeProtectionWithCompletion:(void (^) (BOOL success)) completion;
 - (void) setPasscodeInactivityDurationInMinutes:(NSNumber *) minutes;
 - (NSNumber *) getPasscodeInactivityDurationInMinutes;

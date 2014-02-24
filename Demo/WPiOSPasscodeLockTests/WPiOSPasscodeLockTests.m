@@ -7,6 +7,8 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "PasscodeManager.h"
+#import "PasscodeButtonStyleProvider.h" 
 
 @interface WPiOSPasscodeLockTests : XCTestCase
 
@@ -17,18 +19,50 @@
 - (void)setUp
 {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
 }
 
 - (void)tearDown
 {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
 
-- (void)testExample
+- (void) testPasscodeVerification
 {
-    XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);
+    NSString *passcode = @"1111";
+    [[PasscodeManager sharedManager] setPasscode:passcode];
+    XCTAssertTrue([[PasscodeManager sharedManager] isPasscodeCorrect:passcode], @"Passcode was not set correctly.");
+}
+
+-(void) testPasscodeActivation
+{
+    [[PasscodeManager sharedManager] togglePasscodeProtection:NO];
+    XCTAssertFalse([[PasscodeManager sharedManager] isPasscodeProtectionOn], @"Passcode protection activation does not function.");
+}
+
+- (void) testPasscodeInactivityDuration
+{
+    NSNumber *inactivityDuration = @1;
+    [[PasscodeManager sharedManager] setPasscodeInactivityDurationInMinutes:inactivityDuration];
+    XCTAssertTrue([[PasscodeManager sharedManager] getPasscodeInactivityDurationInMinutes] == inactivityDuration, @"Inactivity duration was not set correctly.");
+}
+
+- (void) testLockingDecision{
+    NSNumber *inactivityDuration = @0;
+    [[PasscodeManager sharedManager] togglePasscodeProtection:YES];
+    [[PasscodeManager sharedManager] setPasscodeInactivityDurationInMinutes:inactivityDuration];
+    
+    XCTAssertTrue([[PasscodeManager sharedManager] shouldLock], @"Incorrect locking decision made.");
+}
+
+- (void) testPasscodeButtonStyleSetting
+{
+    PasscodeButtonStyleProvider *provider = [[PasscodeButtonStyleProvider alloc] init];
+    PasscodeStyle *sampleStyle = [[PasscodeStyle alloc]init];
+    [provider addStyleForButton:PasscodeButtonAll stye:sampleStyle];
+    
+    XCTAssertTrue([provider styleExistsForButton:PasscodeButtonAll], @"Passcode button style was not set.");
+    XCTAssertTrue([provider styleForButton:PasscodeButtonAll] == sampleStyle, @"Passcode button style was not set.");
+    XCTAssertFalse([provider styleExistsForButton:PasscodeButtonOne], @"styleExistsForButton: method does not return the expected value");
 }
 
 @end

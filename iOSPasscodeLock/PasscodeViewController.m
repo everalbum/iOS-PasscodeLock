@@ -390,14 +390,7 @@ typedef enum PasscodeWorkflowStep : NSUInteger {
 	animation.values = instructions;
 	[view.layer addAnimation:animation forKey:@"position"];
 }
--(void)applyBlur
-{
-    UIToolbar *blurToolbar = [[UIToolbar alloc] initWithFrame:self.view.bounds];
-    blurToolbar.barStyle = UIBarStyleBlackTranslucent;
-    blurToolbar.translucent = YES;
-    blurToolbar.alpha = 0.95;
-    [self.view addSubview:blurToolbar];
-}
+
 -(void)applyBackgroundImage
 {
     if([PasscodeManager sharedManager].backgroundImage){
