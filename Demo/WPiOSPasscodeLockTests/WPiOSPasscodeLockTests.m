@@ -63,6 +63,7 @@
     XCTAssertTrue([provider styleExistsForButton:PasscodeButtonAll], @"Passcode button style was not set.");
     XCTAssertTrue([provider styleForButton:PasscodeButtonAll] == sampleStyle, @"Passcode button style was not set.");
     XCTAssertFalse([provider styleExistsForButton:PasscodeButtonOne], @"styleExistsForButton: method does not return the expected value");
+    XCTAssertTrue([provider styleForButton:PasscodeButtonOne], @"Default style for a button was not returned.");
 }
 
 @end
