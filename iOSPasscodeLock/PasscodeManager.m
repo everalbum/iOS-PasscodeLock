@@ -169,6 +169,9 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
     [self dismissLockScreen];
     self.passcodeViewController = [[PasscodeViewController alloc]initWithPasscodeType:passcodeType withDelegate:self];
     self.presentingViewController = [self topViewController];
+    
+    
+    [self.presentingViewController.view.window.layer addAnimation:[self transitionAnimation] forKey:kCATransition];
     [self.presentingViewController presentViewController:self.passcodeViewController animated:NO completion:nil];
 }
 
@@ -248,6 +251,7 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 
 - (void)dismissLockScreen
 {
+    [self.passcodeViewController.view.window.layer addAnimation:[self transitionAnimation] forKey:kCATransition];
     [self.passcodeViewController dismissViewControllerAnimated:NO completion:nil];
 }
 
@@ -336,6 +340,15 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
     }
     
     return NO;
+}
+
+-(CATransition *)transitionAnimation
+{
+    CATransition* transition = [CATransition animation];
+    transition.duration = 0.2;
+    transition.type = kCATransitionFade;
+    transition.subtype = kCATransitionFromBottom;
+    return transition;
 }
 
 #pragma mark - 
