@@ -286,6 +286,7 @@ typedef enum PasscodeErrorType : NSUInteger {
         if(self.currentWorkflowStep == WorkflowStepOne)
         {
             self.lblInstruction.text = NSLocalizedString(@"Enter Passcode", nil);
+
         }
         else if(self.currentWorkflowStep == WorkflowStepSetupPasscodeEnteredOnce)
         {
@@ -294,6 +295,7 @@ typedef enum PasscodeErrorType : NSUInteger {
         else if(self.currentWorkflowStep == WorkflowStepSetupPasscodesDidNotMatch)
         {
             self.lblInstruction.text = NSLocalizedString(@"Enter Passcode", nil);
+
             self.currentWorkflowStep = WorkflowStepOne;
         }
     }
