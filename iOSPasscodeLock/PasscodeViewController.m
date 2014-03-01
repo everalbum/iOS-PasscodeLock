@@ -11,12 +11,17 @@
 #import "PasscodeCircularButton.h"
 #import "PasscodeCircularView.h"
 
-static CGFloat const PasscodeButtonSize = 75;
+#ifndef IS_IPAD
+#define IS_IPAD   ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
+#endif
+
+static CGFloat const PasscodeButtonSize = 70;
 static CGFloat const PasscodeButtonPaddingHorizontal = 20;
 static CGFloat const PasscodeButtonPaddingVertical = 10;
-
-static CGFloat const PasscodeEntryViewSize = 15;
+static CGFloat const PasscodeEntryViewSize = 12;
+static CGFloat const LogoSize = 40;
 static NSInteger const PasscodeDigitCount = 4;
+
 
 typedef enum PasscodeWorkflowStep : NSUInteger {
     WorkflowStepOne,
@@ -42,6 +47,7 @@ typedef enum PasscodeErrorType : NSUInteger {
 @property (strong, nonatomic) NSMutableArray *passcodeEntryViews;
 @property (strong, nonatomic) UIView *passcodeEntryViewsContainerView;
 @property (strong, nonatomic) UIImageView *backgroundImageView;
+@property (strong, nonatomic) UIImageView *logoImageView;
 @property (strong, nonatomic) NSMutableArray *passcodeButtons;
 @property (assign) NSInteger numberOfDigitsEntered;
 
@@ -144,13 +150,13 @@ typedef enum PasscodeErrorType : NSUInteger {
 
 - (void)generateView
 {
+    [self applyBackgroundImageAndLogo];
     [self createButtons];
     [self createPasscodeEntryView];
     [self buildLayout];
     [self updateLayoutBasedOnWorkflowStep];
     
     [self.view setBackgroundColor:[PasscodeManager sharedManager].backgroundColor];
-    [self applyBackgroundImage];
     
 }
 -(void)createButtons
@@ -209,7 +215,8 @@ typedef enum PasscodeErrorType : NSUInteger {
     CGFloat middleButtonX = firstButtonX + PasscodeButtonSize + PasscodeButtonPaddingHorizontal;
     CGFloat lastButtonX = middleButtonX + PasscodeButtonSize + PasscodeButtonPaddingHorizontal;
     
-    CGFloat firstRowY = ([self returnHeight]/2) - PasscodeButtonSize - PasscodeButtonPaddingVertical * 3;
+    CGFloat firstRowY = (IS_IPAD) ? ([self returnHeight]/2) - PasscodeButtonSize * 2 : ([self returnHeight]/2) - PasscodeButtonSize;
+
     CGFloat middleRowY = firstRowY + PasscodeButtonSize + PasscodeButtonPaddingVertical;
     CGFloat lastRowY = middleRowY + PasscodeButtonSize + PasscodeButtonPaddingVertical;
     CGFloat zeroRowY = lastRowY + PasscodeButtonSize + PasscodeButtonPaddingVertical;
@@ -227,7 +234,8 @@ typedef enum PasscodeErrorType : NSUInteger {
    
     CGRect frameBtnCancel = CGRectMake(lastButtonX, zeroRowY, PasscodeButtonSize, PasscodeButtonSize);
     CGRect frameLblInstruction = CGRectMake(0, 0, 250, 20);
-    CGRect frameLblError = CGRectMake(0, 0, 200, 20);
+    CGRect frameLblError = CGRectMake(-100, -100, 200, 20);
+    CGRect frameLogo = CGRectMake(0, 0, LogoSize, LogoSize);
     CGRect frameBackgroundImageView = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, [self returnWidth], [self returnHeight]);
     
     NSArray *buttonFrames = @[frameBtnZero, frameBtnOne, frameBtnTwo, frameBtnThree, frameBtnFour, frameBtnFive, frameBtnSix, frameBtnSeven, frameBtnEight, frameBtnNine];
@@ -241,35 +249,37 @@ typedef enum PasscodeErrorType : NSUInteger {
     }
 
     self.backgroundImageView.frame = frameBackgroundImageView;
-    
     self.btnCancelOrDelete.frame = frameBtnCancel;
 
     self.lblInstruction.textAlignment = NSTextAlignmentCenter;
     self.lblInstruction.frame = frameLblInstruction;
-    self.lblInstruction.center = CGPointMake([self returnWidth]/2, firstRowY - (PasscodeButtonPaddingVertical * 10));
+    self.lblInstruction.center = CGPointMake([self returnWidth]/2, firstRowY - (PasscodeButtonPaddingVertical * 7));
 
     self.lblError.textAlignment = NSTextAlignmentCenter;
     self.lblError.frame = frameLblError;
-    self.lblError.center = CGPointMake([self returnWidth]/2, firstRowY - (PasscodeButtonPaddingVertical * 3));
+   // self.lblError.center = CGPointMake([self returnWidth]/2, firstRowY - (PasscodeButtonPaddingVertical * 3));
     self.lblError.layer.cornerRadius = 10;
     self.lblError.hidden = YES;
+    
+    self.logoImageView.frame = frameLogo;
+    self.logoImageView.center = CGPointMake([self returnWidth]/2, firstRowY - (PasscodeButtonPaddingVertical) * 12);
 
     [self.view addSubview:self.btnCancelOrDelete];
     [self.view addSubview:self.lblInstruction];
     [self.view addSubview:self.lblError];
     
     
-    CGFloat passcodeEntryViewsY = firstRowY - PasscodeButtonPaddingVertical * 7;
+    CGFloat passcodeEntryViewsY = firstRowY - PasscodeButtonPaddingVertical * 4;
     CGFloat passcodeEntryViewWidth = (PasscodeDigitCount * PasscodeEntryViewSize) + ((PasscodeDigitCount - 1) * PasscodeButtonPaddingHorizontal);
-    CGFloat xPoint = ([self returnWidth] - passcodeEntryViewWidth) / 2;
-    CGFloat xPointInsideContainer = 0;
-    CGRect framePasscodeEntryViewsContainerView = CGRectMake(xPoint, passcodeEntryViewsY, passcodeEntryViewWidth, PasscodeEntryViewSize);
+    CGFloat passcodeEntryViewsX = ([self returnWidth] - passcodeEntryViewWidth) / 2;
+    CGFloat insideContainerX = 0;
+    CGRect framePasscodeEntryViewsContainerView = CGRectMake(passcodeEntryViewsX, passcodeEntryViewsY, passcodeEntryViewWidth, PasscodeEntryViewSize);
     
     self.passcodeEntryViewsContainerView = [[UIView alloc]initWithFrame:framePasscodeEntryViewsContainerView];
     for (PasscodeCircularView *circularView in self.passcodeEntryViews){
-        CGRect frame = CGRectMake(xPointInsideContainer, 0, PasscodeEntryViewSize, PasscodeEntryViewSize);
+        CGRect frame = CGRectMake(insideContainerX, 0, PasscodeEntryViewSize, PasscodeEntryViewSize);
         circularView.frame = frame;
-        xPointInsideContainer = xPointInsideContainer + PasscodeEntryViewSize + PasscodeButtonPaddingHorizontal;
+        insideContainerX = insideContainerX + PasscodeEntryViewSize + PasscodeButtonPaddingHorizontal;
         [self.passcodeEntryViewsContainerView addSubview:circularView];
     }
     [self.view addSubview:self.passcodeEntryViewsContainerView];
@@ -300,7 +310,7 @@ typedef enum PasscodeErrorType : NSUInteger {
         }
     }
     else if(self.passcodeType == PasscodeTypeVerify || self.passcodeType == PasscodeTypeVerifyForSettingChange){
-        self.lblInstruction.text = NSLocalizedString(@"Enter Pascode", nil);;
+        self.lblInstruction.text = NSLocalizedString(@"Enter Passcode", nil);;
         if(self.passcodeType == PasscodeTypeVerifyForSettingChange){
         }
     }
@@ -390,12 +400,17 @@ typedef enum PasscodeErrorType : NSUInteger {
 	[view.layer addAnimation:animation forKey:@"position"];
 }
 
--(void)applyBackgroundImage
+-(void)applyBackgroundImageAndLogo
 {
     if([PasscodeManager sharedManager].backgroundImage){
         self.backgroundImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
         [self.backgroundImageView setImage:[PasscodeManager sharedManager].backgroundImage];
         [self.view addSubview:self.backgroundImageView];
+    }
+    if([PasscodeManager sharedManager].logo){
+        self.logoImageView = [[UIImageView alloc]initWithFrame:CGRectZero];
+        [self.logoImageView setImage:[PasscodeManager sharedManager].logo];
+        [self.view addSubview:self.logoImageView];
     }
 }
 #pragma mark -

@@ -53,6 +53,7 @@
     [PasscodeManager sharedManager].backgroundColor = wpBlue;
     [PasscodeManager sharedManager].backgroundImage = [UIImage imageNamed:@"background.jpeg"];
     [PasscodeManager sharedManager].appLockedCoverScreenBackgroundImage = [UIImage imageNamed:@"padlock.png"];
+    [PasscodeManager sharedManager].logo = [UIImage imageNamed:@"wp_white.png"];
     [PasscodeManager sharedManager].appLockedCoverScreenBackgroundColor = wpBlue;
     [PasscodeManager sharedManager].instructionsLabelColor = iPhone5CWhite;
     [PasscodeManager sharedManager].cancelOrDeleteButtonColor = iPhone5CWhite;

@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		F138252618B91E17007F5F3D /* background.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = F138252518B91E16007F5F3D /* background.jpeg */; };
-		F1978DF718B9620E00B8FB8D /* wpLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = F1978DF618B9620E00B8FB8D /* wpLogo.png */; };
 		F1B8E9E918AEAD5800B7F120 /* PasscodeSettingsDurationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B8E9E818AEAD5800B7F120 /* PasscodeSettingsDurationViewController.m */; };
 		F1C63A7D18BA83A700077A5F /* padlock.png in Resources */ = {isa = PBXBuildFile; fileRef = F1C63A7C18BA83A700077A5F /* padlock.png */; };
+		F1D234A418C262B70000487A /* wp_white.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D234A318C262B70000487A /* wp_white.png */; };
 		F1E50F9418AEA64C0011AF09 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1E50F9318AEA64C0011AF09 /* Foundation.framework */; };
 		F1E50F9618AEA64C0011AF09 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1E50F9518AEA64C0011AF09 /* CoreGraphics.framework */; };
 		F1E50F9818AEA64C0011AF09 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1E50F9718AEA64C0011AF09 /* UIKit.framework */; };
@@ -45,10 +45,10 @@
 
 /* Begin PBXFileReference section */
 		F138252518B91E16007F5F3D /* background.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpeg; sourceTree = "<group>"; };
-		F1978DF618B9620E00B8FB8D /* wpLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wpLogo.png; sourceTree = "<group>"; };
 		F1B8E9E718AEAD5800B7F120 /* PasscodeSettingsDurationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PasscodeSettingsDurationViewController.h; sourceTree = "<group>"; };
 		F1B8E9E818AEAD5800B7F120 /* PasscodeSettingsDurationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PasscodeSettingsDurationViewController.m; sourceTree = "<group>"; };
 		F1C63A7C18BA83A700077A5F /* padlock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = padlock.png; sourceTree = "<group>"; };
+		F1D234A318C262B70000487A /* wp_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wp_white.png; sourceTree = "<group>"; };
 		F1E50F9018AEA64C0011AF09 /* WPiOSPasscodeLock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WPiOSPasscodeLock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1E50F9318AEA64C0011AF09 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F1E50F9518AEA64C0011AF09 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -171,8 +171,8 @@
 		F1E50F9A18AEA64C0011AF09 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F1D234A318C262B70000487A /* wp_white.png */,
 				F1C63A7C18BA83A700077A5F /* padlock.png */,
-				F1978DF618B9620E00B8FB8D /* wpLogo.png */,
 				F138252518B91E16007F5F3D /* background.jpeg */,
 				F1E50F9B18AEA64C0011AF09 /* WPiOSPasscodeLock-Info.plist */,
 				F1E50F9C18AEA64C0011AF09 /* InfoPlist.strings */,
@@ -313,8 +313,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1D234A418C262B70000487A /* wp_white.png in Resources */,
 				F138252618B91E17007F5F3D /* background.jpeg in Resources */,
-				F1978DF718B9620E00B8FB8D /* wpLogo.png in Resources */,
 				F1E50F9E18AEA64C0011AF09 /* InfoPlist.strings in Resources */,
 				F1E50FA618AEA64C0011AF09 /* Images.xcassets in Resources */,
 				F1C63A7D18BA83A700077A5F /* padlock.png in Resources */,
