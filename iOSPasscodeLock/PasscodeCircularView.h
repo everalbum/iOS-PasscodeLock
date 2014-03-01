@@ -1,10 +1,11 @@
-//
-//  PasscodeCircularView.h
-//  WPiOSPasscodeLock
-//
-//  Created by Basar Akyelli on 2/17/14.
-//  Copyright (c) 2014 Basar Akyelli. All rights reserved.
-//
+/*
+ *  PasscodeCircularView.h
+ *
+ * Copyright (c) 2014 WordPress. All rights reserved.
+ *
+ * Licensed under GNU General Public License 2.0.
+ * Some rights reserved. See license.txt
+ */
 
 #import <UIKit/UIKit.h>
 

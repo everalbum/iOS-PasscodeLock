@@ -1,10 +1,11 @@
-//
-//  PasscodeManager.h
-//  WPiOSPasscodeLock
-//
-//  Created by Basar Akyelli on 2/15/14.
-//  Copyright (c) 2014 Basar Akyelli. All rights reserved.
-//
+/*
+ *  PasscodeManager.h
+ *
+ * Copyright (c) 2014 WordPress. All rights reserved.
+ *
+ * Licensed under GNU General Public License 2.0.
+ * Some rights reserved. See license.txt
+ */
 
 #import <Foundation/Foundation.h>
 #import "PasscodeViewController.h" 

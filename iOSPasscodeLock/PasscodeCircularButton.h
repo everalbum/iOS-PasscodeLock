@@ -1,10 +1,12 @@
-//
-//  CircleLineButton.h
-//  ABPadLockScreenDemo
-//
-//  Created by Basar Akyelli on 2/15/14.
-//  Copyright (c) 2014 Aron Bury. All rights reserved.
-//
+/*
+ *  PasscodeCircularButton.h
+ *
+ * Copyright (c) 2014 WordPress. All rights reserved.
+ *
+ * Licensed under GNU General Public License 2.0.
+ * Some rights reserved. See license.txt
+ */
+
 
 #import <UIKit/UIKit.h>
 #import "PasscodeButtonStyleProvider.h"

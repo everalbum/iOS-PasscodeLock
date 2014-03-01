@@ -1,10 +1,11 @@
-//
-//  MainViewController.m
-//  WPiOSPasscodeLock
-//
-//  Created by Basar Akyelli on 2/14/14.
-//  Copyright (c) 2014 Basar Akyelli. All rights reserved.
-//
+/*
+*  MainViewController.m
+*
+* Copyright (c) 2014 WordPress. All rights reserved.
+*
+* Licensed under GNU General Public License 2.0.
+* Some rights reserved. See license.txt
+*/
 
 #import "PasscodeViewController.h"
 #import "PasscodeManager.h" 
