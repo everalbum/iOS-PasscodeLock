@@ -251,7 +251,7 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 
 - (void)dismissLockScreen
 {
-    [self.passcodeViewController.view.window.layer addAnimation:[self transitionAnimation:kCATransitionMoveIn] forKey:kCATransition];
+    [self.passcodeViewController.view.window.layer addAnimation:[self transitionAnimation:kCATransitionFade] forKey:kCATransition];
     [self.passcodeViewController dismissViewControllerAnimated:NO completion:nil];
 }
 
