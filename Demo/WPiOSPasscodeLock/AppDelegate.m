@@ -15,7 +15,11 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
+    
+    //Activate protection
     [[PasscodeManager sharedManager] activatePasscodeProtection];
+    
+    //Set style
     [self setPasscodeStyle];
     
     SettingsViewController *svc = [[SettingsViewController alloc]initWithStyle:UITableViewStyleGrouped];
@@ -51,7 +55,7 @@
     [PasscodeManager sharedManager].cancelOrDeleteButtonFont = [UIFont fontWithName:@"Avenir-Book" size:15];
     [PasscodeManager sharedManager].errorLabelFont = [UIFont fontWithName:@"Avenir-Book" size:15];
     [PasscodeManager sharedManager].backgroundColor = wpBlue;
-    //[PasscodeManager sharedManager].backgroundImage = [UIImage imageNamed:@"background.jpeg"];
+    [PasscodeManager sharedManager].backgroundImage = [UIImage imageNamed:@"background.jpeg"];
     [PasscodeManager sharedManager].appLockedCoverScreenBackgroundImage = [UIImage imageNamed:@"padlock.png"];
     [PasscodeManager sharedManager].logo = [UIImage imageNamed:@"wp_white.png"];
     [PasscodeManager sharedManager].appLockedCoverScreenBackgroundColor = wpBlue;
@@ -59,15 +63,6 @@
     [PasscodeManager sharedManager].cancelOrDeleteButtonColor = iPhone5CWhite;
     [PasscodeManager sharedManager].passcodeViewFillColor = wpOrange;
     [PasscodeManager sharedManager].passcodeViewLineColor = iPhone5CWhite;
-
-//    UIColor *iPhone5CBlue = [UIColor colorWithRed:0.275 green:0.671 blue:0.878 alpha:1.0];
-//    UIColor *iPhone5CGreen = [UIColor colorWithRed:0.631 green:0.91 blue:0.467 alpha:1.0];
-//    UIColor *iPhone5CYellow = [UIColor colorWithRed:0.98 green:0.945 blue:0.537 alpha:1.0];
-//    UIColor *iPhone5SSpaceGrey = [UIColor colorWithRed:0.6 green:0.596 blue:0.608 alpha:1.0];
-//    UIColor *iPhone5SGold = [UIColor colorWithRed:0.831 green:0.773 blue:0.702 alpha:1.0];
-//    UIColor *iPhone5SSilver = [UIColor colorWithRed:0.843 green:0.851 blue:0.847 alpha:1.0];
-//    UIColor *iPhone5CPink = [UIColor colorWithRed:0.996 green:0.463 blue:0.478 alpha:1.0];
-
-    }
+}
 
 @end
