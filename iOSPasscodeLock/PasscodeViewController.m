@@ -16,7 +16,7 @@
 #define IS_IPAD   ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
 #endif
 
-static CGFloat const PasscodeButtonSize = 70;
+static CGFloat const PasscodeButtonSize = 65;
 static CGFloat const PasscodeButtonPaddingHorizontal = 20;
 static CGFloat const PasscodeButtonPaddingVertical = 10;
 static CGFloat const PasscodeEntryViewSize = 12;
