@@ -53,9 +53,8 @@
     [PasscodeManager sharedManager].buttonStyleProvider = buttonStyleProvider;
     [PasscodeManager sharedManager].instructionsLabelFont = [UIFont fontWithName:@"Avenir-Book" size:17];
     [PasscodeManager sharedManager].cancelOrDeleteButtonFont = [UIFont fontWithName:@"Avenir-Book" size:15];
-    [PasscodeManager sharedManager].errorLabelFont = [UIFont fontWithName:@"Avenir-Book" size:15];
     [PasscodeManager sharedManager].backgroundColor = wpBlue;
-    [PasscodeManager sharedManager].backgroundImage = [UIImage imageNamed:@"background.jpeg"];
+    //[PasscodeManager sharedManager].backgroundImage = [UIImage imageNamed:@"background.jpeg"];
     [PasscodeManager sharedManager].appLockedCoverScreenBackgroundImage = [UIImage imageNamed:@"padlock.png"];
     [PasscodeManager sharedManager].logo = [UIImage imageNamed:@"wp_white.png"];
     [PasscodeManager sharedManager].appLockedCoverScreenBackgroundColor = wpBlue;
