@@ -18,7 +18,6 @@
 
 static CGFloat const TouchButtonSize = 65;
 static CGFloat const TouchButtonSizeiPad = 80;
-
 static CGFloat const PasscodeButtonPaddingHorizontal = 20;
 static CGFloat const PasscodeButtonPaddingVertical = 10;
 static CGFloat const PasscodeEntryViewSize = 14;
