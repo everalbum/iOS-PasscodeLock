@@ -71,7 +71,6 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
                                              selector: @selector(handleNotification:)
                                                  name: UIApplicationDidEnterBackgroundNotification
                                                object: nil];
-
 }
 
 -(void)disableSubscriptions
