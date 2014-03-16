@@ -10,7 +10,7 @@
 
 #import "PasscodeManager.h"
 #import "FXKeychain.h"
-#import <math.h> 
+#import <math.h>
 
 static NSString * const PasscodeProtectionStatusKey = @"PasscodeProtectionEnabled";
 static NSString * const PasscodeKey = @"PasscodeKey";
@@ -25,6 +25,8 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 @property (nonatomic, strong) PasscodeViewController *passcodeViewController;
 @property (nonatomic, strong) UIViewController *presentingViewController;
 @property (nonatomic, strong) UIView *coverView;
+@property (nonatomic, strong) UIWindow *coverWindow;
+@property (assign) BOOL coverViewPresented;
 
 @end
 
@@ -39,6 +41,14 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
     return sharedManager;
 }
 
+-(id) init
+{
+    self = [super init];
+    if(self){
+        _coverViewPresented = NO;
+    }
+    return self;
+}
 
 #pragma mark -
 #pragma mark - Subscriptions management
@@ -67,10 +77,6 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
                                              selector: @selector(handleNotification:)
                                                  name: UIApplicationDidBecomeActiveNotification
                                                object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleNotification:)
-                                                 name: UIApplicationDidEnterBackgroundNotification
-                                               object: nil];
 }
 
 -(void)disableSubscriptions
@@ -79,17 +85,12 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
                                                     name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIApplicationDidBecomeActiveNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIApplicationDidEnterBackgroundNotification object:nil];
-
 }
 
 -(void)handleNotification:(NSNotification *)notification
 {
     if(notification.name == UIApplicationWillResignActiveNotification){
         [self startTrackingInactivity];
-    }
-    if(notification.name == UIApplicationDidEnterBackgroundNotification){
         if([self shouldLock]){
             [self presentCoverView];
         }
@@ -149,8 +150,8 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
     [self dismissLockScreen];
 }
 
-#pragma mark - 
-#pragma mark - Workflow launchers 
+#pragma mark -
+#pragma mark - Workflow launchers
 
 - (void) disablePasscodeProtectionWithCompletion:(void (^) (BOOL success)) completion
 {
@@ -174,7 +175,7 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
     [self dismissLockScreen];
     self.passcodeViewController = [[PasscodeViewController alloc]initWithPasscodeType:passcodeType withDelegate:self];
     self.presentingViewController = [self topViewController];
-
+    
     [self.presentingViewController.view.window.layer addAnimation:[self transitionAnimation:kCATransitionFade] forKey:kCATransition];
     [self.presentingViewController presentViewController:self.passcodeViewController animated:NO completion:nil];
 }
@@ -201,13 +202,12 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
     
     NSArray *windows = [UIApplication sharedApplication].windows;
     
-    for(int i=windows.count-1; i >= 0; i--)
+    for(NSInteger i=windows.count-1; i >= 0; i--)
     {
         UIWindow *window = windows[i];
-        if(window.windowLevel == UIWindowLevelNormal){
+        if(window.windowLevel == UIWindowLevelNormal && ![window.rootViewController isMemberOfClass:[PasscodeViewController class]]){
             return [self topViewController:window.rootViewController];
         }
-        
     }
     return nil;
 }
@@ -233,15 +233,15 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
     NSNumber *inactivityLimit = [self getPasscodeInactivityDurationInMinutes];
     NSDate *inactivityStarted = [self getInactivityStartTime];
     NSDate *inactivityEnded = [self getInactivityEndTime];
-
+    
     NSTimeInterval difference = [inactivityEnded timeIntervalSinceDate:inactivityStarted];
     if(isnan(difference)){
-        difference = 0; 
+        difference = 0;
     }
     NSInteger differenceInMinutes = difference / 60;
     
     if(differenceInMinutes < 0){ //Date/Time on device might be altered.
-        differenceInMinutes = [inactivityLimit integerValue] + 1; 
+        differenceInMinutes = [inactivityLimit integerValue] + 1;
     }
     
     if([self isPasscodeProtectionOn] && ([inactivityLimit integerValue] <= differenceInMinutes))
@@ -276,23 +276,22 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 
 - (void) presentCoverView
 {
-    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-    self.coverView = [[UIView alloc]initWithFrame:window.bounds];
-    PasscodeViewController *pvc = [PasscodeViewController new];
-    
-    if(!IS_IPAD){
-        [self.coverView addSubview:pvc.view];
-    } else {
-        [self.coverView setBackgroundColor:self.backgroundColor];
+    if(!self.coverViewPresented){
+        self.coverWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        [self.coverWindow setWindowLevel:UIWindowLevelNormal];
+        PasscodeViewController *pvc = [PasscodeViewController new];
+        [self.coverWindow setRootViewController:pvc];
+        [self.coverWindow makeKeyAndVisible];
+        self.coverViewPresented = YES;
     }
-   
-    self.coverView.hidden = NO;
-    [UIApplication.sharedApplication.keyWindow addSubview:self.coverView];
 }
 
 - (void) dismissCoverView{
-    self.coverView.hidden = YES;
-    [self.coverView removeFromSuperview];
+    if(self.coverViewPresented){
+        [self.coverWindow setHidden:YES];
+        self.coverWindow = nil;
+        self.coverViewPresented = NO;
+    }
 }
 
 - (void) setPasscode:(NSString *)passcode
@@ -369,7 +368,7 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
     return transition;
 }
 
-#pragma mark - 
+#pragma mark -
 #pragma mark - Styling Getters
 
 -(UIColor *)backgroundColor
