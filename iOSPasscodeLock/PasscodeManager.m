@@ -47,6 +47,11 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
     return self;
 }
 
+-(void)dealloc
+{
+    [self disableSubscriptions];
+}
+
 #pragma mark -
 #pragma mark - Subscriptions management
 
