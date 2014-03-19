@@ -129,7 +129,9 @@
         }
         else if(indexPath.section == 1 && indexPath.row == 1)
         {
-            [[PasscodeManager sharedManager] changePasscodeWithCompletion:nil];
+            [[PasscodeManager sharedManager] changePasscodeWithCompletion:^(BOOL success) {
+                [self reloadTableView];
+            }];
         }
     }
 }
@@ -141,29 +143,38 @@
     if(switchView.isOn){
         
         [[PasscodeManager sharedManager] setupNewPasscodeWithCompletion:^(BOOL success) {
+
             if(success){
                 selfRef.passcodeEnabled = YES;
                 [selfRef.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+
             }
             else{
                 selfRef.passcodeEnabled = NO;
                 [switchView setOn:NO];
+
             }
+            [self reloadTableView];
+
         }];
     }
     else{
         [[PasscodeManager sharedManager] disablePasscodeProtectionWithCompletion:^(BOOL success) {
+
             if(success){
                 self.passcodeEnabled = NO;
                 [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+
             }
             else{
                 [switchView setOn:YES];
                 self.passcodeEnabled = YES;
+
             }
+            [self reloadTableView];
+
         }];
     }
-    [self reloadTableView];
 }
 
 -(void)reloadTableView
