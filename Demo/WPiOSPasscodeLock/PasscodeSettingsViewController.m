@@ -19,6 +19,13 @@
 @end
 
 
+typedef enum {
+    PasscodeSettingsSectionEnabled = 0,
+    PasscodeSettingsSectionConfiguration,
+    PasscodeSettingsSectionCount
+} PasscodeSettingsSection;
+
+
 @implementation PasscodeSettingsViewController
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -64,33 +71,27 @@
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if(self.passcodeEnabled)
-    {
-        return 2;
-    }
-    else
-    {
-        return 1;
-    }
+    return self.passcodeEnabled ? PasscodeSettingsSectionCount : 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if(section == 0)
-    {
-        return 1;
+    switch (section){
+        case PasscodeSettingsSectionEnabled:
+            return 1;
+        case PasscodeSettingsSectionConfiguration:
+            return 2;
+        default:
+            return 0;
     }
-    else
-    {
-        return 2;
-    }
+
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
     
-    if(indexPath.section== 0) //Switch
+    if(indexPath.section == PasscodeSettingsSectionEnabled) //Switch
     {
         UISwitch *switchview = [[UISwitch alloc] initWithFrame:CGRectZero];
         switchview.tag = 1;
@@ -100,13 +101,13 @@
         cell.textLabel.text = NSLocalizedString(@"Passcode Lock",nil);
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    else if(indexPath.section == 1 && indexPath.row == 0)//Duration
+    else if(indexPath.section == PasscodeSettingsSectionConfiguration && indexPath.row == 0)//Duration
     {
         cell.textLabel.text = NSLocalizedString(@"Activate",nil);
         cell.detailTextLabel.text = self.passcodeDuration;
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
-    else if(indexPath.section == 1 && indexPath.row == 1) //Change passcode
+    else if(indexPath.section == PasscodeSettingsSectionConfiguration && indexPath.row == 1) //Change passcode
     {
         cell.textLabel.text = NSLocalizedString(@"Change Passcode",nil);
     }
@@ -118,7 +119,7 @@
 {
     if(self.passcodeEnabled)
     {
-        if(indexPath.section == 1 && indexPath.row == 0)
+        if(indexPath.section == PasscodeSettingsSectionConfiguration && indexPath.row == 0)
         {
             PasscodeSettingsDurationViewController *psdvc = [[PasscodeSettingsDurationViewController alloc]initWithStyle:UITableViewStyleGrouped];
             psdvc.durations = self.durations;
@@ -127,7 +128,7 @@
             
             [self.navigationController pushViewController:psdvc animated:YES];
         }
-        else if(indexPath.section == 1 && indexPath.row == 1)
+        else if(indexPath.section == PasscodeSettingsSectionConfiguration && indexPath.row == 1)
         {
             [[PasscodeCoordinator sharedCoordinator] changePasscodeWithCompletion:^(BOOL success) {
                 [self reloadTableView];
