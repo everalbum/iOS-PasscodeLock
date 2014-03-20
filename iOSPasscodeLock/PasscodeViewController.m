@@ -175,16 +175,16 @@ typedef enum PasscodeErrorType : NSUInteger {
     CGRect initialFrame = CGRectMake(0, 0, self.passcodeButtonSize, self.passcodeButtonSize);
     
     PasscodeButtonStyleProvider *styleProvider = [PasscodeManager sharedManager].buttonStyleProvider;
-    BOOL styleForAllButtonsExists = [styleProvider styleExistsForButton:PasscodeButtonAll];
+    BOOL styleForAllButtonsExists = [styleProvider customStyleExistsForButtonType:PasscodeButtonTypeAll];
     
     for(int i = 0; i < 10; i++)
     {
-        PasscodeStyle *buttonStyle;
+        PasscodeButtonStyle *buttonStyle;
         
         if(!styleForAllButtonsExists){
-            buttonStyle = [styleProvider styleForButton:i];
+            buttonStyle = [styleProvider styleForButtonType:i];
         } else{
-            buttonStyle = [styleProvider styleForButton:PasscodeButtonAll];
+            buttonStyle = [styleProvider styleForButtonType:PasscodeButtonTypeAll];
         }
         
         NSString *passcodeNumberStr = [NSString stringWithFormat:@"%d",i];

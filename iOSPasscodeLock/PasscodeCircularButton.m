@@ -27,7 +27,7 @@
 
 - (id) initWithNumber:(NSString *)number
                 frame:(CGRect)frame
-                style:(PasscodeStyle *)style
+                style:(PasscodeButtonStyle *)style
 {
     self = [super init];
     

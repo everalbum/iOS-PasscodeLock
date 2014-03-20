@@ -9,7 +9,7 @@
 
 #import "PasscodeButtonStyleProvider.h"
 
-@implementation PasscodeStyle
+@implementation PasscodeButtonStyle
 
 @end
 
@@ -28,37 +28,35 @@
      if(self)
      {
          _buttonStyles = [NSMutableDictionary new];
+         
+         _defaultButtonStyle = [[PasscodeButtonStyle alloc]init];
+         _defaultButtonStyle.titleColor = [UIColor blackColor];
+         _defaultButtonStyle.lineColor = [UIColor blackColor];
+         _defaultButtonStyle.fillColor = [UIColor clearColor];
+         _defaultButtonStyle.selectedFillColor = [UIColor blackColor];
+         _defaultButtonStyle.selectedLineColor = [UIColor whiteColor];
+         _defaultButtonStyle.selectedTitleColor = [UIColor whiteColor];
+         
      }
      return self;
 }
 
-- (void) addStyleForButton:(PasscodeButton)button stye:(PasscodeStyle *)passcodeStyle
+- (void) addStyle:(PasscodeButtonStyle *)passcodeStyle forButton:(PasscodeButtonType)buttonType
 {
-    [_buttonStyles setObject:passcodeStyle forKey:[NSNumber numberWithInt:button]];
+    [self.buttonStyles setObject:passcodeStyle forKey:[NSNumber numberWithInt:buttonType]];
 }
 
-- (PasscodeStyle *) styleForButton:(PasscodeButton)button
+- (PasscodeButtonStyle *) styleForButtonType:(PasscodeButtonType)buttonType
 {
-    if([_buttonStyles objectForKey:[NSNumber numberWithInt:button]] != nil){
-        return [_buttonStyles objectForKey:[NSNumber numberWithInt:button]];
+    if([self.buttonStyles objectForKey:@(buttonType)] != nil){
+        return [self.buttonStyles objectForKey:@(buttonType)];
     }else{
-        PasscodeStyle *defaultStyle = [[PasscodeStyle alloc]init];
-        defaultStyle.titleColor = [UIColor blackColor];
-        defaultStyle.lineColor = [UIColor blackColor];
-        defaultStyle.fillColor = [UIColor clearColor];
-        defaultStyle.selectedFillColor = [UIColor blackColor];
-        defaultStyle.selectedLineColor = [UIColor whiteColor];
-        defaultStyle.selectedTitleColor = [UIColor whiteColor];
-        return defaultStyle;
+        return self.defaultButtonStyle;
+        
     }
 }
 
-- (BOOL) styleExistsForButton:(PasscodeButton)button{
-    if([_buttonStyles objectForKey:[NSNumber numberWithInt:button]]){
-        return YES;
-    }else{
-        return NO;
-    }
-}
+- (BOOL) customStyleExistsForButtonType:(PasscodeButtonType)buttonType{
+   return self.buttonStyles[@(buttonType)] != nil;}
 
 @end
