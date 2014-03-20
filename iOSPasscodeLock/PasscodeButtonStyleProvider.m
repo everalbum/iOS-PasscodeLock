@@ -13,7 +13,6 @@
 
 @end
 
-
 @interface PasscodeButtonStyleProvider ()
 
 @property (strong, nonatomic) NSMutableDictionary *buttonStyles;
@@ -23,7 +22,7 @@
 
 @implementation PasscodeButtonStyleProvider
 
--(id)init{
+- (id)init {
     self = [super init];
      if(self)
      {
@@ -41,13 +40,11 @@
      return self;
 }
 
-- (void) addStyle:(PasscodeButtonStyle *)passcodeStyle forButton:(PasscodeButtonType)buttonType
-{
+- (void)addStyle:(PasscodeButtonStyle *)passcodeStyle forButton:(PasscodeButtonType)buttonType {
     [self.buttonStyles setObject:passcodeStyle forKey:[NSNumber numberWithInt:buttonType]];
 }
 
-- (PasscodeButtonStyle *) styleForButtonType:(PasscodeButtonType)buttonType
-{
+- (PasscodeButtonStyle *)styleForButtonType:(PasscodeButtonType)buttonType {
     if([self.buttonStyles objectForKey:@(buttonType)] != nil){
         return [self.buttonStyles objectForKey:@(buttonType)];
     }else{
@@ -56,7 +53,8 @@
     }
 }
 
-- (BOOL) customStyleExistsForButtonType:(PasscodeButtonType)buttonType{
-   return self.buttonStyles[@(buttonType)] != nil;}
+- (BOOL)customStyleExistsForButtonType:(PasscodeButtonType)buttonType {
+   return self.buttonStyles[@(buttonType)] != nil;
+}
 
 @end

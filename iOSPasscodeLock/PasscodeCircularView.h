@@ -11,10 +11,7 @@
 
 @interface PasscodeCircularView : UIView
 
-- (id) initWithFrame:(CGRect)frame
-           lineColor:(UIColor *) lineColor
-           fillColor:(UIColor *) fillColor;
-
+- (id)initWithFrame:(CGRect)frame lineColor:(UIColor *) lineColor fillColor:(UIColor *) fillColor;
 - (void)fill;
 - (void)clear;
 @end

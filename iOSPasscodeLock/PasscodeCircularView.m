@@ -20,18 +20,12 @@
 
 @implementation PasscodeCircularView
 
-
-- (id) initWithFrame:(CGRect)frame
-            lineColor:(UIColor *) lineColor
-            fillColor:(UIColor *) fillColor
-{
+- (id)initWithFrame:(CGRect)frame lineColor:(UIColor *) lineColor fillColor:(UIColor *) fillColor {
+  
     self = [super init];
-    
-    if(self)
-    {
+    if(self) {
         _lineColor = lineColor;
         _fillColor = fillColor;
-        
         [self setFrame:frame];
         [self drawCircular];
     }
@@ -39,8 +33,7 @@
 }
 
 
-- (void)drawCircular
-{
+- (void)drawCircular {
     self.circle = [CAShapeLayer layer];
     [self.circle setBounds:CGRectMake(0.0f, 0.0f, [self bounds].size.width, [self bounds].size.height)];
     [self.circle setPosition:CGPointMake(CGRectGetMidX([self bounds]),CGRectGetMidY([self bounds]))];
@@ -52,13 +45,11 @@
     [[self layer] addSublayer:self.circle];
 }
 
-- (void)fill
-{
+- (void)fill {
     [self.circle setFillColor:self.fillColor.CGColor];
 }
 
-- (void)clear
-{
+- (void)clear {
     [self.circle setFillColor:[UIColor clearColor].CGColor];
 }
 

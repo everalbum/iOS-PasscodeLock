@@ -21,10 +21,6 @@
 
 @end
 
-@interface PasscodeButtonStyleProvider : NSObject
-
-@property (strong, nonatomic) PasscodeButtonStyle *defaultButtonStyle;
-
 typedef enum PasscodeButtonType : NSUInteger {
     PasscodeButtonTypeZero,
     PasscodeButtonTypeOne,
@@ -39,9 +35,13 @@ typedef enum PasscodeButtonType : NSUInteger {
     PasscodeButtonTypeAll
 } PasscodeButtonType;
 
-- (void) addStyle:(PasscodeButtonStyle *)passcodeStyle forButton:(PasscodeButtonType)buttonType;
-- (PasscodeButtonStyle *) styleForButtonType:(PasscodeButtonType)buttonType;
-- (BOOL) customStyleExistsForButtonType:(PasscodeButtonType)buttonType;
+@interface PasscodeButtonStyleProvider : NSObject
+
+@property (strong, nonatomic) PasscodeButtonStyle *defaultButtonStyle;
+
+- (void)addStyle:(PasscodeButtonStyle *)passcodeStyle forButton:(PasscodeButtonType)buttonType;
+- (PasscodeButtonStyle *)styleForButtonType:(PasscodeButtonType)buttonType;
+- (BOOL)customStyleExistsForButtonType:(PasscodeButtonType)buttonType;
 @end
 
 

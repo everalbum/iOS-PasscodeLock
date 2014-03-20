@@ -12,7 +12,6 @@
 @interface PasscodeCircularButton ()
 
 @property (nonatomic, strong) CAShapeLayer *circle;
-
 @property (nonatomic, strong) UIColor *lineColor;
 @property (nonatomic, strong) UIColor *titleColor;
 @property (nonatomic, strong) UIColor *fillColor;
@@ -20,34 +19,33 @@
 @property (nonatomic, strong) UIColor *selectedFillColor;
 @property (nonatomic, strong) UIColor *selectedTitleColor;
 @property (nonatomic, strong) UIFont *font;
+
 @end
 
 @implementation PasscodeCircularButton
 
-
-- (id) initWithNumber:(NSString *)number
-                frame:(CGRect)frame
-                style:(PasscodeButtonStyle *)style
-{
-    self = [PasscodeCircularButton buttonWithType:UIButtonTypeCustom];
-    _lineColor = style.lineColor;
-    _titleColor = style.titleColor;
-    _fillColor = style.fillColor;
-    _selectedLineColor = style.selectedLineColor;
-    _selectedTitleColor = style.selectedTitleColor;
-    _selectedFillColor = style.selectedFillColor;
-    _font = style.titleFont;
+- (id)initWithNumber:(NSString *)number frame:(CGRect)frame style:(PasscodeButtonStyle *)style{
    
-    [self setTag:[number integerValue]];
-    [self setFrame:frame];
-    [self setTitle:number forState:UIControlStateNormal];
-    [self drawCircular];
+    self = [PasscodeCircularButton buttonWithType:UIButtonTypeCustom];
     
+    if(self) {
+        _lineColor = style.lineColor;
+        _titleColor = style.titleColor;
+        _fillColor = style.fillColor;
+        _selectedLineColor = style.selectedLineColor;
+        _selectedTitleColor = style.selectedTitleColor;
+        _selectedFillColor = style.selectedFillColor;
+        _font = style.titleFont;
+        
+        [self setTag:[number integerValue]];
+        [self setFrame:frame];
+        [self setTitle:number forState:UIControlStateNormal];
+        [self drawCircular];
+    }
     return self;
 }
 
-- (void)drawCircular
-{
+- (void)drawCircular {
     [self setTitleColor:self.lineColor forState:UIControlStateNormal];
     self.circle = [CAShapeLayer layer];
     [self.circle setBounds:CGRectMake(0.0f, 0.0f, [self bounds].size.width, [self bounds].size.height)];
@@ -61,16 +59,13 @@
     self.titleLabel.font = self.font;
 }
 
-- (void)setHighlighted:(BOOL)highlighted
-{
-    if (highlighted)
-    {
+- (void)setHighlighted:(BOOL)highlighted {
+    if (highlighted) {
         [self.circle setStrokeColor:self.selectedLineColor.CGColor];
         [self.circle setFillColor:self.selectedFillColor.CGColor];
         self.titleLabel.textColor = self.selectedTitleColor;
     }
-    else
-    {
+    else {
         self.titleLabel.textColor = self.titleColor;
         [self.circle setFillColor:self.fillColor.CGColor];
         [self.circle setStrokeColor:self.lineColor.CGColor];

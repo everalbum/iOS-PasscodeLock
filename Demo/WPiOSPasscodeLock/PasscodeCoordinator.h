@@ -15,17 +15,17 @@
 
 + (PasscodeCoordinator *)sharedCoordinator;
 
-- (void) activatePasscodeProtection;
-- (void) setupNewPasscodeWithCompletion:(void (^)(BOOL success)) completion;
-- (void) changePasscodeWithCompletion:(void (^)(BOOL success)) completion;
-- (void) disablePasscodeProtectionWithCompletion:(void (^) (BOOL success)) completion;
-- (void) setPasscodeInactivityDurationInMinutes:(NSNumber *) minutes;
-- (void) didSetupPasscode;
-- (void) setPasscode:(NSString *)passcode;
-- (void) togglePasscodeProtection:(BOOL)isOn;
-- (BOOL) isPasscodeProtectionOn;
-- (BOOL) isPasscodeCorrect:(NSString *)passcode;
-- (BOOL) shouldLock;
+- (void)activatePasscodeProtection;
+- (void)setupNewPasscodeWithCompletion:(void (^)(BOOL success)) completion;
+- (void)changePasscodeWithCompletion:(void (^)(BOOL success)) completion;
+- (void)disablePasscodeProtectionWithCompletion:(void (^) (BOOL success)) completion;
+- (void)setPasscodeInactivityDurationInMinutes:(NSNumber *) minutes;
+- (void)didSetupPasscode;
+- (void)setPasscode:(NSString *)passcode;
+- (void)togglePasscodeProtection:(BOOL)isOn;
+- (BOOL)isPasscodeProtectionOn;
+- (BOOL)isPasscodeCorrect:(NSString *)passcode;
+- (BOOL)shouldLock;
 - (NSNumber *) getPasscodeInactivityDurationInMinutes;
 
 @property (strong, nonatomic) UIColor *backgroundColor;
