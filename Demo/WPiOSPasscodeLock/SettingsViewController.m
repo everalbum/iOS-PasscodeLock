@@ -45,14 +45,11 @@ NSString *CellIdentifier = @"Cell";
 #pragma mark - Table view data source
 
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 1;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
     if(!cell)
@@ -62,15 +59,12 @@ NSString *CellIdentifier = @"Cell";
     
     cell.textLabel.text = NSLocalizedString(@"Passcode Lock",nil);
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-
     
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if(indexPath.row == 0)
-    {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if(indexPath.row == 0) {
         PasscodeSettingsViewController *psvc = [[PasscodeSettingsViewController alloc]initWithStyle:UITableViewStyleGrouped];
         [self.navigationController pushViewController:psvc animated:YES];
     }

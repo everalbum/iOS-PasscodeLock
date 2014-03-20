@@ -28,8 +28,7 @@ typedef enum {
 
 @implementation PasscodeSettingsViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
+- (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
@@ -38,14 +37,12 @@ typedef enum {
 }
 
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     [self resetDurations];
 }
 
-- (void)resetDurations
-{
+- (void)resetDurations {
     self.durations = @[NSLocalizedString(@"Immediately",nil),
                        NSLocalizedString(@"After 1 minute",nil),
                        NSLocalizedString(@"After 15 minutes",nil)];
@@ -69,14 +66,12 @@ typedef enum {
     }
 }
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return self.passcodeEnabled ? PasscodeSettingsSectionCount : 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    switch (section){
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    switch (section) {
         case PasscodeSettingsSectionEnabled:
             return 1;
         case PasscodeSettingsSectionConfiguration:
@@ -84,15 +79,12 @@ typedef enum {
         default:
             return 0;
     }
-
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
     
-    if(indexPath.section == PasscodeSettingsSectionEnabled) //Switch
-    {
+    if(indexPath.section == PasscodeSettingsSectionEnabled) {
         UISwitch *switchview = [[UISwitch alloc] initWithFrame:CGRectZero];
         switchview.tag = 1;
         [switchview addTarget:self action:@selector(updateSwitch:) forControlEvents:UIControlEventTouchUpInside];
@@ -101,26 +93,22 @@ typedef enum {
         cell.textLabel.text = NSLocalizedString(@"Passcode Lock",nil);
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    else if(indexPath.section == PasscodeSettingsSectionConfiguration && indexPath.row == 0)//Duration
-    {
+    else if(indexPath.section == PasscodeSettingsSectionConfiguration && indexPath.row == 0) {
         cell.textLabel.text = NSLocalizedString(@"Activate",nil);
         cell.detailTextLabel.text = self.passcodeDuration;
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
-    else if(indexPath.section == PasscodeSettingsSectionConfiguration && indexPath.row == 1) //Change passcode
-    {
+    else if(indexPath.section == PasscodeSettingsSectionConfiguration && indexPath.row == 1) {
         cell.textLabel.text = NSLocalizedString(@"Change Passcode",nil);
     }
     
     return cell;
 }
 
--(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(self.passcodeEnabled)
-    {
-        if(indexPath.section == PasscodeSettingsSectionConfiguration && indexPath.row == 0)
-        {
+    if(self.passcodeEnabled) {
+        if(indexPath.section == PasscodeSettingsSectionConfiguration && indexPath.row == 0) {
             PasscodeSettingsDurationViewController *psdvc = [[PasscodeSettingsDurationViewController alloc]initWithStyle:UITableViewStyleGrouped];
             psdvc.durations = self.durations;
             psdvc.durationMinutes = self.durationMinutes;
@@ -128,19 +116,16 @@ typedef enum {
             
             [self.navigationController pushViewController:psdvc animated:YES];
         }
-        else if(indexPath.section == PasscodeSettingsSectionConfiguration && indexPath.row == 1)
-        {
+        else if(indexPath.section == PasscodeSettingsSectionConfiguration && indexPath.row == 1) {
             [[PasscodeCoordinator sharedCoordinator] changePasscodeWithCompletion:^(BOOL success) {
                 [self reloadTableView];
             }];
         }
     }
     [self reloadTableView];
-
 }
 
--(void)updateSwitch:(UISwitch *)switchView
-{
+-(void)updateSwitch:(UISwitch *)switchView {
     __weak PasscodeSettingsViewController *selfRef = self;
 
     if(switchView.isOn){
@@ -161,7 +146,7 @@ typedef enum {
 
         }];
     }
-    else{
+    else {
         [[PasscodeCoordinator sharedCoordinator] disablePasscodeProtectionWithCompletion:^(BOOL success) {
 
             if(success){
@@ -182,8 +167,7 @@ typedef enum {
 
 }
 
--(void)reloadTableView
-{
+-(void)reloadTableView {
     [self resetDurations];
     [self.tableView reloadData];
 }
