@@ -45,7 +45,6 @@ typedef enum PasscodeErrorType : NSUInteger {
 
 @property (strong, nonatomic) UILabel *lblInstruction;
 @property (strong, nonatomic) UIButton *btnCancelOrDelete;
-@property (strong, nonatomic) UILabel *lblError;
 @property (strong, nonatomic) NSString *passcodeFirstEntry;
 @property (strong, nonatomic) NSString *passcodeEntered;
 @property (strong, nonatomic) NSMutableArray *passcodeEntryViews;
@@ -109,7 +108,6 @@ typedef enum PasscodeErrorType : NSUInteger {
         if(self.numberOfDigitsEntered == 0){
             self.btnCancelOrDelete.hidden = YES;
             [self enableCancelIfAllowed];
-            self.lblError.hidden = YES;
         }
     }
 }
@@ -127,7 +125,6 @@ typedef enum PasscodeErrorType : NSUInteger {
         self.numberOfDigitsEntered++;
         
         if(self.numberOfDigitsEntered == 1){
-            self.lblError.hidden = YES; 
             [self enableDelete];
         }
         if(self.numberOfDigitsEntered == PasscodeDigitCount)
@@ -209,11 +206,6 @@ typedef enum PasscodeErrorType : NSUInteger {
     self.lblInstruction = [[UILabel alloc]initWithFrame:CGRectZero];
     self.lblInstruction.textColor = [PasscodeCoordinator sharedCoordinator].instructionsLabelColor;
     self.lblInstruction.font = [PasscodeCoordinator sharedCoordinator].instructionsLabelFont;
-    
-    self.lblError = [[UILabel alloc]initWithFrame:CGRectZero];
-    self.lblError.textColor = [PasscodeCoordinator sharedCoordinator].errorLabelColor;
-    self.lblError.backgroundColor = [PasscodeCoordinator sharedCoordinator].errorLabelBackgroundColor;
-    self.lblError.font = [PasscodeCoordinator sharedCoordinator].errorLabelFont;
 }
 
 - (void)buildLayout
@@ -244,7 +236,6 @@ typedef enum PasscodeErrorType : NSUInteger {
    
     CGRect frameBtnCancel = CGRectMake(lastButtonX, zeroRowY, self.passcodeButtonSize, self.passcodeButtonSize);
     CGRect frameLblInstruction = CGRectMake(0, 0, 300, 20);
-    CGRect frameLblError = CGRectMake(-100, -100, 200, 20);
     CGRect frameLogo = (IS_IPAD) ? CGRectMake(0, 0, LogoSizeiPad, LogoSizeiPad) : CGRectMake(0, 0, LogoSize, LogoSize);
     CGRect frameBackgroundImageView = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, [self returnWidth], [self returnHeight]);
     
@@ -264,19 +255,12 @@ typedef enum PasscodeErrorType : NSUInteger {
     self.lblInstruction.textAlignment = NSTextAlignmentCenter;
     self.lblInstruction.frame = frameLblInstruction;
     self.lblInstruction.center = CGPointMake([self returnWidth]/2, firstRowY - (PasscodeButtonPaddingVertical * 7));
-
-    self.lblError.textAlignment = NSTextAlignmentCenter;
-    self.lblError.frame = frameLblError;
-   // self.lblError.center = CGPointMake([self returnWidth]/2, firstRowY - (PasscodeButtonPaddingVertical * 3));
-    self.lblError.layer.cornerRadius = 10;
-    self.lblError.hidden = YES;
     
     self.logoImageView.frame = frameLogo;
     self.logoImageView.center = (IS_IPAD) ? CGPointMake([self returnWidth]/2, firstRowY - (PasscodeButtonPaddingVertical) * 13) : CGPointMake([self returnWidth]/2, firstRowY - (PasscodeButtonPaddingVertical) * 12);
 
     [self.view addSubview:self.btnCancelOrDelete];
     [self.view addSubview:self.lblInstruction];
-    [self.view addSubview:self.lblError];
     
     
     CGFloat passcodeEntryViewsY = firstRowY - PasscodeButtonPaddingVertical * 4;
@@ -347,11 +331,6 @@ typedef enum PasscodeErrorType : NSUInteger {
     }
 }
 
--(void)showErrorMessage:(NSString *)errorMessage
-{
-    self.lblError.hidden = NO;
-    self.lblError.text = errorMessage;
-}
 - (void)enableCancelIfAllowed
 {
     if(self.passcodeType == PasscodeTypeChangePasscode || self.passcodeType == PasscodeTypeSetup || self.passcodeType == PasscodeTypeVerifyForSettingChange){
@@ -450,8 +429,6 @@ typedef enum PasscodeErrorType : NSUInteger {
 -(void)evaluatePasscodeEntry{
     
     [NSThread sleepForTimeInterval:0.1];
-    self.lblError.hidden = YES;
-    
     dispatch_async(dispatch_get_main_queue(), ^{
         
         if(self.passcodeType == PasscodeTypeSetup){
@@ -504,13 +481,6 @@ typedef enum PasscodeErrorType : NSUInteger {
 }
 
 -(void)performErrorWithErrorType:(PasscodeErrorType) errorType{
-    if(errorType == PasscodeErrorTypeIncorrectPasscode){
-        [self showErrorMessage:NSLocalizedString(@"Incorrect Passcode", nil)];
-    }
-    else if(errorType == PasscodeErrorTypePascodesDidNotMatch){
-        [self showErrorMessage:NSLocalizedString(@"Passcodes did not Match", nil)];
-
-    }
     [self performShake:self.passcodeEntryViewsContainerView];
 }
 
