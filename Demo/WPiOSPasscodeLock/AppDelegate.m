@@ -39,7 +39,7 @@
     UIColor *wpOrange = [UIColor colorWithRed:0.835 green:0.306 blue:0.129 alpha:1.0];
     
     PasscodeButtonStyleProvider *buttonStyleProvider = [[PasscodeButtonStyleProvider alloc]init];
-    PasscodeStyle *style = [[PasscodeStyle alloc]init];
+    PasscodeButtonStyle *style = [[PasscodeButtonStyle alloc]init];
     style.lineColor = iPhone5CWhite;
     style.titleColor = iPhone5CWhite;
     style.fillColor = [UIColor clearColor];
