@@ -134,6 +134,8 @@
             }];
         }
     }
+    [self reloadTableView];
+
 }
 
 -(void)updateSwitch:(UISwitch *)switchView
@@ -175,6 +177,8 @@
 
         }];
     }
+    [self reloadTableView];
+
 }
 
 -(void)reloadTableView
