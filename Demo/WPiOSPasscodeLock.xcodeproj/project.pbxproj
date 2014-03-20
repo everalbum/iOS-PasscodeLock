@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F138252618B91E17007F5F3D /* background.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = F138252518B91E16007F5F3D /* background.jpeg */; };
+		F13FE7B418DB4ECE00AB39CD /* PasscodeCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F13FE7B318DB4ECE00AB39CD /* PasscodeCoordinator.m */; };
 		F1B8E9E918AEAD5800B7F120 /* PasscodeSettingsDurationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B8E9E818AEAD5800B7F120 /* PasscodeSettingsDurationViewController.m */; };
 		F1C63A7D18BA83A700077A5F /* padlock.png in Resources */ = {isa = PBXBuildFile; fileRef = F1C63A7C18BA83A700077A5F /* padlock.png */; };
 		F1D234A418C262B70000487A /* wp_white.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D234A318C262B70000487A /* wp_white.png */; };
@@ -29,7 +30,6 @@
 		F1EFC46318B802FF00E9A798 /* PasscodeButtonStyleProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = F1EFC45918B802FF00E9A798 /* PasscodeButtonStyleProvider.m */; };
 		F1EFC46418B802FF00E9A798 /* PasscodeCircularButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F1EFC45B18B802FF00E9A798 /* PasscodeCircularButton.m */; };
 		F1EFC46518B802FF00E9A798 /* PasscodeCircularView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1EFC45D18B802FF00E9A798 /* PasscodeCircularView.m */; };
-		F1EFC46618B802FF00E9A798 /* PasscodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F1EFC45F18B802FF00E9A798 /* PasscodeManager.m */; };
 		F1EFC46718B802FF00E9A798 /* PasscodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1EFC46118B802FF00E9A798 /* PasscodeViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +45,8 @@
 
 /* Begin PBXFileReference section */
 		F138252518B91E16007F5F3D /* background.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpeg; sourceTree = "<group>"; };
+		F13FE7B218DB4ECE00AB39CD /* PasscodeCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PasscodeCoordinator.h; sourceTree = "<group>"; };
+		F13FE7B318DB4ECE00AB39CD /* PasscodeCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PasscodeCoordinator.m; sourceTree = "<group>"; };
 		F1B8E9E718AEAD5800B7F120 /* PasscodeSettingsDurationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PasscodeSettingsDurationViewController.h; sourceTree = "<group>"; };
 		F1B8E9E818AEAD5800B7F120 /* PasscodeSettingsDurationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PasscodeSettingsDurationViewController.m; sourceTree = "<group>"; };
 		F1C63A7C18BA83A700077A5F /* padlock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = padlock.png; sourceTree = "<group>"; };
@@ -77,8 +79,6 @@
 		F1EFC45B18B802FF00E9A798 /* PasscodeCircularButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PasscodeCircularButton.m; path = ../../iOSPasscodeLock/PasscodeCircularButton.m; sourceTree = "<group>"; };
 		F1EFC45C18B802FF00E9A798 /* PasscodeCircularView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PasscodeCircularView.h; path = ../../iOSPasscodeLock/PasscodeCircularView.h; sourceTree = "<group>"; };
 		F1EFC45D18B802FF00E9A798 /* PasscodeCircularView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PasscodeCircularView.m; path = ../../iOSPasscodeLock/PasscodeCircularView.m; sourceTree = "<group>"; };
-		F1EFC45E18B802FF00E9A798 /* PasscodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PasscodeManager.h; path = ../../iOSPasscodeLock/PasscodeManager.h; sourceTree = "<group>"; };
-		F1EFC45F18B802FF00E9A798 /* PasscodeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PasscodeManager.m; path = ../../iOSPasscodeLock/PasscodeManager.m; sourceTree = "<group>"; };
 		F1EFC46018B802FF00E9A798 /* PasscodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PasscodeViewController.h; path = ../../iOSPasscodeLock/PasscodeViewController.h; sourceTree = "<group>"; };
 		F1EFC46118B802FF00E9A798 /* PasscodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PasscodeViewController.m; path = ../../iOSPasscodeLock/PasscodeViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -110,12 +110,12 @@
 		F10E1A0618AFCAC5007C9E4B /* iOSPasscodeLock */ = {
 			isa = PBXGroup;
 			children = (
+				F13FE7B218DB4ECE00AB39CD /* PasscodeCoordinator.h */,
+				F13FE7B318DB4ECE00AB39CD /* PasscodeCoordinator.m */,
 				F1EFC46B18B803B000E9A798 /* Model */,
 				F1EFC46A18B8034900E9A798 /* View */,
 				F1EFC46918B8033900E9A798 /* Controller */,
 				F1EFC46818B8033100E9A798 /* Util */,
-				F1EFC45E18B802FF00E9A798 /* PasscodeManager.h */,
-				F1EFC45F18B802FF00E9A798 /* PasscodeManager.m */,
 			);
 			name = iOSPasscodeLock;
 			sourceTree = "<group>";
@@ -347,9 +347,9 @@
 				F1E50FC718AEA7A10011AF09 /* SettingsViewController.m in Sources */,
 				F1EFC46718B802FF00E9A798 /* PasscodeViewController.m in Sources */,
 				F1EFC46418B802FF00E9A798 /* PasscodeCircularButton.m in Sources */,
-				F1EFC46618B802FF00E9A798 /* PasscodeManager.m in Sources */,
 				F1EFC46518B802FF00E9A798 /* PasscodeCircularView.m in Sources */,
 				F1EFC46218B802FF00E9A798 /* FXKeychain.m in Sources */,
+				F13FE7B418DB4ECE00AB39CD /* PasscodeCoordinator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

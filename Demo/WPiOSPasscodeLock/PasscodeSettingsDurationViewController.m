@@ -7,7 +7,7 @@
 //
 
 #import "PasscodeSettingsDurationViewController.h"
-#import "PasscodeManager.h" 
+#import "PasscodeCoordinator.h" 
 
 @interface PasscodeSettingsDurationViewController ()
 
@@ -50,7 +50,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     self.psvc.passcodeDuration = self.durations[indexPath.row];
-    [[PasscodeManager sharedManager] setPasscodeInactivityDurationInMinutes:self.durationMinutes[indexPath.row]];
+    [[PasscodeCoordinator sharedCoordinator] setPasscodeInactivityDurationInMinutes:self.durationMinutes[indexPath.row]];
     [self.psvc reloadTableView];
     [self.navigationController popViewControllerAnimated:YES];
     

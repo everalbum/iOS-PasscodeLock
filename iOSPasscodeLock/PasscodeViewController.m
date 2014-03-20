@@ -8,7 +8,7 @@
 */
 
 #import "PasscodeViewController.h"
-#import "PasscodeManager.h" 
+#import "PasscodeCoordinator.h" 
 #import "PasscodeCircularButton.h"
 #import "PasscodeCircularView.h"
 
@@ -166,7 +166,7 @@ typedef enum PasscodeErrorType : NSUInteger {
     [self buildLayout];
     [self updateLayoutBasedOnWorkflowStep];
     
-    [self.view setBackgroundColor:[PasscodeManager sharedManager].backgroundColor];
+    [self.view setBackgroundColor:[PasscodeCoordinator sharedCoordinator].backgroundColor];
     
 }
 -(void)createButtons
@@ -174,7 +174,7 @@ typedef enum PasscodeErrorType : NSUInteger {
     self.passcodeButtons = [NSMutableArray new];
     CGRect initialFrame = CGRectMake(0, 0, self.passcodeButtonSize, self.passcodeButtonSize);
     
-    PasscodeButtonStyleProvider *styleProvider = [PasscodeManager sharedManager].buttonStyleProvider;
+    PasscodeButtonStyleProvider *styleProvider = [PasscodeCoordinator sharedCoordinator].buttonStyleProvider;
     BOOL styleForAllButtonsExists = [styleProvider customStyleExistsForButtonType:PasscodeButtonTypeAll];
     
     for(int i = 0; i < 10; i++)
@@ -200,20 +200,20 @@ typedef enum PasscodeErrorType : NSUInteger {
     
     self.btnCancelOrDelete = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     self.btnCancelOrDelete.frame = initialFrame;
-    [self.btnCancelOrDelete setTitleColor:[PasscodeManager sharedManager].cancelOrDeleteButtonColor forState:UIControlStateNormal];
+    [self.btnCancelOrDelete setTitleColor:[PasscodeCoordinator sharedCoordinator].cancelOrDeleteButtonColor forState:UIControlStateNormal];
     self.btnCancelOrDelete.hidden = YES;
     [self.btnCancelOrDelete setTitle:@"" forState:UIControlStateNormal];
     [self.btnCancelOrDelete addTarget:self action:@selector(cancelOrDeleteBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
-    self.btnCancelOrDelete.titleLabel.font = [PasscodeManager sharedManager].cancelOrDeleteButtonFont;
+    self.btnCancelOrDelete.titleLabel.font = [PasscodeCoordinator sharedCoordinator].cancelOrDeleteButtonFont;
     
     self.lblInstruction = [[UILabel alloc]initWithFrame:CGRectZero];
-    self.lblInstruction.textColor = [PasscodeManager sharedManager].instructionsLabelColor;
-    self.lblInstruction.font = [PasscodeManager sharedManager].instructionsLabelFont;
+    self.lblInstruction.textColor = [PasscodeCoordinator sharedCoordinator].instructionsLabelColor;
+    self.lblInstruction.font = [PasscodeCoordinator sharedCoordinator].instructionsLabelFont;
     
     self.lblError = [[UILabel alloc]initWithFrame:CGRectZero];
-    self.lblError.textColor = [PasscodeManager sharedManager].errorLabelColor;
-    self.lblError.backgroundColor = [PasscodeManager sharedManager].errorLabelBackgroundColor;
-    self.lblError.font = [PasscodeManager sharedManager].errorLabelFont;
+    self.lblError.textColor = [PasscodeCoordinator sharedCoordinator].errorLabelColor;
+    self.lblError.backgroundColor = [PasscodeCoordinator sharedCoordinator].errorLabelBackgroundColor;
+    self.lblError.font = [PasscodeCoordinator sharedCoordinator].errorLabelFont;
 }
 
 - (void)buildLayout
@@ -365,8 +365,8 @@ typedef enum PasscodeErrorType : NSUInteger {
     self.passcodeEntryViews = [NSMutableArray new];
     self.passcodeEntered = @"";
     self.numberOfDigitsEntered = 0;
-    UIColor *lineColor = [PasscodeManager sharedManager].passcodeViewLineColor;
-    UIColor *fillColor = [PasscodeManager sharedManager].passcodeViewFillColor;
+    UIColor *lineColor = [PasscodeCoordinator sharedCoordinator].passcodeViewLineColor;
+    UIColor *fillColor = [PasscodeCoordinator sharedCoordinator].passcodeViewFillColor;
     CGRect frame = CGRectMake(0, 0, PasscodeEntryViewSize, PasscodeEntryViewSize);
     
     for (int i=0; i < PasscodeDigitCount; i++){
@@ -411,14 +411,14 @@ typedef enum PasscodeErrorType : NSUInteger {
 
 -(void)applyBackgroundImageAndLogo
 {
-    if([PasscodeManager sharedManager].backgroundImage){
+    if([PasscodeCoordinator sharedCoordinator].backgroundImage){
         self.backgroundImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
-        [self.backgroundImageView setImage:[PasscodeManager sharedManager].backgroundImage];
+        [self.backgroundImageView setImage:[PasscodeCoordinator sharedCoordinator].backgroundImage];
         [self.view addSubview:self.backgroundImageView];
     }
-    if([PasscodeManager sharedManager].logo){
+    if([PasscodeCoordinator sharedCoordinator].logo){
         self.logoImageView = [[UIImageView alloc]initWithFrame:CGRectZero];
-        [self.logoImageView setImage:[PasscodeManager sharedManager].logo];
+        [self.logoImageView setImage:[PasscodeCoordinator sharedCoordinator].logo];
         [self.view addSubview:self.logoImageView];
     }
 }
@@ -464,7 +464,7 @@ typedef enum PasscodeErrorType : NSUInteger {
             {
                 if([self.passcodeFirstEntry isEqualToString:self.passcodeEntered])
                 {
-                    [[PasscodeManager sharedManager] setPasscode:self.passcodeEntered];
+                    [[PasscodeCoordinator sharedCoordinator] setPasscode:self.passcodeEntered];
                     [self.delegate didSetupPasscode];
                 }
                 else
@@ -476,7 +476,7 @@ typedef enum PasscodeErrorType : NSUInteger {
             }
         }
         else if(self.passcodeType == PasscodeTypeVerify || self.passcodeType == PasscodeTypeVerifyForSettingChange){
-            if([[PasscodeManager sharedManager] isPasscodeCorrect:self.passcodeEntered]){
+            if([[PasscodeCoordinator sharedCoordinator] isPasscodeCorrect:self.passcodeEntered]){
                 [self.delegate didVerifyPasscode];
             }
             else{
@@ -487,7 +487,7 @@ typedef enum PasscodeErrorType : NSUInteger {
         }
         else if(self.passcodeType == PasscodeTypeChangePasscode)
         {
-            if([[PasscodeManager sharedManager] isPasscodeCorrect:self.passcodeEntered]){
+            if([[PasscodeCoordinator sharedCoordinator] isPasscodeCorrect:self.passcodeEntered]){
                 self.passcodeType = PasscodeTypeSetup;
                 self.currentWorkflowStep = WorkflowStepOne;
                 [self updateLayoutBasedOnWorkflowStep];

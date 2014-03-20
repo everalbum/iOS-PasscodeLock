@@ -30,7 +30,6 @@
                 style:(PasscodeButtonStyle *)style
 {
     self = [PasscodeCircularButton buttonWithType:UIButtonTypeCustom];
-    _tag = [number integerValue];
     _lineColor = style.lineColor;
     _titleColor = style.titleColor;
     _fillColor = style.fillColor;
@@ -39,6 +38,7 @@
     _selectedFillColor = style.selectedFillColor;
     _font = style.titleFont;
    
+    [self setTag:[number integerValue]];
     [self setFrame:frame];
     [self setTitle:number forState:UIControlStateNormal];
     [self drawCircular];

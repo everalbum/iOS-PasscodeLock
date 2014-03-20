@@ -8,7 +8,7 @@
 
 #import "PasscodeSettingsViewController.h"
 #import "PasscodeSettingsDurationViewController.h"
-#import "PasscodeManager.h"
+#import "PasscodeCoordinator.h"
 
 @interface PasscodeSettingsViewController ()
 
@@ -45,11 +45,11 @@
     
     self.durationMinutes = @[@0, @1, @15];
     
-    if([[PasscodeManager sharedManager] isPasscodeProtectionOn])
+    if([[PasscodeCoordinator sharedCoordinator] isPasscodeProtectionOn])
     {
         self.passcodeEnabled = YES;
         
-        NSNumber *inactivityDuration = [[PasscodeManager sharedManager] getPasscodeInactivityDurationInMinutes];
+        NSNumber *inactivityDuration = [[PasscodeCoordinator sharedCoordinator] getPasscodeInactivityDurationInMinutes];
         if(inactivityDuration)
         {
             self.selectedInactivtyDurationIndex = [self.durationMinutes indexOfObject:inactivityDuration];
@@ -129,7 +129,7 @@
         }
         else if(indexPath.section == 1 && indexPath.row == 1)
         {
-            [[PasscodeManager sharedManager] changePasscodeWithCompletion:^(BOOL success) {
+            [[PasscodeCoordinator sharedCoordinator] changePasscodeWithCompletion:^(BOOL success) {
                 [self reloadTableView];
             }];
         }
@@ -144,7 +144,7 @@
 
     if(switchView.isOn){
         
-        [[PasscodeManager sharedManager] setupNewPasscodeWithCompletion:^(BOOL success) {
+        [[PasscodeCoordinator sharedCoordinator] setupNewPasscodeWithCompletion:^(BOOL success) {
 
             if(success){
                 selfRef.passcodeEnabled = YES;
@@ -161,7 +161,7 @@
         }];
     }
     else{
-        [[PasscodeManager sharedManager] disablePasscodeProtectionWithCompletion:^(BOOL success) {
+        [[PasscodeCoordinator sharedCoordinator] disablePasscodeProtectionWithCompletion:^(BOOL success) {
 
             if(success){
                 self.passcodeEnabled = NO;

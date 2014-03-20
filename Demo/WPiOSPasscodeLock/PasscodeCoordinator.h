@@ -11,9 +11,9 @@
 #import "PasscodeViewController.h" 
 #import "PasscodeButtonStyleProvider.h"
 
-@interface PasscodeManager : NSObject <PasscodeViewControllerDelegate> 
+@interface PasscodeCoordinator : NSObject <PasscodeViewControllerDelegate>
 
-+ (PasscodeManager *)sharedManager;
++ (PasscodeCoordinator *)sharedCoordinator;
 
 - (void) activatePasscodeProtection;
 - (void) setupNewPasscodeWithCompletion:(void (^)(BOOL success)) completion;

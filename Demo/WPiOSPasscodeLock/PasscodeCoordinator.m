@@ -8,7 +8,7 @@
  */
 
 
-#import "PasscodeManager.h"
+#import "PasscodeCoordinator.h"
 #import "FXKeychain.h"
 #import <math.h>
 
@@ -18,7 +18,7 @@ static NSString * const PasscodeInactivityDuration = @"PasscodeInactivityDuratio
 static NSString * const PasscodeInactivityStarted = @"PasscodeInactivityStarted";
 static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 
-@interface PasscodeManager ()
+@interface PasscodeCoordinator ()
 
 @property (nonatomic, strong) void (^setupCompletedBlock)(BOOL success);
 @property (nonatomic, strong) void (^verificationCompletedBlock)(BOOL success);
@@ -27,15 +27,15 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 
 @end
 
-@implementation PasscodeManager
+@implementation PasscodeCoordinator
 
-+ (PasscodeManager *)sharedManager {
-    static PasscodeManager *sharedManager = nil;
++ (PasscodeCoordinator *)sharedCoordinator {
+    static PasscodeCoordinator *sharedCoordinator = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sharedManager = [[self alloc] init];
+        sharedCoordinator = [[self alloc] init];
     });
-    return sharedManager;
+    return sharedCoordinator;
 }
 
 -(id) init
