@@ -24,9 +24,9 @@
 
 @implementation PasscodeCircularButton
 
-- (id)initWithNumber:(NSString *)number frame:(CGRect)frame style:(PasscodeButtonStyle *)style{
+- (id)initWithNumber:(NSString *)number frame:(CGRect)frame style:(PasscodeButtonStyle *)style {
    
-    self = [PasscodeCircularButton buttonWithType:UIButtonTypeCustom];
+    self = [[PasscodeCircularButton alloc] initWithFrame:frame];
     
     if(self) {
         _lineColor = style.lineColor;
@@ -36,27 +36,21 @@
         _selectedTitleColor = style.selectedTitleColor;
         _selectedFillColor = style.selectedFillColor;
         _font = style.titleFont;
-        
+        _circle = [CAShapeLayer layer];
+        [_circle setBounds:CGRectMake(0.0f, 0.0f, [self bounds].size.width, [self bounds].size.height)];
+        [_circle setPosition:CGPointMake(CGRectGetMidX([self bounds]),CGRectGetMidY([self bounds]))];
+        UIBezierPath *path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame))];
+        [_circle setPath:[path CGPath]];
+        [_circle setStrokeColor:[self.lineColor CGColor]];
+        [_circle setLineWidth:0.5f];
+        [_circle setFillColor:self.fillColor.CGColor];
+        [[self layer] addSublayer:self.circle];
         [self setTag:[number integerValue]];
-        [self setFrame:frame];
         [self setTitle:number forState:UIControlStateNormal];
-        [self drawCircular];
+        [self setTitleColor:self.lineColor forState:UIControlStateNormal];
+        self.titleLabel.font = self.font;
     }
     return self;
-}
-
-- (void)drawCircular {
-    [self setTitleColor:self.lineColor forState:UIControlStateNormal];
-    self.circle = [CAShapeLayer layer];
-    [self.circle setBounds:CGRectMake(0.0f, 0.0f, [self bounds].size.width, [self bounds].size.height)];
-    [self.circle setPosition:CGPointMake(CGRectGetMidX([self bounds]),CGRectGetMidY([self bounds]))];
-    UIBezierPath *path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame))];
-    [self.circle setPath:[path CGPath]];
-    [self.circle setStrokeColor:[self.lineColor CGColor]];
-    [self.circle setLineWidth:0.5f];
-    [self.circle setFillColor:self.fillColor.CGColor];
-    [[self layer] addSublayer:self.circle];
-    self.titleLabel.font = self.font;
 }
 
 - (void)setHighlighted:(BOOL)highlighted {

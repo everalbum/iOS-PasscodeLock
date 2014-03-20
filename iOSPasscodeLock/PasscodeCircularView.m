@@ -22,27 +22,21 @@
 
 - (id)initWithFrame:(CGRect)frame lineColor:(UIColor *) lineColor fillColor:(UIColor *) fillColor {
   
-    self = [super init];
+    self = [super initWithFrame:frame];
     if(self) {
         _lineColor = lineColor;
         _fillColor = fillColor;
-        [self setFrame:frame];
-        [self drawCircular];
+        _circle =[CAShapeLayer layer];
+        [_circle setBounds:CGRectMake(0.0f, 0.0f, [self bounds].size.width, [self bounds].size.height)];
+        [_circle setPosition:CGPointMake(CGRectGetMidX([self bounds]),CGRectGetMidY([self bounds]))];
+        UIBezierPath *path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame))];
+        [_circle setPath:[path CGPath]];
+        [_circle setStrokeColor:self.lineColor.CGColor];
+        [_circle setLineWidth:0.5f];
+        [_circle setFillColor:[UIColor clearColor].CGColor];
+        [[self layer] addSublayer:self.circle];
     }
     return self;
-}
-
-
-- (void)drawCircular {
-    self.circle = [CAShapeLayer layer];
-    [self.circle setBounds:CGRectMake(0.0f, 0.0f, [self bounds].size.width, [self bounds].size.height)];
-    [self.circle setPosition:CGPointMake(CGRectGetMidX([self bounds]),CGRectGetMidY([self bounds]))];
-    UIBezierPath *path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame))];
-    [self.circle setPath:[path CGPath]];
-    [self.circle setStrokeColor:self.lineColor.CGColor];
-    [self.circle setLineWidth:0.5f];
-    [self.circle setFillColor:[UIColor clearColor].CGColor];
-    [[self layer] addSublayer:self.circle];
 }
 
 - (void)fill {

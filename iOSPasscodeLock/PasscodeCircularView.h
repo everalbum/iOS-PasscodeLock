@@ -14,4 +14,5 @@
 - (id)initWithFrame:(CGRect)frame lineColor:(UIColor *) lineColor fillColor:(UIColor *) fillColor;
 - (void)fill;
 - (void)clear;
+
 @end

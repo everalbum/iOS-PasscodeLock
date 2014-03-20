@@ -38,7 +38,7 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
     return sharedCoordinator;
 }
 
-- (id)init{
+- (id)init {
     self = [super init];
     if(self) {
         _passcodePresented = NO;

@@ -26,7 +26,7 @@
 - (BOOL)isPasscodeProtectionOn;
 - (BOOL)isPasscodeCorrect:(NSString *)passcode;
 - (BOOL)shouldLock;
-- (NSNumber *) getPasscodeInactivityDurationInMinutes;
+- (NSNumber *)getPasscodeInactivityDurationInMinutes;
 
 @property (strong, nonatomic) UIColor *backgroundColor;
 @property (strong, nonatomic) UIImage *backgroundImage;
