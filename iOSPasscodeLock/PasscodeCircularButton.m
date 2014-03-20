@@ -29,23 +29,20 @@
                 frame:(CGRect)frame
                 style:(PasscodeButtonStyle *)style
 {
-    self = [super init];
+    self = [PasscodeCircularButton buttonWithType:UIButtonTypeCustom];
+    _tag = [number integerValue];
+    _lineColor = style.lineColor;
+    _titleColor = style.titleColor;
+    _fillColor = style.fillColor;
+    _selectedLineColor = style.selectedLineColor;
+    _selectedTitleColor = style.selectedTitleColor;
+    _selectedFillColor = style.selectedFillColor;
+    _font = style.titleFont;
+   
+    [self setFrame:frame];
+    [self setTitle:number forState:UIControlStateNormal];
+    [self drawCircular];
     
-    if(self)
-    {
-        self = [PasscodeCircularButton buttonWithType:UIButtonTypeCustom];
-        self.tag = [number integerValue];
-        self.lineColor = style.lineColor;
-        self.titleColor = style.titleColor;
-        self.fillColor = style.fillColor;
-        self.selectedLineColor = style.selectedLineColor;
-        self.selectedTitleColor = style.selectedTitleColor;
-        self.selectedFillColor = style.selectedFillColor;
-        self.frame = frame;
-        self.font = style.titleFont;
-        [self setTitle:number forState:UIControlStateNormal];
-        [self drawCircular];
-    }
     return self;
 }
 

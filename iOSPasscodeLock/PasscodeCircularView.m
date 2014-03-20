@@ -29,9 +29,10 @@
     
     if(self)
     {
-        self.lineColor = lineColor;
-        self.fillColor = fillColor;
-        self.frame = frame; 
+        _lineColor = lineColor;
+        _fillColor = fillColor;
+        
+        [self setFrame:frame];
         [self drawCircular];
     }
     return self;
