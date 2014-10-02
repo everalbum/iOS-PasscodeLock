@@ -12,7 +12,10 @@
 #import "FXKeychain.h"
 #import <math.h>
 
+@import LocalAuthentication;
+
 static NSString * const PasscodeProtectionStatusKey = @"PasscodeProtectionEnabled";
+static NSString * const TouchIdProtectionStatusKey = @"TouchIdProtectionStatusKey";
 static NSString * const PasscodeKey = @"PasscodeKey";
 static NSString * const PasscodeInactivityDuration = @"PasscodeInactivityDuration";
 static NSString * const PasscodeInactivityStarted = @"PasscodeInactivityStarted";
@@ -56,6 +59,7 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 - (void)activatePasscodeProtection {
     self.passcodeWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.passcodeWindow.windowLevel = UIWindowLevelAlert + 1;
+    self.passcodeWindow.rootViewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 
     if([self isPasscodeProtectionOn]) {
         [self subscribeToNotifications];
@@ -94,27 +98,67 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 
 - (void)handleNotification:(NSNotification *)notification {
     if(notification.name == UIApplicationDidEnterBackgroundNotification) {
-        [self dismissLockScreen];
+        [self dismissLockScreenAnimated:NO];
         [self startTrackingInactivity];
         if([self shouldLock]) {
-            [self verifyPasscodeWithPasscodeType:PasscodeTypeVerify withCompletion:nil];
+            [self verifyPasscodeWithPasscodeType:PasscodeTypeVerify animated:NO withCompletion:nil];
         }
     }
     else if(notification.name == UIApplicationWillEnterForegroundNotification) {
         [self stopTrackingInactivity];
         if([self shouldLock]) {
-            [self verifyPasscodeWithPasscodeType:PasscodeTypeVerify withCompletion:nil];
+            [self verifyPasscodeWithPasscodeType:PasscodeTypeVerify animated:NO withCompletion:nil];
+        } else if (self.passcodePresented) {
+            [self verifyWithTouchId];
         }
     }
     else if(notification.name == UIApplicationDidFinishLaunchingNotification) {
         [self stopTrackingInactivity];
         if([self shouldLock]) {
-            [self verifyPasscodeWithPasscodeType:PasscodeTypeVerify withCompletion:nil];
+            [self verifyPasscodeWithPasscodeType:PasscodeTypeVerify animated:NO withCompletion:nil];
         }
     }
 
 }
 
+#pragma mark -
+#pragma mark - TouchId
+
+- (BOOL)isTouchIdAvailable {
+    LAContext *context = [[LAContext alloc] init];
+    NSError *error;
+    
+    return [context canEvaluatePolicy: LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error];
+}
+
+- (void) toggleTouchIdProtection:(BOOL)isOn {
+    [[NSUserDefaults standardUserDefaults] setObject:(isOn ? @"YES" : @"NO") forKey:TouchIdProtectionStatusKey];
+}
+
+- (BOOL)isTouchIdProtectionOn {
+    NSString *status = [[NSUserDefaults standardUserDefaults]stringForKey:TouchIdProtectionStatusKey];
+    if(status) {
+        return [status isEqual: @"YES"] ? YES : NO;
+    }
+    else{
+        return NO;
+    }
+    return NO;
+}
+
+-(void)presentTouchIdWithCompletion:(void (^) (BOOL success)) completion {
+    LAContext *context = [[LAContext alloc] init];
+    
+    [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics
+              localizedReason:@"Unlock Access"
+                        reply:^(BOOL success, NSError *error) {
+                            if(completion) {
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    completion(success);
+                                });
+                            }
+                        }];
+}
 
 #pragma mark -
 #pragma mark - PasscodeViewControllerDelegate methods
@@ -169,16 +213,56 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 
 - (void)verifyPasscodeWithPasscodeType:(PasscodeType) passcodeType withCompletion:(void (^) (BOOL success)) completion {
     self.verificationCompletedBlock = completion;
-    [self presentLockScreenWithPasscodeType:passcodeType];
+    [self presentLockScreenWithPasscodeType:passcodeType animated:YES];
+}
+
+- (void)verifyPasscodeWithPasscodeType:(PasscodeType) passcodeType animated:(BOOL)animated withCompletion:(void (^) (BOOL success)) completion {
+    self.verificationCompletedBlock = completion;
+    [self presentLockScreenWithPasscodeType:passcodeType animated:animated];
 }
 
 - (void)presentLockScreenWithPasscodeType:(PasscodeType) passcodeType {
-    [self dismissLockScreen];
+    [self presentLockScreenWithPasscodeType:passcodeType animated:YES];
+}
+
+- (void)presentLockScreenWithPasscodeType:(PasscodeType) passcodeType animated:(BOOL)animated {
+    [self dismissLockScreenAnimated:NO];
 
     PasscodeViewController *pvc = [[PasscodeViewController alloc] initWithPasscodeType:passcodeType withDelegate:self];
     [self.passcodeWindow setRootViewController:pvc];
-    [self.passcodeWindow setHidden:NO];
-    self.passcodePresented = YES; 
+    
+    if(animated) {
+        [self.passcodeWindow setHidden:NO];
+        self.passcodeWindow.alpha = 0.;
+        [UIView animateWithDuration:0.25
+                         animations: ^{
+                             self.passcodeWindow.alpha = 1.;
+                         }
+                         completion:^(BOOL finished){
+                             if(!finished) {
+                                 self.passcodeWindow.alpha = 1.;
+                             }
+                         }];
+    } else {
+        [self.passcodeWindow setHidden:NO];
+        self.passcodeWindow.alpha = 1.;
+    }
+    
+    self.passcodePresented = YES;
+    
+    if(passcodeType == PasscodeTypeVerify) {
+        [self verifyWithTouchId];
+    }
+}
+
+- (void)verifyWithTouchId {
+    if([self isTouchIdProtectionOn]) {
+        [self presentTouchIdWithCompletion:^(BOOL success) {
+            if (success) {
+                [self didVerifyPasscode];
+            }
+        }];
+    }
 }
 
 - (void)setupNewPasscodeWithCompletion:(void (^)(BOOL success)) completion {
@@ -198,7 +282,6 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 #pragma mark - Helper methods
 
 - (BOOL)shouldLock{
-    
     if(self.passcodePresented) {
         return NO;
     }
@@ -240,9 +323,31 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 }
 
 - (void)dismissLockScreen {
+    [self dismissLockScreenAnimated:YES];
+}
+
+- (void)dismissLockScreenAnimated:(BOOL)animated {
     if(self.passcodePresented) {
-        [self.passcodeWindow setHidden:YES];
         self.passcodePresented = NO;
+        
+        if(animated) {
+            self.passcodeWindow.alpha = 1.;
+            [self.passcodeWindow setHidden:NO];
+            [UIView animateWithDuration:0.25
+                             animations: ^{
+                                 self.passcodeWindow.alpha = 0.;
+                             }
+                             completion:^(BOOL finished){
+                                 if(finished) {
+                                     [self.passcodeWindow setHidden:YES];
+                                 } else {
+                                     self.passcodeWindow.alpha = 1.;
+                                     [self.passcodeWindow setHidden:NO];
+                                 }
+                             }];
+        } else {
+            [self.passcodeWindow setHidden:YES];
+        }
     }
 }
 
@@ -276,7 +381,7 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 - (BOOL)isPasscodeProtectionOn{
     NSString *status = [[NSUserDefaults standardUserDefaults]stringForKey:PasscodeProtectionStatusKey];
     if(status) {
-        return [status isEqual: @"YES"] ? YES: NO;
+        return [status isEqual: @"YES"] ? YES : NO;
     }
     else{
         return NO;

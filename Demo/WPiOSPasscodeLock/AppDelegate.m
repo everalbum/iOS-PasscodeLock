@@ -15,7 +15,6 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    
     //Activate protection
     [[PasscodeCoordinator sharedCoordinator] activatePasscodeProtection];
     
@@ -34,18 +33,16 @@
 
 -(void) setPasscodeStyle{
     
-    UIColor *iPhone5CWhite = [UIColor colorWithRed:0.961 green:0.957 blue:0.969 alpha:1.0];
-    UIColor *wpBlue = [UIColor colorWithRed:0.129 green:0.459 blue:0.608 alpha:1.0];
-    UIColor *wpOrange = [UIColor colorWithRed:0.835 green:0.306 blue:0.129 alpha:1.0];
+    UIColor *everalbumBlue = [UIColor colorWithRed:0.176 green:0.624 blue:0.933 alpha:1.0];
     
     PasscodeButtonStyleProvider *buttonStyleProvider = [[PasscodeButtonStyleProvider alloc]init];
     PasscodeButtonStyle *style = [[PasscodeButtonStyle alloc]init];
-    style.lineColor = iPhone5CWhite;
-    style.titleColor = iPhone5CWhite;
+    style.lineColor = [UIColor whiteColor];
+    style.titleColor = [UIColor whiteColor];
     style.fillColor = [UIColor clearColor];
-    style.selectedFillColor = wpOrange;
-    style.selectedLineColor = iPhone5CWhite;
-    style.selectedTitleColor = iPhone5CWhite;
+    style.selectedFillColor = [UIColor whiteColor];
+    style.selectedLineColor = [UIColor whiteColor];
+    style.selectedTitleColor = everalbumBlue;
     style.titleFont = [UIFont fontWithName:@"Avenir-Book" size:35];
     
     [buttonStyleProvider addStyle:style forButton:PasscodeButtonTypeAll];
@@ -53,13 +50,12 @@
     [PasscodeCoordinator sharedCoordinator].buttonStyleProvider = buttonStyleProvider;
     [PasscodeCoordinator sharedCoordinator].instructionsLabelFont = [UIFont fontWithName:@"Avenir-Book" size:20];
     [PasscodeCoordinator sharedCoordinator].cancelOrDeleteButtonFont = [UIFont fontWithName:@"Avenir-Book" size:15];
-    [PasscodeCoordinator sharedCoordinator].backgroundColor = wpBlue;
-    [PasscodeCoordinator sharedCoordinator].backgroundImage = [UIImage imageNamed:@"background.jpeg"];
+    [PasscodeCoordinator sharedCoordinator].backgroundColor = everalbumBlue;
     [PasscodeCoordinator sharedCoordinator].logo = [UIImage imageNamed:@"wp_white.png"];
-    [PasscodeCoordinator sharedCoordinator].instructionsLabelColor = iPhone5CWhite;
-    [PasscodeCoordinator sharedCoordinator].cancelOrDeleteButtonColor = iPhone5CWhite;
-    [PasscodeCoordinator sharedCoordinator].passcodeViewFillColor = wpOrange;
-    [PasscodeCoordinator sharedCoordinator].passcodeViewLineColor = iPhone5CWhite;
+    [PasscodeCoordinator sharedCoordinator].instructionsLabelColor = [UIColor whiteColor];
+    [PasscodeCoordinator sharedCoordinator].cancelOrDeleteButtonColor = [UIColor whiteColor];
+    [PasscodeCoordinator sharedCoordinator].passcodeViewFillColor = [UIColor whiteColor];
+    [PasscodeCoordinator sharedCoordinator].passcodeViewLineColor = [UIColor whiteColor];
 }
 
 @end

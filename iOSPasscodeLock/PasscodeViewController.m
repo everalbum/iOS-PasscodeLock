@@ -12,6 +12,8 @@
 #import "PasscodeCircularButton.h"
 #import "PasscodeCircularView.h"
 
+@import LocalAuthentication;
+
 #ifndef IS_IPAD
 #define IS_IPAD   ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
 #endif
@@ -21,8 +23,8 @@ static CGFloat const TouchButtonSizeiPad = 80;
 static CGFloat const PasscodeButtonPaddingHorizontal = 20;
 static CGFloat const PasscodeButtonPaddingVertical = 10;
 static CGFloat const PasscodeEntryViewSize = 14;
-static CGFloat const LogoSize = 40;
-static CGFloat const LogoSizeiPad = 50;
+static CGFloat const LogoSize = 100;
+static CGFloat const LogoSizeiPad = 120;
 
 static NSInteger const PasscodeDigitCount = 4;
 
@@ -168,7 +170,7 @@ typedef enum PasscodeErrorType : NSUInteger {
                                                                                          frame:initialFrame
                                                                                          style:buttonStyle];
         
-        [passcodeButton addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [passcodeButton addTarget:self action:@selector(passcodeBtnPressed:) forControlEvents:UIControlEventTouchDown];
         [self.passcodeButtons addObject:passcodeButton];
 
     }
@@ -208,9 +210,12 @@ typedef enum PasscodeErrorType : NSUInteger {
     NSValue *frameBtnNine = [NSValue valueWithCGRect:CGRectMake(lastButtonX, lastRowY, self.passcodeButtonSize, self.passcodeButtonSize)];
     NSValue *frameBtnZero = [NSValue valueWithCGRect:CGRectMake(middleButtonX, zeroRowY, self.passcodeButtonSize, self.passcodeButtonSize)];
    
+    UIImage *logo = [PasscodeCoordinator sharedCoordinator].logo;
+    float logoScale = ((IS_IPAD) ? LogoSizeiPad : LogoSize) / logo.size.height;
+    
     CGRect frameBtnCancel = CGRectMake(lastButtonX, zeroRowY, self.passcodeButtonSize, self.passcodeButtonSize);
     CGRect frameLblInstruction = CGRectMake(0, 0, 300, 20);
-    CGRect frameLogo = (IS_IPAD) ? CGRectMake(0, 0, LogoSizeiPad, LogoSizeiPad) : CGRectMake(0, 0, LogoSize, LogoSize);
+    CGRect frameLogo = CGRectMake(0, 0, logo.size.width * logoScale, logo.size.height * logoScale);
     CGRect frameBackgroundImageView = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, [self returnWidth], [self returnHeight]);
     
     NSArray *buttonFrames = @[frameBtnZero, frameBtnOne, frameBtnTwo, frameBtnThree, frameBtnFour, frameBtnFive, frameBtnSix, frameBtnSeven, frameBtnEight, frameBtnNine];
@@ -227,7 +232,7 @@ typedef enum PasscodeErrorType : NSUInteger {
     self.lblInstruction.frame = frameLblInstruction;
     self.lblInstruction.center = CGPointMake([self returnWidth]/2, firstRowY - (PasscodeButtonPaddingVertical * 7));
     self.logoImageView.frame = frameLogo;
-    self.logoImageView.center = (IS_IPAD) ? CGPointMake([self returnWidth]/2, firstRowY - (PasscodeButtonPaddingVertical) * 13) : CGPointMake([self returnWidth]/2, firstRowY - (PasscodeButtonPaddingVertical) * 12);
+    self.logoImageView.center = (IS_IPAD) ? CGPointMake([self returnWidth]/2, firstRowY - (PasscodeButtonPaddingVertical) * 16) : CGPointMake([self returnWidth]/2, firstRowY - (PasscodeButtonPaddingVertical) * 15);
    
     [self.view addSubview:self.btnCancelOrDelete];
     [self.view addSubview:self.lblInstruction];
@@ -268,7 +273,7 @@ typedef enum PasscodeErrorType : NSUInteger {
         }
     }
     else if(self.passcodeType == PasscodeTypeVerify || self.passcodeType == PasscodeTypeVerifyForSettingChange) {
-        self.lblInstruction.text = NSLocalizedString(@"Enter Passcode", nil);;
+        self.lblInstruction.text = NSLocalizedString(@"Enter Passcode", nil);
         if(self.passcodeType == PasscodeTypeVerifyForSettingChange){
         }
     }

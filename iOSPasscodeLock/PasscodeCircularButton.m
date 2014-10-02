@@ -42,7 +42,7 @@
         UIBezierPath *path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame))];
         [_circle setPath:[path CGPath]];
         [_circle setStrokeColor:[self.lineColor CGColor]];
-        [_circle setLineWidth:0.5f];
+        [_circle setLineWidth:1.0f];
         [_circle setFillColor:self.fillColor.CGColor];
         [[self layer] addSublayer:self.circle];
         [self setTag:[number integerValue]];

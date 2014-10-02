@@ -10,9 +10,9 @@
 #import <Foundation/Foundation.h>
 #import "PasscodeViewController.h" 
 #import "PasscodeButtonStyleProvider.h"
+#import "PasscodeCoordinator.h"
 
 @interface PasscodeCoordinator : NSObject <PasscodeViewControllerDelegate>
-
 + (PasscodeCoordinator *)sharedCoordinator;
 
 - (void)activatePasscodeProtection;
@@ -27,6 +27,9 @@
 - (BOOL)isPasscodeCorrect:(NSString *)passcode;
 - (BOOL)shouldLock;
 - (NSNumber *)getPasscodeInactivityDurationInMinutes;
+- (BOOL)isTouchIdAvailable;
+- (BOOL)isTouchIdProtectionOn;
+- (void)toggleTouchIdProtection:(BOOL)isOn;
 
 @property (strong, nonatomic) UIColor *backgroundColor;
 @property (strong, nonatomic) UIImage *backgroundImage;
