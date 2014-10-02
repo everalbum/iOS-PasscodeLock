@@ -30,6 +30,7 @@
 - (BOOL)isTouchIdAvailable;
 - (BOOL)isTouchIdProtectionOn;
 - (void)toggleTouchIdProtection:(BOOL)isOn;
+- (void)verifyWithTouchId;
 
 @property (strong, nonatomic) UIColor *backgroundColor;
 @property (strong, nonatomic) UIImage *backgroundImage;
