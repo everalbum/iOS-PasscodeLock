@@ -84,6 +84,10 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
                                              selector: @selector(handleNotification:)
                                                  name: UIApplicationDidFinishLaunchingNotification
                                                object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleNotification:)
+                                                 name: UIApplicationDidBecomeActiveNotification
+                                               object: nil];
 }
 
 - (void)disableSubscriptions {
@@ -93,6 +97,8 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
                                                     name:UIApplicationDidFinishLaunchingNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)handleNotification:(NSNotification *)notification {
@@ -107,7 +113,9 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
         [self stopTrackingInactivity];
         if([self shouldLock]) {
             [self verifyPasscodeWithPasscodeType:PasscodeTypeVerify animated:NO withCompletion:nil];
-        } else if (self.passcodePresented) {
+        }
+        
+        if (self.passcodePresented) {
             [self verifyWithTouchId];
         }
     }
@@ -116,6 +124,13 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
         if([self shouldLock]) {
             [self verifyPasscodeWithPasscodeType:PasscodeTypeVerify animated:NO withCompletion:nil];
         }
+        
+        if (self.passcodePresented) {
+            [self verifyWithTouchId];
+        }
+    }
+    else if(notification.name == UIApplicationDidBecomeActiveNotification) {
+        
     }
 
 }
@@ -149,13 +164,13 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
     LAContext *context = [[LAContext alloc] init];
     
     [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics
-              localizedReason:@"Unlock Access"
-                        reply:^(BOOL success, NSError *error) {
-                            if(completion) {
-                                dispatch_async(dispatch_get_main_queue(), ^{
+            localizedReason:NSLocalizedString(@"Unlock Access", nil)
+                      reply:^(BOOL success, NSError *error) {
+                          dispatch_async(dispatch_get_main_queue(), ^{
+                            if(completion && !error) {
                                     completion(success);
-                                });
-                            }
+                                }
+                            });
                         }];
 }
 
@@ -254,17 +269,16 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
     }
     
     self.passcodePresented = YES;
-    
-    if(passcodeType == PasscodeTypeVerify) {
-        [self verifyWithTouchId];
-    }
 }
 
 - (void)verifyWithTouchId {
     if([self isTouchIdProtectionOn]) {
         [self presentTouchIdWithCompletion:^(BOOL success) {
             if (success) {
-                [self didVerifyPasscode];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self didVerifyPasscode];
+                });
+                
             }
         }];
     }
