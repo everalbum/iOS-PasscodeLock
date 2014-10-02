@@ -59,7 +59,6 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 - (void)activatePasscodeProtection {
     self.passcodeWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.passcodeWindow.windowLevel = UIWindowLevelAlert + 1;
-    self.passcodeWindow.rootViewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 
     if([self isPasscodeProtectionOn]) {
         [self subscribeToNotifications];
@@ -233,19 +232,25 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
     
     if(animated) {
         [self.passcodeWindow setHidden:NO];
-        self.passcodeWindow.alpha = 0.;
-        [UIView animateWithDuration:0.25
+        
+        CGRect screen = [UIScreen mainScreen].bounds;
+        screen.origin.y = screen.size.height;
+        self.passcodeWindow.frame = screen;
+        
+        [UIView animateWithDuration:0.5
+                              delay:0.
+                            options:UIViewAnimationOptionCurveEaseInOut
                          animations: ^{
-                             self.passcodeWindow.alpha = 1.;
+                             self.passcodeWindow.frame = [UIScreen mainScreen].bounds;
                          }
                          completion:^(BOOL finished){
                              if(!finished) {
-                                 self.passcodeWindow.alpha = 1.;
+                                 self.passcodeWindow.frame = [UIScreen mainScreen].bounds;
                              }
                          }];
     } else {
         [self.passcodeWindow setHidden:NO];
-        self.passcodeWindow.alpha = 1.;
+        self.passcodeWindow.frame = [UIScreen mainScreen].bounds;
     }
     
     self.passcodePresented = YES;
@@ -331,17 +336,21 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
         self.passcodePresented = NO;
         
         if(animated) {
-            self.passcodeWindow.alpha = 1.;
+            self.passcodeWindow.frame = [UIScreen mainScreen].bounds;
             [self.passcodeWindow setHidden:NO];
-            [UIView animateWithDuration:0.25
+            [UIView animateWithDuration:0.5
+                                  delay:0.
+                                options:UIViewAnimationOptionCurveEaseInOut
                              animations: ^{
-                                 self.passcodeWindow.alpha = 0.;
+                                 CGRect screen = [UIScreen mainScreen].bounds;
+                                 screen.origin.y = screen.size.height;
+                                 self.passcodeWindow.frame = screen;
                              }
                              completion:^(BOOL finished){
                                  if(finished) {
                                      [self.passcodeWindow setHidden:YES];
                                  } else {
-                                     self.passcodeWindow.alpha = 1.;
+                                     self.passcodeWindow.frame = [UIScreen mainScreen].bounds;
                                      [self.passcodeWindow setHidden:NO];
                                  }
                              }];
