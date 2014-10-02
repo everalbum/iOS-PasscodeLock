@@ -102,10 +102,6 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
         if([self shouldLock]) {
             [self verifyPasscodeWithPasscodeType:PasscodeTypeVerify animated:NO withCompletion:nil];
         }
-        
-        if(self.passcodePresented) {
-            [self verifyWithTouchId];
-        }
     }
     else if(notification.name == UIApplicationWillEnterForegroundNotification) {
         [self stopTrackingInactivity];
@@ -121,6 +117,10 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
         [self stopTrackingInactivity];
         if([self shouldLock]) {
             [self verifyPasscodeWithPasscodeType:PasscodeTypeVerify animated:NO withCompletion:nil];
+        }
+        
+        if(self.passcodePresented) {
+            [self verifyWithTouchId];
         }
     }
 }
@@ -243,7 +243,7 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
         screen.origin.y = screen.size.height;
         self.passcodeWindow.frame = screen;
         
-        [UIView animateWithDuration:0.5
+        [UIView animateWithDuration:0.25
                               delay:0.
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations: ^{
@@ -342,7 +342,7 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
         if(animated) {
             self.passcodeWindow.frame = [UIScreen mainScreen].bounds;
             [self.passcodeWindow setHidden:NO];
-            [UIView animateWithDuration:0.5
+            [UIView animateWithDuration:0.25
                                   delay:0.
                                 options:UIViewAnimationOptionCurveEaseInOut
                              animations: ^{
