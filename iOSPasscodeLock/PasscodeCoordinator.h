@@ -45,5 +45,7 @@
 @property (strong, nonatomic) UIFont *instructionsLabelFont;
 @property (strong, nonatomic) UIFont *cancelOrDeleteButtonFont;
 @property (strong, nonatomic) PasscodeButtonStyleProvider *buttonStyleProvider;
+@property (nonatomic) BOOL useViewControllerPresentationMode;
+@property (nonatomic, strong) void (^firstLaunchAuthenticatedBlock)(BOOL success);
 
 @end

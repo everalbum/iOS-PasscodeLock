@@ -69,7 +69,6 @@ typedef enum PasscodeErrorType : NSUInteger {
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self generateView];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -78,6 +77,7 @@ typedef enum PasscodeErrorType : NSUInteger {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self generateView];
 }
 
 - (id)initWithPasscodeType:(PasscodeType)type withDelegate:(id<PasscodeViewControllerDelegate>)delegate{

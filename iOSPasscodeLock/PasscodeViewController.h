@@ -38,4 +38,6 @@ typedef enum PasscodeType : NSUInteger {
 
 - (id)initWithPasscodeType:(PasscodeType)type withDelegate:(id<PasscodeViewControllerDelegate>)delegate;
 
+- (void)generateView;
+
 @end
