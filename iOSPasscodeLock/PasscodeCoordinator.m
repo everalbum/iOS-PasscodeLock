@@ -338,7 +338,7 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 }
 
 - (void)setupNewPasscodeWithCompletion:(void (^)(BOOL success)) completion {
-    [self setPasscodeInactivityDurationInMinutes:@0];
+    [self setPasscodeInactivityDurationInMinutes:@5];
     self.setupCompletedBlock = completion;
     [self presentLockScreenWithPasscodeType:PasscodeTypeSetup allowTouchId:NO];
     
