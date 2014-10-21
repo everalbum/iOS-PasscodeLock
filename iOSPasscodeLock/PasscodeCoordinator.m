@@ -132,7 +132,9 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
             [self verifyPasscodeWithPasscodeType:PasscodeTypeVerify allowTouchId:YES animated:NO withCompletion:nil];
         } else {
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self verifyWithTouchId]; 
+                if (self.passcodePresented) {
+                    [self verifyWithTouchId];
+                }
             });
         }
     }
@@ -152,9 +154,10 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
     } else if (notification.name == UIApplicationWillResignActiveNotification) {
         if ([self isPasscodeProtectionOn]) {
             
-            if (!self.passcodePresented) {
+            self.resignedActive = YES;
+            
+            if (!self.passcodePresented && [self shouldLock]) {
                 [self verifyPasscodeWithPasscodeType:PasscodeTypeVerify allowTouchId:NO animated:NO withCompletion:nil];
-                self.resignedActive = YES;
             }
         }
     } else if (notification.name == UIApplicationDidBecomeActiveNotification) {
