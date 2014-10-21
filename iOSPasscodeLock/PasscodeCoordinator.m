@@ -386,19 +386,25 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 }
 
 - (NSDate *)getInactivityStartTime {
-    return [FXKeychain defaultKeychain][PasscodeInactivityStarted];
+    return [[NSUserDefaults standardUserDefaults] valueForKey:@"PasscodeInactivityStarted"];
+//    return [FXKeychain defaultKeychain][PasscodeInactivityStarted];
 }
 
 - (NSDate *)getInactivityEndTime {
+    return [[NSUserDefaults standardUserDefaults] valueForKey:@"PasscodeInactivityEnded"];
     return [FXKeychain defaultKeychain][PasscodeInactivityEnded];
 }
 
 - (void)startTrackingInactivity {
-    [FXKeychain defaultKeychain][PasscodeInactivityStarted] = [NSDate date];
+    [[NSUserDefaults standardUserDefaults] setValue:[NSDate date] forKey:@"PasscodeInactivityStarted"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+//    [FXKeychain defaultKeychain][PasscodeInactivityStarted] = [NSDate date];
 }
 
 - (void)stopTrackingInactivity {
-    [FXKeychain defaultKeychain][PasscodeInactivityEnded] = [NSDate date];
+    [[NSUserDefaults standardUserDefaults] setValue:[NSDate date] forKey:@"PasscodeInactivityEnded"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+//    [FXKeychain defaultKeychain][PasscodeInactivityEnded] = [NSDate date];
 }
 
 - (void)dismissLockScreen {
