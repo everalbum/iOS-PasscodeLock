@@ -362,6 +362,10 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
     NSDate *inactivityStarted = [self getInactivityStartTime];
     NSDate *inactivityEnded = [self getInactivityEndTime];
     
+    if (!inactivityStarted) {
+        return YES; // if there was never inactivity, this is a fresh launch.
+    }
+    
     NSTimeInterval difference = [inactivityEnded timeIntervalSinceDate:inactivityStarted];
     if(isnan(difference)) {
         difference = 0;
