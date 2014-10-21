@@ -466,7 +466,8 @@ static NSString * const PasscodeInactivityEnded = @"PasscodeInactivityEnded";
 }
 
 - (NSNumber *) getPasscodeInactivityDurationInMinutes {
-    return   [NSNumber numberWithInteger:[[FXKeychain defaultKeychain][PasscodeInactivityDuration] integerValue]];
+    // Hard coded to return 5..
+    return @5; // [NSNumber numberWithInteger:[[FXKeychain defaultKeychain][PasscodeInactivityDuration] integerValue]];
 }
 
 - (BOOL)isPasscodeProtectionOn{
